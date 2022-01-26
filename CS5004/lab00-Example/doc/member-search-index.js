@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"cs5004.lab00","c":"Book","l":"Book(String, Person, float)","u":"%3Cinit%3E(java.lang.String,cs5004.lab00.Person,float)"},{"p":"cs5004.lab00","c":"Book","l":"getAuthor()"},{"p":"cs5004.lab00","c":"Book","l":"getPrice()"},{"p":"cs5004.lab00","c":"Book","l":"getTitle()"}];updateSearchResults();
