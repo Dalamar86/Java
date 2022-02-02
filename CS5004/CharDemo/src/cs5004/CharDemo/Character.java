@@ -1,3 +1,4 @@
+package cs5004.CharDemo;
 import java.lang.Math;
 
 public class Character {
@@ -20,8 +21,6 @@ public class Character {
 	{
 		this();
 		this.name = name;
-		// hp = 100;
-		// strength = 9;
 	}
 	
 	public Character(String name, int hp, int strength)
@@ -32,64 +31,33 @@ public class Character {
 		setStrength(strength);
 	}
 	
-	public int getHp()
-	{
-		return hp;
-	}
+	public int getHp()       { return hp; }	
+	public String getName()  { return name; }	
+	public int getStrength() { return strength; }
+	public boolean isAlive() { return alive; }
 	
-	public String getName()
-	{
-		return name;
-	}
-	
-	public int getStrength()
-	{
-		return strength;
-	}
-	
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-	
-	private void setHp(int hp)
-	{
-		if(hp<=0)
-		{
+	public void setName(String name) { this.name = name; }	
+	private void setHp(int hp) {
+		if(hp<=0) {
 			this.alive = false;	
 			hp = 0;
 		}
+		
 		this.hp = hp;
 	}
 	
-	public void setStrength(int strength)
-	{
+	public void setStrength(int strength) {
 		if(strength>99) strength = 99;
 		this.strength = strength;
 	}
 	
-	public void takeDamage(int damage)
-	{
-		this.setHp(this.getHp()-damage);
-	}
-	
-	public boolean isAlive()
-	{
-		return alive;
-	}
-	
-	public int attack()
-	{
-		
-		return (int)(Math.random() * strength);
-	}
-	
-	public void printChar()
-	{
+	public void printChar() {
 		System.out.println("name:" + name);
 		System.out.println("hp:" + hp);
 		System.out.println("Strength:" + strength);
 		System.out.println("Alive:" + alive);
 	}
 	
+	public void takeDamage(int damage) { this.setHp(this.getHp()-damage); }
+	public int attack() { return (int)(Math.random() * strength); }	
 }

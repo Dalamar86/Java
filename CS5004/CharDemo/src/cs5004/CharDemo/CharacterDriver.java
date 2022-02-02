@@ -1,3 +1,4 @@
+package cs5004.CharDemo;
 /*
 GameDriver for in class demonstration
 Author : Dr. G
@@ -14,21 +15,21 @@ public class CharacterDriver
 {
 	public static void main(String [] args)
 	{
-		//Start by creating a Character.java file
-		
+		// Create Character instances
 		Character c1 = new Character();
 		Character c2 = new Character("Tony");
 		Character c3 = new Character("Steve", -8, 1);
 		
-		c1.takeDamage(30);
-		System.out.println(c1.getHp());
-		
+		// Print out Character objects attributes
 		c1.printChar();
 		c2.printChar();
 		c3.printChar();
 		
+		// Create an instance of the battle arena, which also runs the battle
 		BattleArena ba1 = new BattleArena(c1, c2);
+		
 		//1. Add three member variables to character
+			// Added name, health, and strength
 		//2. Create an instance of a character and print it with System.out.println("Character");
 		//3. Using public access set and then print the variables
 		//4. Change access to private and observe the results
