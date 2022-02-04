@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"cs5004.CharDemo","l":"BattleArena"},{"p":"cs5004.CharDemo","l":"Character"},{"p":"cs5004.CharDemo","l":"CharacterDriver"},{"p":"<Unnamed>","l":"CharacterTest"}];updateSearchResults();
