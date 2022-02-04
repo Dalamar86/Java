@@ -1,10 +1,25 @@
+/* 
+ * Created by: "Robert Wilson"
+ * Date: "01 February 2022"
+ */
+
 package cs5004.CharDemo;
 
+/**
+ * This class represents a Battle Arena. A battle arena has two Characters.
+ */
 public class BattleArena {
 
 	private Character c1;
 	private Character c2;
 	
+	/**
+	 * Construct a battle arena object and initializes it with characters c1 and c2.  
+	 * The fight method is called in the constructor which initiates the battle.
+	 *  
+	 * @param c1 the first character in the arena
+	 * @param c2 the second character in the arena
+	 */
 	public BattleArena(Character c1, Character c2)
 	{
 		this.c1 = c1;
@@ -13,6 +28,9 @@ public class BattleArena {
 		this.fight();
 	}
 	
+	/**
+	 * Fight method which uses a while loop to cause the characters to battle until one is no longer alive.
+	 */
 	public void fight()
 	{
 		while(this.c1.isAlive() && this.c2.isAlive())

@@ -1,20 +1,33 @@
-package cs5004.CharDemo;
 /*
 GameDriver for in class demonstration
 Author : Dr. G
 Date : 5/13/2021
-Editted 9/17/2021
+Edited 9/17/2021
 
 Because we are going to create some JavaDocs and run some JUnit tests, we'll do this demo in Eclipse, but
 we can actually accomplish all of this using the command line. 
 
+ * Edited by: "Robert Wilson"
+ * Date: "01 February 2022"
+ 
 */
+package cs5004.CharDemo;
 
-
-public class CharacterDriver
-{
-	public static void main(String [] args)
-	{
+/**
+ * This class drives the CharDemo project.
+ * 
+ * @author Robert Wilson
+ *
+ */
+public class CharacterDriver {
+	/**
+	 * Main method which drives the CharDemo project. First it creates three Characters, 
+	 * prints them out with the character printChar method, and then passes c1 and c2 to 
+	 * BattleArena.
+	 * 
+	 * @param args command line arguments which are not used
+	 */
+	public static void main(String [] args) {
 		// Create Character instances
 		Character c1 = new Character();
 		Character c2 = new Character("Tony");
