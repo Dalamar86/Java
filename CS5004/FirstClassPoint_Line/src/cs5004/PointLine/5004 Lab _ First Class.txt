@@ -1,0 +1,99 @@
+﻿5004 - First Class: Points and Lines with Class Composition
+
+
+Lab Objectives:
+
+
+* Create a class from scratch
+* Create a driver to test that class
+* Create multiple types of constructors
+* Create getters and setters for private variables
+* Demonstrate data encapsulation with a setter test
+* Reverse engineer an existing JUnit test file
+
+
+Description and Instructions:
+Point Class
+1. Create a class called point that’s made up of two int values x and y. 
+2. Make sure x and y are private and include getters and setters for access.
+3. Make sure the user can not set a value greater than 99 or less than -99. If they try, just set the value to 99/-99. Make sure this can’t be circumvented through the setter or constructors.
+4. Create a no argument and a two argument constructor. 
+5. Create a method getQuadrant that will print the quadrant A, B, C, D, or origin that a point is in. If a point is on a border, example (-4, 0), then print “Border.” See the provided tester class for more specifics.
+“System.out.println(p1.getQuadrant());”
+6. Create a print method that will print the x and y coordinates of a point. 
+“p1.printPoint();”
+________________
+
+
+Line Class
+1. Create a class called “Line” that’s made up of two points p1 and p2. 
+2. Create a constructor that will accept nothing and set two points at the origin. 
+3. Create a constructor that will accept two points. 
+4. Create a constructor that will accept 4 ints and use point constructors to set p1 & p2. 
+5. Create a print method that will print both points using the print point methods. 
+6. Create a getLength() method that returns the length of the line. Use the formula: d = √[(x2 − x1)2 + (y2 − y1)2]
+Driver
+1. Create a driver that will generate a point in each quadrant and the origin.
+2. Write manual test cases for each quadrant. For example: 
+Point p1 = new Point(0,0);
+If (p1.getQuadrant() == “Origin”) 
+System.out.println(“Origin test passed”); 
+else System.out.println(“Origin test failed”); 
+3. Print each point to see if your print method works as expected
+4. Create three lines and print each to see if the line print method works as expected
+5. Check the line length of each created line and see if it produces expected results
+6. Make sure to explain in comments what you are doing.
+Testing
+Because I’m asking you to write a driver, I’ll give you the testing file. A large part of your grade will be making sure you pass all of the tests in this file. Feel free to reverse engineer it to make sure you get it right, but don’t change any of the tests. If you add any tests, make sure to add comments clearly showing the tests you added.
+https://www.dropbox.com/s/pit0u437utetvji/PointLineTester.java?dl=0
+
+
+Extensions: 
+The required tasks above will get you a B+ (89 points), but to get an A, I need you to prove you really understand the material and go a little above and beyond. You may choose your extension from the below or create your own. Whether or not your extension/extensions net you all 11 points is up to your grader. You do not have to do all the extensions to get full credit. Have a conversation with your TA in recitation to get a feel for their expectations. If you still have doubts, run by what you did with your TA before the deadline. Don’t procrastinate.
+Extension ideas:
+1. Add a more complex class like a square made up of lines. Don’t forget to test it. 
+2. Increase the percent coverage of the provided testing class. 
+3. Add more simple functionality to the points or lines like getting line slope.
+4. Add more complex functionality to the line class like checking to see if a line crosses another line. 
+5. Look ahead and figure out how to do a string override.
+6. Look ahead and figure out how to do an equals override.
+7. Add tests covering any functionality you added.
+Report: 
+I’d like you to create a short report with the following sections. Submit this report as a text file or as a pdf. This should be a very short report. Consider the amount of points it is worth and spend only the appropriate amount of time on it.
+1. Reflections: What did you learn in this lab assignment?
+2. Testing comparison: What was the difference in the JUnit testing and the driver tests? Which was easier? Which was more complete? Which helped you understand your object more?
+3. Extensions: What extensions did you add?
+4. Grading statement: What grade do you feel you deserve on this assignment? Why?
+Submissables: 
+Submit to GradeScope 
+* Add your two class files together into PointLineDriver.java
+* Add your report
+* Add any additional files you need for your extensions
+
+
+________________
+
+
+Rubric
+
+
+Point & Line JUnit Tests pass
+	54
+	Point : Print Method Created (Driver Test)
+	5
+	Line : Print method created (Driver test)
+	5
+	Driver : Point tested as requested
+	5
+	Driver : Line tested as requested
+	5
+	Report
+	5
+	Extensions
+	11
+	Code Quality (correct indentation, comment blocks, variable naming, etc)
+	10
+	
+
+	TOTAL POINTS POSSIBLE
+	100 PTS

@@ -7,6 +7,8 @@ package cs5004.CharDemo;
 
 /**
  * This class represents a Battle Arena. A battle arena has two Characters.
+ * 
+ * @author Robert Wilson
  */
 public class BattleArena {
 
