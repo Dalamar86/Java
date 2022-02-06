@@ -8,7 +8,9 @@ import java.lang.Math;
 
 /** 
  * This class represents a Character. A character has a name, hit points,
- * strength, and a boolean alive. 
+ * strength, and a boolean alive.
+ *  
+ * @author Robert Wilson
  */
 public class Character {
 
