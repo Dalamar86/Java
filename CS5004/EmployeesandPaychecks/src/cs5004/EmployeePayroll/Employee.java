@@ -122,7 +122,7 @@ public class Employee {
 	 * 
 	 * @return pay (double) total pay of the employee based on hours and pay rate
 	 */
-	public double getTotalPay() {
+	public double getWeeklyCheck() {
 		PayCheck check = new PayCheck(this);
 		double pay = check.getTotalPay();
 		return pay;

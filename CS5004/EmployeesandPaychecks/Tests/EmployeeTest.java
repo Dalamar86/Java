@@ -56,9 +56,9 @@ public class EmployeeTest {
 		joe.addHoursWorked(35.0);
 		barry.addHoursWorked(50.0);
 		pay = 752.50;
-		assertEquals(pay, joe.getTotalPay(), 0.1);
+		assertEquals(pay, joe.getWeeklyCheck(), 0.1);
 		pay = 1072.50;
-		assertEquals(pay, barry.getTotalPay(), 0.1);
+		assertEquals(pay, barry.getWeeklyCheck(), 0.1);
 	}
 	
 	@Test
