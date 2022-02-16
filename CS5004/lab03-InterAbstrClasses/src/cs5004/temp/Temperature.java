@@ -1,4 +1,5 @@
 package cs5004.temp;
+
 /**
  * Represents a temperature.
  */
@@ -35,6 +36,6 @@ public interface Temperature {
    *
    * @return True or False
    */
-   
-  //Boolean isFreezing();
+  Boolean isFreezing();
+
 }

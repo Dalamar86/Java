@@ -5,7 +5,7 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import cs5004.temp.Temperature;
+import cs5004.temp.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -22,27 +22,27 @@ public class TemperatureTest {
   @Before
   public void init() {
     cTemp1 = new CelsiusTemperature(100);
-    fTemp1 = new FarenheitTemperature(100, true);
-	
-	fTemp2 = new FarenheitTemperature(50);
+    fTemp1 = new FahrenheitTemperature(100, true);
+    
+	fTemp2 = new FahrenheitTemperature(50);
 	cTemp2 = new CelsiusTemperature(50, true);
   }
-
+  
   @Test(expected = IllegalArgumentException.class)
   public void testForInvalidFTemp() {
-    new FarenheitTemperature(-1000);
+    new FahrenheitTemperature(-1000);
   }
-  
+  /*
   @Test(expected = IllegalArgumentException.class)
   public void testForInvalidCTemp() {
     new CelsiusTemperature(-1000);
   }
-
+	*/
   @Test
   public void testObservers() {
     assertEquals(100, cTemp1.inCelsius(), 0.001);
     assertEquals(212, cTemp1.inFahrenheit(), 0.001);
-    assertEquals(373.15, cTemp1.inKelvin(), 0.001);
+    assertEquals(373.15, cTemp1.inKelvin(), 0.001); 
 	
 	assertEquals(100, fTemp1.inCelsius(), 0.001);
 	assertEquals(212, fTemp1.inFahrenheit(), 0.001);
@@ -59,7 +59,7 @@ public class TemperatureTest {
 
   @Test
   public void testInF() {
-    assertEquals(212, fTemp1.inFahrenheit(), 0.001);
+    assertEquals(212.0, fTemp1.inFahrenheit(), 0.001);
   }
  
   @Test
@@ -72,7 +72,7 @@ public class TemperatureTest {
   public void testEquals() {
 	  
 	  Temperature cTemp3 = new CelsiusTemperature(100);
-	  Temperature fTemp3 = new FarenheitTemperature(50);
+	  Temperature fTemp3 = new FahrenheitTemperature(50);
 	  
 	  assertTrue(cTemp3.equals(cTemp1));
 	  assertFalse(cTemp3.equals(cTemp2));
