@@ -18,11 +18,11 @@ public class FahrenheitTemperature extends TemperatureImp {
 		super(temperature);
 		this.fahrenheit = temperature;
 		// If temperature is below absolute zero print exception
-		try {
+		//try {
 			this.kelvin = super.inKelvin();
-		} catch (IllegalArgumentException e ) {
-			e.printStackTrace();
-		}
+		//} catch (IllegalArgumentException e ) {
+		//	e.printStackTrace();
+		//}
 		this.celsius = super.inCelsius();
 	}
 	
@@ -40,12 +40,12 @@ public class FahrenheitTemperature extends TemperatureImp {
 		}
 		this.celsius = temperature;
 		// If temperature is below absolute zero print exception
-		try {
+		//try {
 			this.kelvin = super.inKelvin();
-		} catch (IllegalArgumentException e ) {
-			e.printStackTrace();
-		}
-		this.fahrenheit = super.inCelsius();		
+		//} catch (IllegalArgumentException e ) {
+		//	e.printStackTrace();
+		//}
+		this.fahrenheit = super.inFahrenheit();		
 	}
 	
 	/**
@@ -54,7 +54,7 @@ public class FahrenheitTemperature extends TemperatureImp {
 	@Override
 	public String toString() {
 		String str;
-			str = String.format("%.1f", fahrenheit) + " Fahrenheit"; 
+			str = String.format("%.1f", fahrenheit) + "° Fahrenheit"; 
 		return str;
 	}
 }

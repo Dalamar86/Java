@@ -18,6 +18,11 @@ public class TemperatureTest {
   
   private Temperature cTemp2;
   private Temperature fTemp2;
+  
+  private Temperature cTemp3;
+  private Temperature fTemp3;
+  
+  private Temperature fTemp4;
 
   @Before
   public void init() {
@@ -26,18 +31,25 @@ public class TemperatureTest {
     
 	fTemp2 = new FahrenheitTemperature(50);
 	cTemp2 = new CelsiusTemperature(50, true);
+	
+	cTemp3 = new CelsiusTemperature(0, false);
+	fTemp3 = new FahrenheitTemperature(0, false);
+	
+	fTemp4 = new FahrenheitTemperature(0);
   }
   
   @Test(expected = IllegalArgumentException.class)
   public void testForInvalidFTemp() {
     new FahrenheitTemperature(-1000);
+    new FahrenheitTemperature(-1000, true);
   }
-  /*
+  
   @Test(expected = IllegalArgumentException.class)
   public void testForInvalidCTemp() {
     new CelsiusTemperature(-1000);
+    new CelsiusTemperature(-1000, true);
   }
-	*/
+	
   @Test
   public void testObservers() {
     assertEquals(100, cTemp1.inCelsius(), 0.001);
@@ -64,8 +76,8 @@ public class TemperatureTest {
  
   @Test
   public void testToString() {
-    assertEquals("100.0Â° Celsius", cTemp1.toString());
-    assertEquals("212.0Â° Fahrenheit", fTemp1.toString());
+    assertEquals("100.0° Celsius", cTemp1.toString());
+    assertEquals("212.0° Fahrenheit", fTemp1.toString());
   }
   
   @Test
@@ -83,5 +95,11 @@ public class TemperatureTest {
   }
   
   /*Add additional tests for methods you added or tests that were left out below this line.*/
+  @Test
+  public void testFreeze() {
+	  assertTrue(fTemp4.isFreezing());
+	  assertFalse(cTemp2.isFreezing());
+  }
+  
   
 }

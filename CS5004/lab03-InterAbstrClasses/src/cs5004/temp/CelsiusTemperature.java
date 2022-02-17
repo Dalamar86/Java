@@ -54,7 +54,7 @@ public class CelsiusTemperature extends TemperatureImp {
 	@Override
 	public String toString() {
 		String str;
-			str = String.format("%.1f", celsius) + " Celsius"; 
+			str = String.format("%.1f", celsius) + "° Celsius"; 
 		return str;
 	}
 }
