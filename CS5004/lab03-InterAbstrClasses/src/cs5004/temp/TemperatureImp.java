@@ -6,7 +6,7 @@ package cs5004.temp;
  * @author Robert Wilson
  *
  */
-public class TemperatureImp implements Temperature {
+public abstract class TemperatureImp implements Temperature {
 	/**
 	 * temperature in celsius
 	 */
@@ -19,19 +19,25 @@ public class TemperatureImp implements Temperature {
 	 * temperature in kelvin
 	 */
 	protected double kelvin;
+	
+	//################ Was told we do not need to include the constructor here for the lab so i have removed it and its associated field ############################//
+	
 	/**
 	 * the input temperature
-	 */
+	 *
 	protected double temperature;
 	
 	/**
 	 * Construct the temperature object which is extended by CelsiusTemperature and fahrenheitTemperature
 	 * 
 	 * @param temperature (double) temperature input
-	 */
+	 *
 	public TemperatureImp(double temperature) {
 		this.temperature = temperature;
 	}
+	*/
+	
+	//#################################################################################################################################################################//
 	
 	@Override
 	public double inCelsius() {

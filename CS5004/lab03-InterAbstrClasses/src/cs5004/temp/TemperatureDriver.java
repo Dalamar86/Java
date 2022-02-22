@@ -17,6 +17,9 @@ public class TemperatureDriver {
 		
 		TemperatureImp temp4 = new FahrenheitTemperature(212.0, true);
 		TemperatureImp temp5 = new FahrenheitTemperature(212.0, false);
+
+		TemperatureImp temp6 = new FahrenheitTemperature(-1000.0);
+		TemperatureImp temp7 = new CelsiusTemperature(-1000.0);
 		
 		// Print using toString Overrides
 		System.out.println(temp);
@@ -25,8 +28,12 @@ public class TemperatureDriver {
 		System.out.println(temp3);
 		System.out.println(temp4);
 		System.out.println(temp5);
+		System.out.println(temp6);
+		System.out.println(temp7);
 		
 		// Demonstrate each field is populated properly and isFreezing is working
+		System.out.println("\ntemp\nCelsius:\t" + temp.celsius + "\nFahrenheit:\t" + temp.fahrenheit + "\nKelvin:\t" + String.format("%.2f", temp.kelvin) 
+				+ "\nIs it Freezing:\t" + temp.isFreezing() + "\n");
 		System.out.println("\ntemp1\nCelsius:\t" + temp1.celsius + "\nFahrenheit:\t" + temp1.fahrenheit + "\nKelvin:\t" + String.format("%.2f", temp1.kelvin) 
 				+ "\nIs it Freezing:\t" + temp1.isFreezing() + "\n");
 		System.out.println("temp2\nCelsius:\t" + temp2.celsius + "\nFahrenheit:\t" + temp2.fahrenheit + "\nKelvin:\t" + String.format("%.2f", temp2.kelvin)
@@ -37,6 +44,10 @@ public class TemperatureDriver {
 				+ "\nIs it Freezing:\t" + temp4.isFreezing() + "\n");
 		System.out.println("temp5\nCelsius:\t" + temp5.celsius + "\nFahrenheit:\t" + temp5.fahrenheit + "\nKelvin:\t" + String.format("%.2f", temp5.kelvin)
 				+ "\nIs it Freezing:\t" + temp5.isFreezing() + "\n");
+		System.out.println("\ntemp6\nCelsius:\t" + temp6.celsius + "\nFahrenheit:\t" + temp6.fahrenheit + "\nKelvin:\t" + String.format("%.2f", temp6.kelvin) 
+				+ "\nIs it Freezing:\t" + temp6.isFreezing() + "\n");
+		System.out.println("\ntemp7\nCelsius:\t" + temp7.celsius + "\nFahrenheit:\t" + temp7.fahrenheit + "\nKelvin:\t" + String.format("%.2f", temp7.kelvin) 
+				+ "\nIs it Freezing:\t" + temp7.isFreezing() + "\n");
 		
 		// Demonstrate that the equals Overrides is working properly
 		System.out.println("temp1 equlas temp2: " + temp1.equals(temp2));

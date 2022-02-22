@@ -15,7 +15,7 @@ public class CelsiusTemperature extends TemperatureImp {
 	 * @param temperature (double) in celsius
 	 */
 	public CelsiusTemperature (double temperature) {
-		super(temperature);
+		//super(temperature);    Removed as it was not a requirement for the lab or this project
 		this.celsius = temperature;
 		// If temperature is below absolute zero print exception
 		try {
@@ -34,7 +34,7 @@ public class CelsiusTemperature extends TemperatureImp {
 	 * @param bool (Boolean) must be true to turn temperature to fahrenheit
 	 */
 	public CelsiusTemperature (double temperature, boolean bool) {
-		super(temperature);
+		// super(temperature);    Removed as it was not a requirement for the lab or this project
 		if(bool != true) {
 			return;
 		}

@@ -15,14 +15,14 @@ public class FahrenheitTemperature extends TemperatureImp {
 	 * @param temperature (double) in fahrenheit
 	 */
 	public FahrenheitTemperature (double temperature) {
-		super(temperature);
+		//super(temperature);    Removed as it was not a requirement for the lab or this project
 		this.fahrenheit = temperature;
 		// If temperature is below absolute zero print exception
-		//try {
+		try {
 			this.kelvin = super.inKelvin();
-		//} catch (IllegalArgumentException e ) {
-		//	e.printStackTrace();
-		//}
+		} catch (IllegalArgumentException e ) {
+			e.printStackTrace();
+		}
 		this.celsius = super.inCelsius();
 	}
 	
@@ -34,17 +34,17 @@ public class FahrenheitTemperature extends TemperatureImp {
 	 * @param bool (Boolean) must be true, changes type of temperature to celsius
 	 */
 	public FahrenheitTemperature (double temperature, boolean bool) {
-		super(temperature);
+		//super(temperature);    Removed as it was not a requirement for the lab or this project
 		if(bool != true) {
 			return;
 		}
 		this.celsius = temperature;
 		// If temperature is below absolute zero print exception
-		//try {
+		try {
 			this.kelvin = super.inKelvin();
-		//} catch (IllegalArgumentException e ) {
-		//	e.printStackTrace();
-		//}
+		} catch (IllegalArgumentException e ) {
+			e.printStackTrace();
+		}
 		this.fahrenheit = super.inFahrenheit();		
 	}
 	

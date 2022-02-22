@@ -40,13 +40,15 @@ public class TemperatureTest {
   
   @Test(expected = IllegalArgumentException.class)
   public void testForInvalidFTemp() {
+	// If i remove the try catch block this passes but the program stops running as we are not catching the exception in the driver
     new FahrenheitTemperature(-1000);
     new FahrenheitTemperature(-1000, true);
   }
   
   @Test(expected = IllegalArgumentException.class)
   public void testForInvalidCTemp() {
-    new CelsiusTemperature(-1000);
+	// If i remove the try catch block this passes but the program stops running as we are not catching the exception in the driver
+	new CelsiusTemperature(-1000);
     new CelsiusTemperature(-1000, true);
   }
 	
