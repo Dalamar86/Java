@@ -59,8 +59,8 @@ public abstract class TemperatureImp implements Temperature {
 			kelvin = celsius - ABS_ZERO_C;
 		} else if(celsius == null) {
 			kelvin = (fahrenheit-32.0)*(5.0/9.0) - ABS_ZERO_C;
-		} 
-		if(kelvin < 0) { throw new IllegalArgumentException("Temperature is below know limits of 'Absolute Zero'");}
+		}
+		if(kelvin < -0.00001) { throw new IllegalArgumentException("Temperature is below know limits of 'Absolute Zero'");}
 		
 		return kelvin;
 	}
@@ -84,5 +84,73 @@ public abstract class TemperatureImp implements Temperature {
 			return true;
 		}
 		return false;
+	}
+	
+	//################################### Static conversion methods #############################################//
+	
+	/**
+	 * Converts given celsius temperature to fahrenheit
+	 * 
+	 * @param c (double) temperature in celsius
+	 * @return f (double) temperature in fahrenheit
+	 */
+	public static double cToF(double c) {
+		double f = (c*(9.0/5.0))+32.0;
+		return f;
+	}
+	
+	/**
+	 * Converts given fahrenheit temperature to celsius
+	 * 
+	 * @param f (double) temperature in fahrenheit
+	 * @return c (double) temperature in celsius
+	 */
+	public static double fToC(double f) {
+		double c = (f-32.0) *(5.0/9.0);
+		return c;
+	}
+	
+	/**
+	 * Converts given celsius temperature to kelvin
+	 * 
+	 * @param c (double) temperature in celsius
+	 * @return k (double) temperature in kelvin
+	 */
+	public static double cToK(double c) {
+		double k = c - ABS_ZERO_C;
+		return k;
+	}
+	
+	/**
+	 * Converts given kelvin temperature to celsius
+	 * 
+	 * @param k (double) temperature in kelvin
+	 * @return c (double) temperature in celsius
+	 */
+	public static double kToC(double k) {
+		double c = k + ABS_ZERO_C;
+		return c;
+	}
+	
+	/**
+	 * Converts given fahrenheit temperature to kelvin
+	 * 
+	 * @param f (double) temperature in fahrenheit
+	 * @return k (double) temperature in kelvin
+	 */
+	public static double fToK(double f) {
+		double k = (f-32.0) *(5.0/9.0)-ABS_ZERO_C;
+		return k;
+	}
+	
+	/**
+	 * Converts given kelvin temperature to fahrenheit
+	 * 
+	 * @param k (double) temperature in kelvin
+	 * @return f (double) temperature in fahrenheit
+	 */
+	public static double kToF(double k) {
+		double f = ((k + ABS_ZERO_C)*(9.0/5.0))+32.0;
+		return f;
 	}
 }

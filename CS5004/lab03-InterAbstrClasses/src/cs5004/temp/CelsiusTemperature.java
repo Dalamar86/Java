@@ -18,11 +18,7 @@ public class CelsiusTemperature extends TemperatureImp {
 		//super(temperature);    Removed as it was not a requirement for the lab or this project
 		this.celsius = temperature;
 		// If temperature is below absolute zero print exception
-		try {
-			this.kelvin = super.inKelvin();
-		} catch (IllegalArgumentException e ) {
-			e.printStackTrace();
-		}
+		this.kelvin = super.inKelvin();
 		this.fahrenheit = super.inFahrenheit();
 	}
 	
@@ -40,11 +36,7 @@ public class CelsiusTemperature extends TemperatureImp {
 		}
 		this.fahrenheit = temperature;
 		// If temperature is below absolute zero print exception 
-		try {
-			this.kelvin = super.inKelvin();
-		} catch (IllegalArgumentException e ) {
-			e.printStackTrace();
-		}
+		this.kelvin = super.inKelvin();
 		this.celsius = super.inFahrenheit();
 	}
 	

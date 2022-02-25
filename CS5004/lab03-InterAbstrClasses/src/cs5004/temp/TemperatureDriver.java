@@ -10,16 +10,31 @@ public class TemperatureDriver {
 
 	public static void main(String[] args) {
 		// Initialize temperatures
-		TemperatureImp temp = new CelsiusTemperature(-275.0);
+		TemperatureImp temp;
+		TemperatureImp temp6;
+		TemperatureImp temp7;
+		
+		try {
+			temp = new CelsiusTemperature(-275.0);
+		} catch  (IllegalArgumentException e ) {
+			e.printStackTrace();
+			temp = new CelsiusTemperature(-273);
+		}
+		
 		TemperatureImp temp1 = new CelsiusTemperature(100.0);
 		TemperatureImp temp2 = new FahrenheitTemperature(68.0);
 		TemperatureImp temp3 = new CelsiusTemperature(20.0);
 		
 		TemperatureImp temp4 = new FahrenheitTemperature(212.0, true);
 		TemperatureImp temp5 = new FahrenheitTemperature(212.0, false);
-
-		TemperatureImp temp6 = new FahrenheitTemperature(-1000.0);
-		TemperatureImp temp7 = new CelsiusTemperature(-1000.0);
+		
+		try {
+			temp6 = new FahrenheitTemperature(-1000.0);
+			temp7 = new CelsiusTemperature(-1000.0);
+		} catch (IllegalArgumentException e ) { 
+			temp6 = new FahrenheitTemperature(-459.67);
+			temp7 = new CelsiusTemperature(-273.15);
+		}
 		
 		// Print using toString Overrides
 		System.out.println(temp);
@@ -52,5 +67,14 @@ public class TemperatureDriver {
 		// Demonstrate that the equals Overrides is working properly
 		System.out.println("temp1 equlas temp2: " + temp1.equals(temp2));
 		System.out.println("temp1 equlas temp3: " + temp2.equals(temp3));
+		
+		// Static conversion calls
+		System.out.println("\nStatic Conversion Statements:");
+		System.out.println("\nConvert " + temp1 + " to fahrenheit: \n\t" + String.format("%.1f", TemperatureImp.cToF(temp1.inCelsius())) + "° Fahrenheit");
+		System.out.println("\nConvert " + temp4 + " to celsius: \n\t" + String.format("%.1f", TemperatureImp.fToC(temp4.inFahrenheit())) + "° Celsius");
+		System.out.println("\nConvert " + temp4 + " to kelvin: \n\t" + String.format("%.2f", TemperatureImp.fToK(temp4.inFahrenheit())) + "° Kelvin");
+		System.out.println("\nConvert " + temp1 + " to kelvin: \n\t" + String.format("%.2f", TemperatureImp.cToK(temp1.inCelsius())) + "° Kelvin");
+		System.out.println("\nConvert " + String.format("%.2f", temp4.inKelvin()) + "° kelvin to fahrenheit: \n\t" + String.format("%.2f", TemperatureImp.kToF(temp4.inKelvin())) + "° Fahrenheit");
+		System.out.println("\nConvert " + String.format("%.2f", temp1.inKelvin()) + "° kelvin to celsius: \n\t" + String.format("%.2f", TemperatureImp.kToC(temp1.inKelvin())) + "° Celsius");
 	}
 }
