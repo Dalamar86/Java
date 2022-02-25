@@ -103,5 +103,13 @@ public class TemperatureTest {
 	  assertFalse(cTemp2.isFreezing());
   }
   
-  
+  @Test
+  public void testStaticConversion() {
+	  assertEquals(100.00, TemperatureImp.fToC(212.0), 0.1);
+	  assertEquals(212.00, TemperatureImp.cToF(100.0), 0.1);
+	  assertEquals(273.15, TemperatureImp.fToK(32.0), 0.1);
+	  assertEquals(273.15, TemperatureImp.cToK(0.0), 0.1);
+	  assertEquals(32.0, TemperatureImp.kToF(273.15), 0.1);
+	  assertEquals(0.0, TemperatureImp.kToC(273.15), 0.1);
+  }
 }
