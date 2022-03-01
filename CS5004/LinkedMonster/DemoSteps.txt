@@ -1,0 +1,53 @@
+Check all syntax by compiling the code
+
+1. Examine the driver file LinkedMonsters
+	1.1 Compile singularly
+	1.3 What's the purpose of each file?
+
+2. Establish MonsterListI interface
+	2.1 manually add the described functions
+	2.2 which files implement this interface?
+	2.3 establish compile all
+
+3. Fix the implementation constructors (don't forget to compile as you go)
+	3.1 create the required class variables
+	3.2 create a no argument constructor 
+	3.3 create the argument constructors
+
+4. Establish a node and an empty node to continue
+	4.1 review an empty node to see if any changes are needed
+	4.2 review a node and make the needed changes to the constructor
+	4.3 compile all and check to see if you've broken anything
+
+5. Add the ability to print a monster list so you can test
+	3.1 make sure you can print a monster
+	3.2 the base of your list is a node so add the ability to print a node
+	(You'll need to use recursion here.) 
+	3.3 create a list with a single monster and test with a print
+	
+6. Add the ability to add a monster
+	6.1 put the addMonster lines in to the driver
+	6.2 implement the addMonster method
+	6.3 compile, check, and test with print
+
+7. Add the ability to count monsters
+	7.1 add the count ability to MonsterListImp
+	7.2 fix empty node
+	7.3 fix node
+	7.4 test
+
+8. Add the ability to get a retrieve a specific monster given a position
+	8.1 create a test in the driver
+	8.2 implement impl, emptyNode, and node
+
+9. Add/check the ability for a monster to take damage
+	9.1 check this functionality
+	9.2 kill a monster
+
+10. Edit the list by removing dead monsters
+	10.1 check the current removeDead method
+	10.2 add the getAlive methods in node and emptyNode
+
+8. Add the ability to get only zombies 
+	8.1 add a getZombies method
+	8.2 abstract this out to get any monster type
