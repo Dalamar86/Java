@@ -3,6 +3,11 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * This class controls our keyboard input.
+ * @author Robert Wilson
+ *
+ */
 public class KeyHandler implements KeyListener {
 
 	public boolean upPressed, downPressed, ltPressed, rtPressed;
