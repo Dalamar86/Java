@@ -4,8 +4,11 @@ import items.MeleeWeapon;
 
 public class Skeleton extends Entities {
 
+	private static int skeletonCount = 0;
+	
 	public Skeleton() {
 		setDefaultValues();
+		skeletonCount++;
 	}
 	
 	@Override
@@ -28,6 +31,11 @@ public class Skeleton extends Entities {
 		return name;
 	}
 
+		@Override
+	public int getStrength() {
+		return strength;
+	}
+	
 	@Override
 	public int attack() {
 		
@@ -35,10 +43,8 @@ public class Skeleton extends Entities {
 		
 		return damage;
 	}
-
-	@Override
-	public int getStrength() {
-		return strength;
+	
+	public static int getSkeletonCount() {
+		return skeletonCount;
 	}
-
 }

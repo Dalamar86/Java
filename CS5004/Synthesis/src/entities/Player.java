@@ -4,12 +4,17 @@ import items.MeleeWeapon;
 
 public class Player extends Entities {
 
+	private static int playerCount = 0;
+	
 	public Player() {
 		setDefaultValues();
+		playerCount++;
 	}
 	
 	public Player(int health, int strength, String name) {
 		super(health, strength, name);
+		setHealth(health);
+		playerCount++;
 	}
 
 	@Override
@@ -27,6 +32,13 @@ public class Player extends Entities {
 		return health;
 	}
 
+	public void setHealth(int health) {
+		if(health > 100) {
+			health = 100;
+		}
+		this.health = health;
+	}
+	
 	@Override
 	public String getName() {
 		return name;
@@ -50,4 +62,8 @@ public class Player extends Entities {
 		return "Leeroy Jenkins";
 	}
 
+
+	public static int getPlayerCount() {
+		return playerCount;
+	}
 }
