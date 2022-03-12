@@ -10,6 +10,11 @@ import javax.swing.JPanel;
 import entity.Player;
 import tile.TileManager;
 
+/**
+ * This is our game panel and is the window for our game.
+ * @author Robert Wilson
+ *
+ */
 public class GamePanel extends JPanel implements Runnable {
 	
 	// Screen Settings
