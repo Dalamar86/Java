@@ -37,7 +37,7 @@ public class CelsiusTemperature extends TemperatureImp {
 		this.fahrenheit = temperature;
 		// If temperature is below absolute zero print exception 
 		this.kelvin = super.inKelvin();
-		this.celsius = super.inFahrenheit();
+		this.celsius = super.inCelsius();
 	}
 	
 	/**
