@@ -22,6 +22,7 @@ public class Player extends Entity{
 	
 	public final int screenX;
 	public final int screenY;
+	int hasKey = 0;
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		
@@ -34,6 +35,8 @@ public class Player extends Entity{
 		solidArea = new Rectangle();
 		solidArea.x = gp.tileSize/6;
 		solidArea.y = gp.tileSize/3;
+		solidAreaDefaultX = solidArea.x;
+		solidAreaDefaultY = solidArea.y;
 		solidArea.width = (int) (gp.tileSize/1.5);
 		solidArea.height = (int) (gp.tileSize/1.5);
 		
@@ -46,6 +49,7 @@ public class Player extends Entity{
 		worldX = gp.tileSize * 23;
 		worldY = gp.tileSize * 21;
 		speed = 4;
+		speeddiag = 3;
 		direction = "down";
 	}
 	
@@ -109,6 +113,10 @@ public class Player extends Entity{
 			collisionOn = false;
 			gp.cChecker.checkTile(this);
 			
+			// Check object collision
+			int objIndex = gp.cChecker.checkObject(this, true);
+			pickUpObject(objIndex);
+
 			// if collision is False, Player can move
 			if(collisionOn == false) {
 	
@@ -117,23 +125,23 @@ public class Player extends Entity{
 					worldY -= speed;
 					break;
 				case "uplt":
-					worldY -= speed/1.5;
-					worldX -= speed/1.5;
+					worldY -= speeddiag;
+					worldX -= speeddiag;
 					break;
 				case "uprt":
-					worldY -= speed/1.5;
-					worldX += speed/1.5;
+					worldY -= speeddiag;
+					worldX += speeddiag;
 					break;
 				case "down":
 					worldY += speed;
 					break;
 				case "downlt":
-					worldY += speed/1.5;
-					worldX -= speed/1.5;
+					worldY += speeddiag;
+					worldX -= speeddiag;
 					break;
 				case "downrt":
-					worldY += speed/1.5;
-					worldX += speed/1.5;
+					worldY += speeddiag;
+					worldX += speeddiag;
 					break;
 				case "left":
 					worldX -= speed;
@@ -147,12 +155,14 @@ public class Player extends Entity{
 				direction = "left";
 				collisionOn = false;
 				gp.cChecker.checkTile(this);
+				gp.cChecker.checkObject(this, true);
 				if(collisionOn == false) {
 					worldX -= speed;
 				} else {				
 					direction = "up";
 					collisionOn = false;
 					gp.cChecker.checkTile(this);
+					gp.cChecker.checkObject(this, true);
 					if(collisionOn == false) {
 						worldY -= speed;
 					}
@@ -161,12 +171,14 @@ public class Player extends Entity{
 				direction = "right";
 				collisionOn = false;
 				gp.cChecker.checkTile(this);
+				gp.cChecker.checkObject(this, true);
 				if(collisionOn == false) {
 					worldX += speed;
 				} else {				
 					direction = "up";
 					collisionOn = false;
 					gp.cChecker.checkTile(this);
+					gp.cChecker.checkObject(this, true);
 					if(collisionOn == false) {
 						worldY -= speed;
 					}
@@ -175,12 +187,14 @@ public class Player extends Entity{
 				direction = "left";
 				collisionOn = false;
 				gp.cChecker.checkTile(this);
+				gp.cChecker.checkObject(this, true);
 				if(collisionOn == false) {
 					worldX -= speed;
 				} else {
 					direction = "down";
 					collisionOn = false;
 					gp.cChecker.checkTile(this);
+					gp.cChecker.checkObject(this, true);
 					if(collisionOn == false) {
 						worldY += speed;
 					}
@@ -189,12 +203,14 @@ public class Player extends Entity{
 				direction = "right";
 				collisionOn = false;
 				gp.cChecker.checkTile(this);
+				gp.cChecker.checkObject(this, true);
 				if(collisionOn == false) {
 					worldX += speed;
 				} else {
 					direction = "down";
 					collisionOn = false;
 					gp.cChecker.checkTile(this);
+					gp.cChecker.checkObject(this, true);
 					if(collisionOn == false) {
 						worldY += speed;
 					}
@@ -211,6 +227,27 @@ public class Player extends Entity{
 				}
 				spriteCounter = 0;
 			}
+		}
+	}
+	
+	public void pickUpObject(int index) {
+		if(index != 999) {
+			String objectName = gp.obj[index].name;
+			
+			switch(objectName) {
+			case "Key":
+				hasKey++;
+				gp.obj[index] = null;
+				break;
+			case "Door":
+				if(hasKey > 0) {
+					gp.obj[index] = null;
+					hasKey--;
+				}
+				break;
+				
+			}
+			
 		}
 	}
 	
