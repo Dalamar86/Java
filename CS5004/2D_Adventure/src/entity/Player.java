@@ -2,13 +2,13 @@ package entity;
 
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import main.GamePanel;
-import main.KeyHandler;
+import main.*;
 
 /**
  * 
@@ -30,6 +30,12 @@ public class Player extends Entity{
 		
 		screenX = gp.screenWidth/2 - (gp.tileSize/2);
 		screenY = gp.screenHeight/2 - (gp.tileSize/2);
+		
+		solidArea = new Rectangle();
+		solidArea.x = gp.tileSize/6;
+		solidArea.y = gp.tileSize/3;
+		solidArea.width = (int) (gp.tileSize/1.5);
+		solidArea.height = (int) (gp.tileSize/1.5);
 		
 		setDefaultValues();
 		getPlayerImage();
@@ -64,19 +70,136 @@ public class Player extends Entity{
 	public void update() {
 		
 		if(keyH.upPressed == true || keyH.downPressed == true || keyH.ltPressed == true || keyH.rtPressed == true ) {
+			
 			if(keyH.upPressed == true) {
-				direction = "up";
-				worldY -= speed;
+				if(keyH.ltPressed) {
+					direction = "uplt";
+				} else if (keyH.rtPressed) {
+					direction = "uprt";
+				} else {
+					direction = "up";
+				}
 			} else if(keyH.downPressed == true) {
-				direction = "down";
-				worldY += speed;
+				if(keyH.ltPressed) {
+					direction = "downlt";
+				} else if (keyH.rtPressed) {
+					direction = "downrt";
+				} else {
+					direction = "down";
+				}
 			} else if(keyH.ltPressed == true) {
-				direction = "left";
-				worldX -= speed;
+				if(keyH.upPressed) {
+					direction = "uplt";
+				} else if (keyH.downPressed) {
+					direction = "downlt";
+				} else {
+					direction = "left";
+				}
 			} else if(keyH.rtPressed == true) {
+				if(keyH.upPressed) {
+					direction = "uprt";
+				} else if (keyH.downPressed) {
+					direction = "downrt";
+				} else {
+					direction = "right";
+				}
+			}
+			
+			// Check tile collision
+			collisionOn = false;
+			gp.cChecker.checkTile(this);
+			
+			// if collision is False, Player can move
+			if(collisionOn == false) {
+	
+				switch(direction) {
+				case "up":
+					worldY -= speed;
+					break;
+				case "uplt":
+					worldY -= speed/2;
+					worldX -= speed/2;
+					break;
+				case "uprt":
+					worldY -= speed/2;
+					worldX += speed/2;
+					break;
+				case "down":
+					worldY += speed;
+					break;
+				case "downlt":
+					worldY += speed/2;
+					worldX -= speed/2;
+					break;
+				case "downrt":
+					worldY += speed/2;
+					worldX += speed/2;
+					break;
+				case "left":
+					worldX -= speed;
+					break;
+				case "right":
+					worldX += speed;
+					break;
+				}
+				
+			} else if(collisionOn == true && direction == "uplt") {
+				direction = "left";
+				collisionOn = false;
+				gp.cChecker.checkTile(this);
+				if(collisionOn == false) {
+					worldX -= speed;
+				} else {				
+					direction = "up";
+					collisionOn = false;
+					gp.cChecker.checkTile(this);
+					if(collisionOn == false) {
+						worldY -= speed;
+					}
+				}
+			} else if(collisionOn == true && direction == "uprt") {
 				direction = "right";
-				worldX += speed;
-			} 
+				collisionOn = false;
+				gp.cChecker.checkTile(this);
+				if(collisionOn == false) {
+					worldX += speed;
+				} else {				
+					direction = "up";
+					collisionOn = false;
+					gp.cChecker.checkTile(this);
+					if(collisionOn == false) {
+						worldY -= speed;
+					}
+				}
+			} else if(collisionOn == true && direction == "downlt") {
+				direction = "left";
+				collisionOn = false;
+				gp.cChecker.checkTile(this);
+				if(collisionOn == false) {
+					worldX -= speed;
+				} else {
+					direction = "down";
+					collisionOn = false;
+					gp.cChecker.checkTile(this);
+					if(collisionOn == false) {
+						worldY += speed;
+					}
+				}
+			} else if(collisionOn == true && direction == "downrt") {
+				direction = "right";
+				collisionOn = false;
+				gp.cChecker.checkTile(this);
+				if(collisionOn == false) {
+					worldX += speed;
+				} else {
+					direction = "down";
+					collisionOn = false;
+					gp.cChecker.checkTile(this);
+					if(collisionOn == false) {
+						worldY += speed;
+					}
+				}
+			}
 			
 			
 			spriteCounter++;
@@ -102,7 +225,22 @@ public class Player extends Entity{
 				} else {
 					image = up2;
 				}
-				
+				break;
+			case "downlt":
+			case "uplt":
+				if(spriteNum == 1) {
+					image = left1;
+				} else {
+					image = left2;
+				}
+				break;
+			case "downrt":
+			case "uprt":
+				if(spriteNum == 1) {
+					image = right1;
+				} else {
+					image = right2;
+				}
 				break;
 			case "down":
 				if(spriteNum == 1) {
@@ -110,7 +248,6 @@ public class Player extends Entity{
 				} else {
 					image = down2;
 				}
-				
 				break;
 			case "left":
 				if(spriteNum == 1) {
@@ -118,7 +255,6 @@ public class Player extends Entity{
 				} else {
 					image = left2;
 				}
-				
 				break;
 			case "right":
 				if(spriteNum == 1) {
@@ -126,7 +262,6 @@ public class Player extends Entity{
 				} else {
 					image = right2;
 				}
-				
 				break;
 		}
 		
