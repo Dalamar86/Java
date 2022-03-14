@@ -117,23 +117,23 @@ public class Player extends Entity{
 					worldY -= speed;
 					break;
 				case "uplt":
-					worldY -= speed/2;
-					worldX -= speed/2;
+					worldY -= speed/1.5;
+					worldX -= speed/1.5;
 					break;
 				case "uprt":
-					worldY -= speed/2;
-					worldX += speed/2;
+					worldY -= speed/1.5;
+					worldX += speed/1.5;
 					break;
 				case "down":
 					worldY += speed;
 					break;
 				case "downlt":
-					worldY += speed/2;
-					worldX -= speed/2;
+					worldY += speed/1.5;
+					worldX -= speed/1.5;
 					break;
 				case "downrt":
-					worldY += speed/2;
-					worldX += speed/2;
+					worldY += speed/1.5;
+					worldX += speed/1.5;
 					break;
 				case "left":
 					worldX -= speed;
