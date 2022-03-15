@@ -7,8 +7,9 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
-import entity.Player;
-import tile.TileManager;
+import entity.*;
+import tile.*;
+import object.*;
 
 /**
  * This is our game panel and is the window for our game.
@@ -27,14 +28,38 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int screenWidth = tileSize * maxScreenCol;	// 768 Pixels
 	public final int screenHeight = tileSize * maxScreenRow;	// 576 Pixels
 	
+	// World Setting
+	public final int maxWorldCol = 50;
+	public final int maxWorldRow = 50;
+	public final int worldWidth = tileSize * maxWorldCol;
+	public final int worldHeight = tileSize * maxWorldRow;
+	
 	// FPS
 	int FPS = 60;
 	
+	// Game State
+	public enum GameState {
+		PLAYSTATE, 
+		PAUSESTATE
+	}
+	GameState gameState = GameState.PLAYSTATE;
+	
+	// System
 	TileManager tileM = new TileManager(this);
-	KeyHandler keyH = new KeyHandler();
+	KeyHandler keyH = new KeyHandler(this);
+	Sound music = new Sound();
+	Sound se = new Sound();
+	public CollisionChecker cChecker = new CollisionChecker(this);
+	public AssetSetter aSetter = new AssetSetter(this);
+	public UI ui = new UI(this);
 	Thread gameThread;  // keeps the programming running
-	Player player = new Player(this, keyH);
-		
+	
+	// Entity and objects
+	public Player player = new Player(this, keyH);
+	public SuperObject obj[] = new SuperObject[20];
+	
+	
+			
 	public GamePanel () {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
@@ -43,8 +68,14 @@ public class GamePanel extends JPanel implements Runnable {
 		this.setFocusable(true);
 	}
 
-	public void startGameThread() {
+	public void setupGame() {
 		
+		aSetter.setObject();
+		playMusic(0);
+		gameState = GameState.PLAYSTATE;
+	}
+	
+	public void startGameThread() {
 		gameThread = new Thread(this);
 		gameThread.start();
 	}
@@ -86,20 +117,68 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 	
 	public void update( ) {
+		switch(gameState) {
+		case PLAYSTATE:
+			player.update();
+			break;
+		case PAUSESTATE:
+			break;
+		}
 		
-		player.update();
 	}
 	
 	public void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
-		
 		Graphics2D g2 = (Graphics2D)g;
 		
+		// Debug
+		long drawStart = 0;
+		if(keyH.checkDrawTime) {
+			drawStart = System.nanoTime();
+		}
+		
+		// Tile
 		tileM.draw(g2);
 		
+		// Object
+		for(int i = 0; i < obj.length; i++) {
+			if(obj[i] != null) {
+				obj[i].draw(g2, this);
+			}
+		}
+		
+		// Player
 		player.draw(g2);
 		
+		// UI
+		ui.draw(g2);
+		
+		// Debug
+		if(keyH.checkDrawTime) {
+			long drawEnd = System.nanoTime();
+			long passed = drawEnd - drawStart;
+			g2.setColor(Color.white);
+			g2.drawString("Draw Time: " + passed, 10, 400);
+			System.out.println("Draw Time: " + passed);
+		}
+		
 		g2.dispose();
+	}
+	
+	public void playMusic(int index) {
+		
+		music.setFile(index);
+		music.play();
+		music.loop();
+	}
+	
+	public void stopMusic() {
+		music.stop();
+	}
+	
+	public void playSE(int index) {
+		se.setFile(index);
+		se.play();
 	}
 }
