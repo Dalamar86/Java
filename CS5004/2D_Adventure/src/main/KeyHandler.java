@@ -12,6 +12,9 @@ public class KeyHandler implements KeyListener {
 
 	public boolean upPressed, downPressed, ltPressed, rtPressed;
 	
+	// Debug
+	boolean checkDrawTime = false;
+	
 	@Override
 	public void keyTyped(KeyEvent e) {		
 	}
@@ -29,7 +32,13 @@ public class KeyHandler implements KeyListener {
 			ltPressed = true;
 		} else if(code == KeyEvent.VK_D) {
 			rtPressed = true;
-		} 
+		} else if(code == KeyEvent.VK_T) {
+			if(checkDrawTime) {
+				checkDrawTime = false;
+			} else {
+				checkDrawTime = true;
+			}
+		}
 	}
 
 	@Override
