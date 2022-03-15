@@ -119,7 +119,7 @@ public class Player extends Entity{
 			
 			// Check tile collision
 			collisionOn = false;
-			gp.cChecker.checkTile(this);
+			//gp.cChecker.checkTile(this);
 			
 			// Check object collision
 			int objIndex = gp.cChecker.checkObject(this, true);
@@ -290,52 +290,66 @@ public class Player extends Entity{
 		BufferedImage image = null;
 		
 		switch(direction) {
-			case "up":
-				if(spriteNum == 1) {
-					image = up1;
-				} else {
-					image = up2;
-				}
-				break;
-			case "downlt":
-			case "uplt":
-				if(spriteNum == 1) {
-					image = left1;
-				} else {
-					image = left2;
-				}
-				break;
-			case "downrt":
-			case "uprt":
-				if(spriteNum == 1) {
-					image = right1;
-				} else {
-					image = right2;
-				}
-				break;
-			case "down":
-				if(spriteNum == 1) {
-					image = down1;
-				} else {
-					image = down2;
-				}
-				break;
-			case "left":
-				if(spriteNum == 1) {
-					image = left1;
-				} else {
-					image = left2;
-				}
-				break;
-			case "right":
-				if(spriteNum == 1) {
-					image = right1;
-				} else {
-					image = right2;
-				}
-				break;
+		case "up":
+			if(spriteNum == 1) {
+				image = up1;
+			} else {
+				image = up2;
+			}
+			break;
+		case "downlt":
+		case "uplt":
+			if(spriteNum == 1) {
+				image = left1;
+			} else {
+				image = left2;
+			}
+			break;
+		case "downrt":
+		case "uprt":
+			if(spriteNum == 1) {
+				image = right1;
+			} else {
+				image = right2;
+			}
+			break;
+		case "down":
+			if(spriteNum == 1) {
+				image = down1;
+			} else {
+				image = down2;
+			}
+			break;
+		case "left":
+			if(spriteNum == 1) {
+				image = left1;
+			} else {
+				image = left2;
+			}
+			break;
+		case "right":
+			if(spriteNum == 1) {
+				image = right1;
+			} else {
+				image = right2;
+			}
+			break;
+		}
+		int x = screenX;
+		int y = screenY;
+		int rightOffset = gp.screenWidth - screenX;
+		int bottomOffset = gp.screenHeight - screenY;
+		
+		if(screenX > worldX) {
+			x = worldX;
+		} if(screenY > worldY) {
+			y = worldY;
+		} if(rightOffset > gp.worldWidth -worldX) {
+			x = gp.screenWidth - (gp.worldWidth - worldX);
+		} if(bottomOffset > gp.worldHeight - worldY) {
+			y = gp.screenHeight - (gp.worldHeight - worldY);
 		}
 		
-		g2.drawImage(image,  screenX,  screenY, null);
+		g2.drawImage(image,  x,  y, null);
 	}
 }
