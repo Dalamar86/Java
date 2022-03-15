@@ -22,7 +22,8 @@ public class Player extends Entity{
 	
 	public final int screenX;
 	public final int screenY;
-	int hasKey = 0;
+	public int hasKey = 0;
+	int standCounter = 0;
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		
@@ -227,6 +228,14 @@ public class Player extends Entity{
 				}
 				spriteCounter = 0;
 			}
+		} else {
+			standCounter++;
+			
+			if(standCounter == 20) {
+				spriteNum = 1;
+				standCounter = 0;
+			}
+			
 		}
 	}
 	
@@ -239,18 +248,28 @@ public class Player extends Entity{
 				gp.playSE(1);
 				hasKey++;
 				gp.obj[index] = null;
+				gp.ui.showMessage("You got a key!");
 				break;
 			case "Door":
-				gp.playSE(3);
 				if(hasKey > 0) {
+					gp.playSE(3);
 					gp.obj[index] = null;
 					hasKey--;
+					gp.ui.showMessage("Door Unlocked!");
+				} else {
+					gp.ui.showMessage("Door Locked!");
 				}
 				break;
 			case "Boots":
 				gp.playSE(2);
 				speed += 2;
 				gp.obj[index] = null;
+				gp.ui.showMessage("Speed boost");
+				break;
+			case "Chest":
+				gp.ui.levelFinished = true;
+				gp.stopMusic();
+				gp.playSE(4);
 				break;
 			}
 			
