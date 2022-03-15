@@ -22,7 +22,7 @@ public class Player extends Entity{
 	
 	public final int screenX;
 	public final int screenY;
-	public int hasKey = 0;
+	//public int hasKey = 0;
 	int standCounter = 0;
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
@@ -248,6 +248,8 @@ public class Player extends Entity{
 	
 	public void pickUpObject(int index) {
 		if(index != 999) {
+			
+			/*
 			String objectName = gp.obj[index].name;
 			
 			switch(objectName) {
@@ -279,7 +281,7 @@ public class Player extends Entity{
 				gp.playSE(4);
 				break;
 			}
-			
+			*/
 		}
 	}
 	

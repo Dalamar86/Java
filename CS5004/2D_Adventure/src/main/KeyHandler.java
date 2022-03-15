@@ -10,10 +10,15 @@ import java.awt.event.KeyListener;
  */
 public class KeyHandler implements KeyListener {
 
+	GamePanel gp;
 	public boolean upPressed, downPressed, ltPressed, rtPressed;
 	
 	// Debug
 	boolean checkDrawTime = false;
+	
+	public KeyHandler(GamePanel gp) {
+		this.gp = gp;
+	}
 	
 	@Override
 	public void keyTyped(KeyEvent e) {		
@@ -37,6 +42,14 @@ public class KeyHandler implements KeyListener {
 				checkDrawTime = false;
 			} else {
 				checkDrawTime = true;
+			}
+		} else if(code == KeyEvent.VK_ESCAPE) {
+			switch(gp.gameState) {
+			case PLAYSTATE:
+				gp.gameState = gp.gameState.PAUSESTATE;
+				break;
+			case PAUSESTATE:
+				gp.gameState = gp.gameState.PLAYSTATE;
 			}
 		}
 	}
