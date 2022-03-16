@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import main.*;
+import main.GamePanel.GameState;
 
 /**
  * 
@@ -281,7 +282,8 @@ public class Player extends Entity{
 	
 	public void interactNPC(int index) {
 		if(index != 999) {
-			System.out.println("You are hitting an NPC");
+			gp.gameState = GameState.DIALOGUESTATE;
+			gp.npc[index].speak();
 		}
 	}
 	

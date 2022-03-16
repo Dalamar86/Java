@@ -40,9 +40,11 @@ public class GamePanel extends JPanel implements Runnable {
 	// Game State
 	public enum GameState {
 		PLAYSTATE, 
-		PAUSESTATE
+		PAUSESTATE,
+		DIALOGUESTATE
 	}
-	GameState gameState = GameState.PLAYSTATE;
+	public GameState gameState = GameState.PLAYSTATE;
+	public GameState gameStatePrev;
 	
 	// System
 	TileManager tileM = new TileManager(this);
@@ -131,6 +133,10 @@ public class GamePanel extends JPanel implements Runnable {
 			}
 			break;
 		case PAUSESTATE:
+			break;
+		case DIALOGUESTATE:
+			break;
+		default:
 			break;
 		}
 		

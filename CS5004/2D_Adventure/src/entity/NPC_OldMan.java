@@ -12,6 +12,7 @@ public class NPC_OldMan extends Entity {
 		speed = 1;
 		
 		getImage();
+		setDialogue();
 	}
 
 	public void getImage() {		
@@ -23,6 +24,13 @@ public class NPC_OldMan extends Entity {
 		left2 = setup("/npc/oldman_left_2");
 		right1 = setup("/npc/oldman_right_1");
 		right2 = setup("/npc/oldman_right_2");
+	}
+	
+	public void setDialogue() {
+		dialogues[0] = "Hello, Link";
+		dialogues[1] = "So, you've found me!";
+		dialogues[2] = "I used to be a great wizard... \ntill I took an arrow to the hat";
+		dialogues[3] = "Good luck storming the castle";
 	}
 	
 	public void setAction() {
@@ -42,7 +50,11 @@ public class NPC_OldMan extends Entity {
 				direction = "right";
 			}
 			actionTimeCounter = 0;
-		}
-		
+		}	
+	}
+	
+	public void speak() {
+		super.speak();
+		// leaves room for customization
 	}
 }
