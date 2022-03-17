@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import object.*;
+import entity.*;
 
 public class UI {
 
@@ -58,8 +59,8 @@ public class UI {
 		}
 		
 		// Create overlay objects
-		SuperObject heart = new OBJ_Heart(gp);
-		heart_full = heart.image;
+		Entity heart = new OBJ_Heart(gp);
+		heart_full = heart.image1;
 		heart_half = heart.image2;
 		heart_blank = heart.image3;
 	}

@@ -9,6 +9,5 @@ public interface EntityInt {
 	public void draw(Graphics2D g2);
 	public void update();
 	public BufferedImage setup(String imagePath);
-	public void getImage();
 	public void speak();
 }
