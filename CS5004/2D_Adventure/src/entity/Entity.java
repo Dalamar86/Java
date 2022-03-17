@@ -176,7 +176,7 @@ public abstract class Entity implements EntityInt {
 		return life;
 	}
 
-	protected void setLife(int life) {
+	public void setLife(int life) {
 		this.life = life;
 	}
 }

@@ -306,7 +306,7 @@ public class CollisionChecker {
 		entity.solidArea.x = entity.worldX + entity.solidArea.x;
 		entity.solidArea.y = entity.worldY + entity.solidArea.y;
 		
-		// get the object's solid area position
+		// get the player's solid area position
 		gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
 		gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
 		

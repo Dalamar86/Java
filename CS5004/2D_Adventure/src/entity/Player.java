@@ -19,6 +19,7 @@ public class Player extends Entity{
 	
 	public final int screenX;
 	public final int screenY;
+	private int hasKey = 0;
 	int standCounter = 0;
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
@@ -116,6 +117,9 @@ public class Player extends Entity{
 			int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
 			interactNPC(npcIndex);
 
+			// Check events
+			gp.eHandler.checkEvent();
+			
 			// if collision is False, Player can move
 			if(collisionOn == false) {
 	
@@ -248,7 +252,7 @@ public class Player extends Entity{
 	public void pickUpObject(int index) {
 		if(index != 999) {
 			
-			/*
+			
 			String objectName = gp.obj[index].name;
 			
 			switch(objectName) {
@@ -280,7 +284,7 @@ public class Player extends Entity{
 				gp.playSE(4);
 				break;
 			}
-			*/
+			
 		}
 	}
 	

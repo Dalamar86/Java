@@ -12,7 +12,7 @@ import main.GamePanel.GameState;
 public class KeyHandler implements KeyListener {
 
 	GamePanel gp;
-	public boolean upPressed, downPressed, ltPressed, rtPressed;
+	public boolean upPressed, downPressed, ltPressed, rtPressed, enterPressed;
 	
 	// Debug
 	boolean checkDrawTime = false;
@@ -108,6 +108,8 @@ public class KeyHandler implements KeyListener {
 					gp.gameState = GameState.PAUSESTATE;
 					System.out.println("In Play End: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
 					
+				} else if(code == KeyEvent.VK_ENTER) {
+					enterPressed = true;
 				}
 				break;
 				
@@ -155,7 +157,9 @@ public class KeyHandler implements KeyListener {
 			ltPressed = false;
 		} else if(code == KeyEvent.VK_D) {
 			rtPressed = false;
-		} 
+		} else if(code == KeyEvent.VK_ENTER) {
+			enterPressed = false;
+		}
 		
 	}
 
