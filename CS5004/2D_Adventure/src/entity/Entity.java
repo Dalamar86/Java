@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -24,10 +25,15 @@ public abstract class Entity implements EntityInt {
 	public String direction = "";
 	public int spriteCounter = 0;
 	public int spriteNum = 1;
+	protected int actionTimeCounter = 0;
+	
 	public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
 	public int solidAreaDefaultX, solidAreaDefaultY;
+	
+	public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
+	
 	public boolean collisionOn = false;
-	protected int actionTimeCounter = 0;
+	
 	
 	// NPC specific
 	String dialogues[] = new String[20];
@@ -36,11 +42,15 @@ public abstract class Entity implements EntityInt {
 	// Character status
 	protected int maxLife;
 	protected int life;
+	
 	public int speed;
 	public int speeddiag;
+	
 	public boolean invincible = false;
 	public int invincibleCounter = 0;
 	protected int type; 
+	
+	
 	boolean attacking = false;
 	
 	// Describes an image with an accessible buffer of image data.
@@ -113,6 +123,14 @@ public abstract class Entity implements EntityInt {
 			}
 			spriteCounter = 0;
 		}
+		
+		if(invincible) {
+			invincibleCounter++;
+			if(invincibleCounter > 30) {
+				invincible = false;
+				invincibleCounter = 0;
+			}
+		}	
 	}
 	
 	public void draw(Graphics2D g2) {
@@ -175,7 +193,14 @@ public abstract class Entity implements EntityInt {
 				break;	
 			}
 			
+			if(invincible) {
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4F));
+			}
+			
 			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+			
+			// Reset alpha
+			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));
 		}
 	}
 	
