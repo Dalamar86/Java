@@ -122,7 +122,8 @@ public class Player extends Entity{
 				} else {
 					direction = "right";
 				}
-			} else if(keyH.enterPressed) {
+			}  
+			if(keyH.enterPressed) {
 				attacking = true;
 			}
 			
@@ -144,6 +145,7 @@ public class Player extends Entity{
 			
 			// Check events
 			gp.eHandler.checkEvent();
+			
 			
 			// if collision is False, Player can move
 			if(collisionOn == false) {
@@ -384,6 +386,7 @@ public class Player extends Entity{
 			if(!invincible ) {
 				life--;
 				invincible = true;
+				gp.playSE(6);
 			}
 		}
 	}
@@ -393,11 +396,22 @@ public class Player extends Entity{
 			if(!gp.monster[index].invincible) {
 				gp.monster[index].life--;
 				gp.monster[index].invincible = true;
+				gp.monster[index].damageReaction();
+				
 				
 				if(gp.monster[index].life <= 0) {
-					gp.monster[index] = null;
+					gp.monster[index].setDying(true);
+					gp.playSE(8);
+				} else {
+					gp.playSE(5);
 				}
 			}
+		} else {
+			if(keyH.enterPressed) {
+				System.out.println("hit  miss");
+				gp.playSE(7);
+			}
+			
 		}
 	}
 	

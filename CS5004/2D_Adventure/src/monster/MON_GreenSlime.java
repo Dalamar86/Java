@@ -57,4 +57,11 @@ actionTimeCounter ++;
 			actionTimeCounter = 0;
 		}	
 	}
+	
+	@Override
+	public void damageReaction() {
+		
+		actionTimeCounter = 0;
+		direction = gp.player.direction;
+	}
 }

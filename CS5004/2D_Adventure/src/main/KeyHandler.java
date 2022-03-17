@@ -151,13 +151,13 @@ public class KeyHandler implements KeyListener {
 		
 		if(code == KeyEvent.VK_W) {
 			upPressed = false;
-		} else if(code == KeyEvent.VK_S) {
+		}  if(code == KeyEvent.VK_S) {
 			downPressed = false;
-		} else if(code == KeyEvent.VK_A) {
+		}  if(code == KeyEvent.VK_A) {
 			ltPressed = false;
-		} else if(code == KeyEvent.VK_D) {
+		}  if(code == KeyEvent.VK_D) {
 			rtPressed = false;
-		} else if(code == KeyEvent.VK_ENTER) {
+		}  if(code == KeyEvent.VK_ENTER) {
 			enterPressed = false;
 		}
 		

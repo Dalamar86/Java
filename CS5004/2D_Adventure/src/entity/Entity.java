@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -19,21 +20,19 @@ public abstract class Entity implements EntityInt {
 	
 	//Setup
 	protected GamePanel gp;
+	
+	// State
 	public int worldX, worldY;
-	
-	// Image properties
 	public String direction = "";
-	public int spriteCounter = 0;
 	public int spriteNum = 1;
-	protected int actionTimeCounter = 0;
-	
+	public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
 	public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
 	public int solidAreaDefaultX, solidAreaDefaultY;
-	
-	public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
-	
 	public boolean collisionOn = false;
-	
+	public boolean invincible = false;
+	boolean attacking = false;
+	private boolean alive = true;
+	private boolean dying = false;
 	
 	// NPC specific
 	String dialogues[] = new String[20];
@@ -42,26 +41,24 @@ public abstract class Entity implements EntityInt {
 	// Character status
 	protected int maxLife;
 	protected int life;
-	
 	public int speed;
 	public int speeddiag;
-	
-	public boolean invincible = false;
-	public int invincibleCounter = 0;
 	protected int type; 
-	
-	
-	boolean attacking = false;
-	
-	// Describes an image with an accessible buffer of image data.
-	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-	public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
 	
 	// Object stats
 	public BufferedImage image1, image2, image3;
 	public String name;
 	public boolean collision = false;
 	
+	// Counters
+	public int spriteCounter = 0;
+	protected int actionTimeCounter = 0;
+	public int invincibleCounter = 0;
+	int dyingCounter = 0;
+	
+	// Describes an image with an accessible buffer of image data.
+	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+	public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
 	
 	
 	public Entity(GamePanel gp) {
@@ -69,7 +66,7 @@ public abstract class Entity implements EntityInt {
 	}
 	
 	public void setAction() {}
-	
+	public void damageReaction() {}
 	public void speak() {
 		if(dialogues[dialogueIndex] == null) {
 			dialogueIndex = 0;
@@ -99,6 +96,7 @@ public abstract class Entity implements EntityInt {
 		
 		if(this.type == 2 && contactPlayer == true) {
 			if(!gp.player.invincible) {
+				gp.playSE(6);
 				gp.player.life--;
 				gp.player.invincible = true;
 			}
@@ -193,14 +191,35 @@ public abstract class Entity implements EntityInt {
 				break;	
 			}
 			
-			if(invincible) {
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4F));
+			// Monster Hp Bar
+			if(type == 2) {
+				if(life < maxLife) {
+					double oneScale = (double)gp.tileSize/maxLife;
+					double hpBarValue = oneScale*life;
+					
+					g2.setColor(new Color(35, 35, 35));
+					g2.fillRect(screenX - 1, screenY - 16, gp.tileSize + 2, 12);
+					
+					
+					g2.setColor(new Color(255, 0, 30));
+					g2.fillRect(screenX, screenY - 15, (int)hpBarValue, 10);	
+				}
 			}
 			
+			
+			if(invincible) {
+				changeAlpha(g2, 0.4f);
+				//g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4F));
+			}
+			if(isDying()) {
+				dyingAnimation(g2);
+			}
+				
 			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 			
 			// Reset alpha
-			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));
+			changeAlpha(g2, 1f);
+			//g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));
 		}
 	}
 	
@@ -214,6 +233,31 @@ public abstract class Entity implements EntityInt {
 		   worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
 			g2.drawImage(image1, screenX, screenY, gp.tileSize, gp.tileSize, null);
 		}
+	}
+	
+	public void dyingAnimation(Graphics2D g2) {
+		
+		dyingCounter++;
+		
+		int i = 5;
+		
+		if(dyingCounter <= i) {changeAlpha(g2, 0f);}
+		if(dyingCounter > i && dyingCounter <= i*2) {changeAlpha(g2, 1f);}
+		if(dyingCounter > i*2 && dyingCounter <= i*3) {changeAlpha(g2, 0f);}
+		if(dyingCounter > i*3 && dyingCounter <= i*4) {changeAlpha(g2, 1f);}
+		if(dyingCounter > i*4 && dyingCounter <= i*5) {changeAlpha(g2, 0f);}
+		if(dyingCounter > i*5 && dyingCounter <= i*6) {changeAlpha(g2, 1f);}
+		if(dyingCounter > i*6 && dyingCounter <= i*7) {changeAlpha(g2, 0f);}
+		if(dyingCounter > i*7 && dyingCounter <= i*8) {changeAlpha(g2, 1f);}
+		if(dyingCounter > i*8) {
+			dying = false;
+			alive = false;
+		}
+	}
+	
+	public void changeAlpha(Graphics2D g2, float alphaValue) {
+		
+		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));
 	}
 	
 	public BufferedImage setup(String imagePath) {
@@ -258,5 +302,21 @@ public abstract class Entity implements EntityInt {
 
 	public void setLife(int life) {
 		this.life = life;
+	}
+
+	public boolean isAlive() {
+		return alive;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+
+	public boolean isDying() {
+		return dying;
+	}
+
+	public void setDying(boolean dying) {
+		this.dying = dying;
 	}
 }
