@@ -34,6 +34,10 @@ public abstract class Entity implements EntityInt {
 	String dialogues[] = new String[20];
 	int dialogueIndex = 0;
 	
+	// Character status
+	protected int maxLife;
+	protected int life;
+	
 	public Entity(GamePanel gp) {
 		this.gp = gp;
 	}
@@ -158,5 +162,21 @@ public abstract class Entity implements EntityInt {
 			e.printStackTrace();
 		}
 		return image;
+	}
+
+	public int getMaxLife() {
+		return maxLife;
+	}
+
+	protected void setMaxLife(int maxLife) {
+		this.maxLife = maxLife;
+	}
+
+	public int getLife() {
+		return life;
+	}
+
+	protected void setLife(int life) {
+		this.life = life;
 	}
 }

@@ -5,22 +5,44 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+import object.*;
+
 public class UI {
 
+	// Setup
 	GamePanel gp;
 	Graphics2D g2;
 	Font arial_40, arial_80B, arial, baskerville;
+	
+	// Player overlay
+	BufferedImage heart_full, heart_half, heart_blank;
+	
+	// Pop ups
 	public boolean messageOn = false;
 	public String message = "";
 	int messageCounter = 0;
-	public boolean levelFinished = false;
+	
+	// Dialogue text
 	public String currentDialogue = "";
+	private String text;
+	
+	// Title screen
+	int commandNum = 0;
+	
+	// End game
+	public boolean levelFinished = false;
+	int titleScreenState = 0;
+	
+	
 	
 	public UI(GamePanel gp) {
 		this.gp = gp;
+		this.text = "";
+		
 		arial_40 = new Font("Arial", Font.PLAIN, 40);
 		arial_80B = new Font("Arial", Font.BOLD, 80);
 		
@@ -34,6 +56,12 @@ public class UI {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		// Create overlay objects
+		SuperObject heart = new OBJ_Heart(gp);
+		heart_full = heart.image;
+		heart_half = heart.image2;
+		heart_blank = heart.image3;
 	}
 	
 	public void showMessage(String text) {
@@ -49,6 +77,7 @@ public class UI {
 		
 		switch(gp.gameState) {
 		case PLAYSTATE:
+			drawHUD();
 			break;
 		case PAUSESTATE:
 			drawPauseScreen();
@@ -56,13 +85,136 @@ public class UI {
 		case DIALOGUESTATE:
 			drawDialogueScreen();
 			break;
+		case TITLESTATE:
+			drawTitleScreen();
+			break;
+		default:
+			break;
 		}
+	}
+	
+	public void drawHUD() {
+		
+		// Empty hearts
+		int x = gp.tileSize/2;
+		int y = gp.tileSize/2;
+		int i = 0;
+		
+		while(i < gp.player.getMaxLife()/2) {
+			g2.drawImage(heart_blank, x, y, null);
+			i++;
+			x += gp.tileSize;
+		}
+		
+		// Full hearts
+		x = gp.tileSize/2;
+		y = gp.tileSize/2;
+		i = 0;
+		
+		while(i < gp.player.getLife()) {
+			g2.drawImage(heart_half, x, y, null);
+			i++;
+			if(i < gp.player.getLife() ) {
+				g2.drawImage(heart_full, x, y, null);
+			}
+			i++;
+			x += gp.tileSize;
+		}
+	}
+	
+	public void drawTitleScreen() {
+		if(titleScreenState == 0) {
+			g2.setColor(new Color(25, 25, 185));
+			g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+			
+			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80F));
+			text = "Blue Boy Adventure";
+			int x = getXforCenteredText(text), y = gp.tileSize*3;
+			
+			// Shadow
+			g2.setColor(Color.gray);
+			g2.drawString(text, x+5, y+5);
+			
+			// Main Colour
+			g2.setColor(Color.white);
+			g2.drawString(text, x, y);
+			
+			// Display Character
+			x = gp.screenWidth/2 - (gp.tileSize*2)/2;
+			y += gp.tileSize*2;
+			g2.drawImage(gp.player.down1, x, y, gp.tileSize*2, gp.tileSize*2, null);
+			
+			// Menu
+			g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 48F));
+			text = "New Game";
+			x = getXforCenteredText(text); y += gp.tileSize*4;
+			g2.drawString(text, x, y);
+			if(commandNum == 0) {
+				g2.drawString(">", x-gp.tileSize, y);
+			}
+			
+			text = "Load Game";
+			x = getXforCenteredText(text); y += gp.tileSize*1;
+			g2.drawString(text, x, y);
+			if(commandNum == 1) {
+				g2.drawString(">", x-gp.tileSize, y);
+			}
+			
+			text = "Quit";
+			x = getXforCenteredText(text); y += gp.tileSize*1;
+			g2.drawString(text, x, y);
+			if(commandNum == 2) {
+				g2.drawString(">", x-gp.tileSize, y);
+			}
+		} else if (titleScreenState == 1) {
+			// Class selection screen
+			g2.setColor(Color.white);
+			g2.setFont(g2.getFont().deriveFont(42F));
+			
+			text = "Select your class!";
+			int x = getXforCenteredText(text);
+			int y = gp.tileSize*3;
+			g2.drawString(text,  x,  y);
+			
+			text = "Fighter";
+			x = getXforCenteredText(text);
+			y += gp.tileSize*3;
+			g2.drawString(text,  x,  y);
+			if(commandNum == 0) {
+				g2.drawString(">", x-gp.tileSize, y);
+			}
+			
+			text = "Sorcerer";
+			x = getXforCenteredText(text);
+			y += gp.tileSize;
+			g2.drawString(text,  x,  y);
+			if(commandNum == 1) {
+				g2.drawString(">", x-gp.tileSize, y);
+			}
+			
+			text = "Rogue";
+			x = getXforCenteredText(text);
+			y += gp.tileSize;
+			g2.drawString(text,  x,  y);
+			if(commandNum == 2) {
+				g2.drawString(">", x-gp.tileSize, y);
+			}
+			
+			text = "Back";
+			x = getXforCenteredText(text);
+			y += gp.tileSize*2;
+			g2.drawString(text,  x,  y);
+			if(commandNum == 3) {
+				g2.drawString(">", x-gp.tileSize, y);
+			}
+		}
+		
 	}
 	
 	public void drawPauseScreen() {
 		
 		g2.setFont(arial_80B);
-		String text = "Paused";
+		text = "Paused";
 		int x, y;
 		x = getXforCenteredText(text);
 		y = gp.screenHeight/2;

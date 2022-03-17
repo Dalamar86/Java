@@ -36,7 +36,7 @@ public class NPC_OldMan extends Entity {
 	public void setAction() {
 		actionTimeCounter ++;
 		
-		if(actionTimeCounter%120 == 0) {
+		if(actionTimeCounter == 120) {
 			Random rand = new Random();
 			int i = rand.nextInt(100) + 1;
 			

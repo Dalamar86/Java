@@ -11,7 +11,7 @@ import main.*;
 
 public abstract class SuperObject {
 
-	public BufferedImage image;
+	public BufferedImage image, image2, image3;
 	public String name;
 	public boolean collision = false;
 	protected GamePanel gp;
@@ -23,8 +23,38 @@ public abstract class SuperObject {
 	
 	public SuperObject(GamePanel gp, String name) {
 		this.name = name;
+		this.gp = gp;
+		addImage(name);
+	}
+	
+	public void addImage(String name) {
 		try {
 			image = ImageIO.read(getClass().getResourceAsStream("/objects/" + name + ".png"));
+			image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+			
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public void addImage(String name2, String name3) {
+		try {
+			image2 = ImageIO.read(getClass().getResourceAsStream("/objects/" + name2 + ".png"));
+			image3 = ImageIO.read(getClass().getResourceAsStream("/objects/" + name3 + ".png"));
+			image2 = uTool.scaleImage(image2, gp.tileSize, gp.tileSize);
+			image3 = uTool.scaleImage(image3, gp.tileSize, gp.tileSize);
+			
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public void addImage(String name1, String name2, String name3) {
+		try {
+			image = ImageIO.read(getClass().getResourceAsStream("/objects/" + name1 + ".png"));
+			image2 = ImageIO.read(getClass().getResourceAsStream("/objects/" + name2 + ".png"));
+			image3 = ImageIO.read(getClass().getResourceAsStream("/objects/" + name3 + ".png"));
+			image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+			image2 = uTool.scaleImage(image2, gp.tileSize, gp.tileSize);
+			image3 = uTool.scaleImage(image3, gp.tileSize, gp.tileSize);
 			
 		} catch(IOException e) {
 			e.printStackTrace();

@@ -19,7 +19,6 @@ public class Player extends Entity{
 	
 	public final int screenX;
 	public final int screenY;
-	//public int hasKey = 0;
 	int standCounter = 0;
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
@@ -46,9 +45,14 @@ public class Player extends Entity{
 		
 		worldX = gp.tileSize * 23;
 		worldY = gp.tileSize * 21;
+		
 		speed = 4;
 		speeddiag = speed - 1;
 		direction = "down";
+		
+		// Player status
+		setMaxLife(6);
+		setLife(getMaxLife());
 	}
 	
 	public void getImage() {		

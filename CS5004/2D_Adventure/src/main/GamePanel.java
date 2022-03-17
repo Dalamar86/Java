@@ -39,11 +39,12 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	// Game State
 	public enum GameState {
+		TITLESTATE,
 		PLAYSTATE, 
 		PAUSESTATE,
 		DIALOGUESTATE
 	}
-	public GameState gameState = GameState.PLAYSTATE;
+	public GameState gameState = GameState.TITLESTATE;
 	public GameState gameStatePrev;
 	
 	// System
@@ -76,7 +77,7 @@ public class GamePanel extends JPanel implements Runnable {
 		aSetter.setObject();
 		aSetter.setNPC();
 		playMusic(0);
-		gameState = GameState.PLAYSTATE;
+		gameState = GameState.TITLESTATE;
 	}
 	
 	public void startGameThread() {
@@ -122,6 +123,8 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	public void update( ) {
 		switch(gameState) {
+		case TITLESTATE:
+			break;
 		case PLAYSTATE:
 			// Player
 			player.update();
@@ -153,37 +156,97 @@ public class GamePanel extends JPanel implements Runnable {
 			drawStart = System.nanoTime();
 		}
 		
-		// Tile
-		tileM.draw(g2);
-		
-		// Object
-		for(int i = 0; i < obj.length; i++) {
-			if(obj[i] != null) {
-				obj[i].draw(g2, this);
+		// Title Screen
+		switch(gameState) {
+		case TITLESTATE:
+			ui.draw(g2);
+			break;
+		case DIALOGUESTATE:
+			// Tile
+			tileM.draw(g2);
+			
+			// Object
+			for(int i = 0; i < obj.length; i++) {
+				if(obj[i] != null) {
+					obj[i].draw(g2, this);
+				}
 			}
-		}
-		
-		// NPC
-		for(int i = 0;i < npc.length; i++) {
-			if(npc[i] != null) {
-				npc[i].draw(g2);
+			
+			// NPC
+			for(int i = 0;i < npc.length; i++) {
+				if(npc[i] != null) {
+					npc[i].draw(g2);
+				}
 			}
+			
+			// Player
+			player.draw(g2);
+			
+			// UI
+			ui.draw(g2);
+			break;
+		case PAUSESTATE:
+			// Tile
+			tileM.draw(g2);
+			
+			// Object
+			for(int i = 0; i < obj.length; i++) {
+				if(obj[i] != null) {
+					obj[i].draw(g2, this);
+				}
+			}
+			
+			// NPC
+			for(int i = 0;i < npc.length; i++) {
+				if(npc[i] != null) {
+					npc[i].draw(g2);
+				}
+			}
+			
+			// Player
+			player.draw(g2);
+			
+			// UI
+			ui.draw(g2);
+			break;
+		case PLAYSTATE:
+			// Tile
+			tileM.draw(g2);
+			
+			// Object
+			for(int i = 0; i < obj.length; i++) {
+				if(obj[i] != null) {
+					obj[i].draw(g2, this);
+				}
+			}
+			
+			// NPC
+			for(int i = 0;i < npc.length; i++) {
+				if(npc[i] != null) {
+					npc[i].draw(g2);
+				}
+			}
+			
+			// Player
+			player.draw(g2);
+			
+			// UI
+			ui.draw(g2);
+			
+			// Debug
+			if(keyH.checkDrawTime) {
+				long drawEnd = System.nanoTime();
+				long passed = drawEnd - drawStart;
+				g2.setColor(Color.white);
+				g2.drawString("Draw Time: " + passed, 10, 400);
+				System.out.println("Draw Time: " + passed);
+			}
+			break;
+		default:
+			break;
 		}
 		
-		// Player
-		player.draw(g2);
 		
-		// UI
-		ui.draw(g2);
-		
-		// Debug
-		if(keyH.checkDrawTime) {
-			long drawEnd = System.nanoTime();
-			long passed = drawEnd - drawStart;
-			g2.setColor(Color.white);
-			g2.drawString("Draw Time: " + passed, 10, 400);
-			System.out.println("Draw Time: " + passed);
-		}
 		
 		g2.dispose();
 	}

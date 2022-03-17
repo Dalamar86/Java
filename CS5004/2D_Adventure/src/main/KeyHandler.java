@@ -31,8 +31,61 @@ public class KeyHandler implements KeyListener {
 		int code = e.getKeyCode();
 		
 		switch(gp.gameState) {
+		case TITLESTATE:
+			if(gp.ui.titleScreenState == 0) {
+				if(code == KeyEvent.VK_W ||  code == KeyEvent.VK_KP_UP) {
+					gp.ui.commandNum--;
+					if(gp.ui.commandNum < 0) {
+						gp.ui.commandNum = 2;
+					}
+				} else if (code == KeyEvent.VK_S || code == KeyEvent.VK_KP_DOWN) {
+					gp.ui.commandNum++;
+					gp.ui.commandNum%=3;
+				} else if(code == KeyEvent.VK_ENTER) {
+					switch(gp.ui.commandNum) {
+					case 0:
+						gp.ui.titleScreenState = 1;
+						break;
+					case 1:
+						// TODO
+						gp.gameState = GameState.PLAYSTATE;
+						break;
+					case 2:
+						System.exit(0);
+						break;
+					}
+				}
+			} else if(gp.ui.titleScreenState == 1) {
+				if(code == KeyEvent.VK_W ||  code == KeyEvent.VK_KP_UP) {
+					gp.ui.commandNum--;
+					if(gp.ui.commandNum < 0) {
+						gp.ui.commandNum = 3;
+					}
+				} else if (code == KeyEvent.VK_S || code == KeyEvent.VK_KP_DOWN) {
+					gp.ui.commandNum++;
+					gp.ui.commandNum%=4;
+				} else if(code == KeyEvent.VK_ENTER) {
+					switch(gp.ui.commandNum) {
+					case 0:
+						// TODO add fighter stats
+						gp.gameState = GameState.PLAYSTATE;
+						break;
+					case 1:
+						// TODO add sorcerer stats
+						break;
+					case 2:
+						// TODO add rogue stats
+						break;
+					case 3:
+						gp.ui.titleScreenState = 0;
+						gp.ui.commandNum = 0;
+						break;
+					}
+				}
+			}
+			break;
+			
 			case PLAYSTATE:
-				
 				if(code == KeyEvent.VK_W) {
 					upPressed = true;
 				} else if(code == KeyEvent.VK_S) {
@@ -57,6 +110,7 @@ public class KeyHandler implements KeyListener {
 					
 				}
 				break;
+				
 			case PAUSESTATE:
 				if(code == KeyEvent.VK_ESCAPE) {
 					System.out.println("Pressed Escape");
@@ -65,6 +119,7 @@ public class KeyHandler implements KeyListener {
 					System.out.println("In Pause After: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
 				}
 				break;
+				
 			case DIALOGUESTATE:
 				if(code == KeyEvent.VK_ENTER) {
 					System.out.println("Pressed Enter");
@@ -80,6 +135,7 @@ public class KeyHandler implements KeyListener {
 					System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
 				}
 				break;
+				
 			default:
 				break;
 		
