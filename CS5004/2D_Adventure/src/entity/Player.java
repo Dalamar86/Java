@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 
 import main.*;
 import main.GamePanel.GameState;
+import object.*;
 
 /**
  * 
@@ -22,6 +23,7 @@ public class Player extends Entity{
 	public final int screenY;
 	private int hasKey = 0;
 	int standCounter = 0;
+	private boolean attackCanceled = false;
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		super(gp);
@@ -58,8 +60,26 @@ public class Player extends Entity{
 		direction = "down";
 		
 		// Player status
+		setLevel(1);
 		setMaxLife(6);
 		setLife(getMaxLife());
+		setStrength(1);
+		setDexterity(1);
+		setExp(0);
+		setNextLevelExp(5);
+		setCoin(0);
+		currentWeapon = new OBJ_Sword_Normal(gp);
+		currentShield = new OBJ_Shield_Wooden(gp);
+		setAttack(getAttack());
+		setDefense(getDefense());
+	}
+	
+	public int getAttack() {
+		return attack = getStrength() * currentWeapon.attackValue;
+	}
+	
+	public int getDefense() { 
+		return defense = getDexterity() * currentShield.defenseValue;
 	}
 	
 	public void getImage() {		
@@ -263,6 +283,14 @@ public class Player extends Entity{
 				}
 			}
 			
+			if(keyH.enterPressed && !attackCanceled) {
+				gp.playSE(7);
+				attacking = true;
+				spriteCounter = 0;
+			}
+			
+			attackCanceled = false;
+			gp.keyH.enterPressed = false;
 			
 			spriteCounter++;
 			if(spriteCounter > 12) {
@@ -376,6 +404,7 @@ public class Player extends Entity{
 	
 	public void interactNPC(int index) {
 		if(index != 999) {
+			attackCanceled = true;
 			gp.gameState = GameState.DIALOGUESTATE;
 			gp.npc[index].speak();
 		}
@@ -406,12 +435,6 @@ public class Player extends Entity{
 					gp.playSE(5);
 				}
 			}
-		} else {
-			if(keyH.enterPressed) {
-				System.out.println("hit  miss");
-				gp.playSE(7);
-			}
-			
 		}
 	}
 	
@@ -511,5 +534,13 @@ public class Player extends Entity{
 		
 		// Reset alpha
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));
+	}
+
+	public boolean isAttackCanceled() {
+		return attackCanceled;
+	}
+
+	public void setAttackCanceled(boolean attackCanceled) {
+		this.attackCanceled = attackCanceled;
 	}
 }

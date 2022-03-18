@@ -45,14 +45,15 @@ public class GamePanel extends JPanel implements Runnable {
 		TITLESTATE,
 		PLAYSTATE, 
 		PAUSESTATE,
-		DIALOGUESTATE
+		DIALOGUESTATE,
+		CHARACTERSTATE
 	}
 	public GameState gameState = GameState.TITLESTATE;
 	public GameState gameStatePrev;
 	
 	// System
 	TileManager tileM = new TileManager(this);
-	KeyHandler keyH = new KeyHandler(this);
+	public KeyHandler keyH = new KeyHandler(this);
 	Sound music = new Sound();
 	Sound se = new Sound();
 	public CollisionChecker cChecker = new CollisionChecker(this);
@@ -173,6 +174,8 @@ public class GamePanel extends JPanel implements Runnable {
 			break;
 		case DIALOGUESTATE:
 			break;
+		case CHARACTERSTATE:
+			break;
 		default:
 			break;
 		}
@@ -247,6 +250,7 @@ public class GamePanel extends JPanel implements Runnable {
 			ui.draw(g2);
 			break;
 			*/
+		case CHARACTERSTATE:
 		case PLAYSTATE:
 			// Tile
 			tileM.draw(g2);

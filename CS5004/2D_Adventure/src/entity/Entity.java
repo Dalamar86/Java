@@ -39,16 +39,32 @@ public abstract class Entity implements EntityInt {
 	int dialogueIndex = 0;
 	
 	// Character status
+	private int level;
+	public int speeddiag;
+	protected int type;
+	private int exp;
+	private int nextLevelExp;
+	private int coin;
+	public Entity currentWeapon;
+	public Entity currentShield;
+	
+	// Shared stats
 	protected int maxLife;
 	protected int life;
+	private int strength;
+	private int dexterity;
+	protected int mana;
+	protected int attack;
+	protected int attackBonus;
+	protected int defense;
 	public int speed;
-	public int speeddiag;
-	protected int type; 
 	
 	// Object stats
 	public BufferedImage image1, image2, image3;
 	public String name;
 	public boolean collision = false;
+	protected int attackValue;
+	protected int defenseValue;
 	
 	// Counters
 	public int spriteCounter = 0;
@@ -67,6 +83,7 @@ public abstract class Entity implements EntityInt {
 	
 	public void setAction() {}
 	public void damageReaction() {}
+	
 	public void speak() {
 		if(dialogues[dialogueIndex] == null) {
 			dialogueIndex = 0;
@@ -318,5 +335,69 @@ public abstract class Entity implements EntityInt {
 
 	public void setDying(boolean dying) {
 		this.dying = dying;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public int getStrength() {
+		return strength;
+	}
+
+	public void setStrength(int strength) {
+		this.strength = strength;
+	}
+
+	public int getDexterity() {
+		return dexterity;
+	}
+
+	public void setDexterity(int dexterity) {
+		this.dexterity = dexterity;
+	}
+
+	public int getAttack() {
+		return attack;
+	}
+
+	public void setAttack(int attack) {
+		this.attack = attack;
+	}
+
+	public int getDefense() {
+		return defense;
+	}
+
+	public void setDefense(int defense) {
+		this.defense = defense;
+	}
+
+	public int getExp() {
+		return exp;
+	}
+
+	public void setExp(int exp) {
+		this.exp = exp;
+	}
+
+	public int getNextLevelExp() {
+		return nextLevelExp;
+	}
+
+	public void setNextLevelExp(int nextLevelExp) {
+		this.nextLevelExp = nextLevelExp;
+	}
+
+	public int getCoin() {
+		return coin;
+	}
+
+	public void setCoin(int coin) {
+		this.coin = coin;
 	}
 }
