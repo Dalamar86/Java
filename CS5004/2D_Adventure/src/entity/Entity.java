@@ -39,11 +39,11 @@ public abstract class Entity implements EntityInt {
 	int dialogueIndex = 0;
 	
 	// Character status
-	private int level;
+	protected int level;
 	public int speeddiag;
 	protected int type;
-	private int exp;
-	private int nextLevelExp;
+	protected int exp;
+	protected int nextLevelExp;
 	private int coin;
 	public Entity currentWeapon;
 	public Entity currentShield;
@@ -114,7 +114,12 @@ public abstract class Entity implements EntityInt {
 		if(this.type == 2 && contactPlayer == true) {
 			if(!gp.player.invincible) {
 				gp.playSE(6);
-				gp.player.life--;
+				
+				int damage = attack - gp.player.defense;
+				if(damage < 0) {
+					damage = 0;
+				}
+				gp.player.life -= damage;
 				gp.player.invincible = true;
 			}
 		}
@@ -210,7 +215,7 @@ public abstract class Entity implements EntityInt {
 			
 			// Monster Hp Bar
 			if(type == 2) {
-				if(life < maxLife) {
+				if(life < maxLife && life >= 0) {
 					double oneScale = (double)gp.tileSize/maxLife;
 					double hpBarValue = oneScale*life;
 					
@@ -229,6 +234,7 @@ public abstract class Entity implements EntityInt {
 				//g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4F));
 			}
 			if(isDying()) {
+				attack = 0;
 				dyingAnimation(g2);
 			}
 				

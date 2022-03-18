@@ -374,23 +374,23 @@ public class Player extends Entity{
 				gp.playSE(1);
 				hasKey++;
 				gp.obj[index] = null;
-				gp.ui.showMessage("You got a key!");
+				gp.ui.addMessage("You got a key!");
 				break;
 			case "Door":
 				if(hasKey > 0) {
 					gp.playSE(3);
 					gp.obj[index] = null;
 					hasKey--;
-					gp.ui.showMessage("Door Unlocked!");
+					gp.ui.addMessage("Door Unlocked!");
 				} else {
-					gp.ui.showMessage("Door Locked!");
+					gp.ui.addMessage("Door Locked!");
 				}
 				break;
 			case "Boots":
 				gp.playSE(2);
 				speed += 2;
 				gp.obj[index] = null;
-				gp.ui.showMessage("Speed boost");
+				gp.ui.addMessage("Speed boost");
 				break;
 			case "Chest":
 				gp.ui.levelFinished = true;
@@ -410,10 +410,14 @@ public class Player extends Entity{
 		}
 	}
 	
-	public void contactMonster(int i) {
-		if(i != 999) {
+	public void contactMonster(int index) {
+		if(index != 999) {
 			if(!invincible ) {
-				life--;
+				int damage = gp.monster[index].attack - defense;
+				if(damage < 0) {
+					damage = 0;
+				}
+				life -= damage;
 				invincible = true;
 				gp.playSE(6);
 			}
@@ -423,18 +427,43 @@ public class Player extends Entity{
 	public void damageMonster(int index) {
 		if(index != 999) {
 			if(!gp.monster[index].invincible) {
-				gp.monster[index].life--;
+				int damage = attack - gp.monster[index].defense;
+				if(damage < 0) {
+					damage = 0;
+				}
+				
+				gp.monster[index].life -= damage;
+				gp.ui.addMessage(damage + " damage!");
+				
 				gp.monster[index].invincible = true;
 				gp.monster[index].damageReaction();
 				
-				
 				if(gp.monster[index].life <= 0) {
 					gp.monster[index].setDying(true);
+					gp.ui.addMessage("Killed the " + gp.monster[index].name + "!");
+					exp += gp.monster[index].exp;
+					checkLevelUp();
 					gp.playSE(8);
 				} else {
 					gp.playSE(5);
 				}
 			}
+		}
+	}
+	
+	public void checkLevelUp() {
+		if(exp >= nextLevelExp ) {
+			level++;
+			nextLevelExp *= 2;
+			maxLife += 2;
+			setLife(getMaxLife());
+			setStrength(getStrength() + 1);
+			setDexterity(getDexterity() +1);
+			attack = getAttack();
+			defense = getDefense();
+			gp.playSE(9);
+			gp.gameState = GameState.DIALOGUESTATE;
+			gp.ui.currentDialogue = "You are now level " + level + "\nYou feel stronger!";
 		}
 	}
 	
@@ -522,11 +551,11 @@ public class Player extends Entity{
 		}
 		
 		if(invincible) {
-			if(invincibleCounter%20 == 0) {
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1F));
-			} else if(invincibleCounter%10 == 0) {
+			if(invincibleCounter <= 10) {
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3F));
-			}
+			} else if(invincibleCounter <= 20) {
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1F));
+			} 
 		}
 		
 		g2.drawImage(image,  x,  y, null);
