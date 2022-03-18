@@ -15,7 +15,7 @@ public class KeyHandler implements KeyListener {
 	public boolean upPressed, downPressed, ltPressed, rtPressed, enterPressed;
 	
 	// Debug
-	boolean checkDrawTime = false;
+	boolean showDebugText = false;
 	
 	public KeyHandler(GamePanel gp) {
 		this.gp = gp;
@@ -29,6 +29,12 @@ public class KeyHandler implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		
 		int code = e.getKeyCode();
+		
+		if(showDebugText) {
+			if(code == KeyEvent.VK_R ) {
+				gp.tileM.loadMap("/maps/worldV2.txt");
+			}
+		}
 		
 		switch(gp.gameState) {
 		case TITLESTATE:
@@ -47,7 +53,7 @@ public class KeyHandler implements KeyListener {
 						gp.ui.titleScreenState = 1;
 						break;
 					case 1:
-						// TODO
+						// TODO add Load method
 						gp.gameState = GameState.PLAYSTATE;
 						break;
 					case 2:
@@ -97,10 +103,10 @@ public class KeyHandler implements KeyListener {
 			} else if (code == KeyEvent.VK_C) {
 				gp.gameState = GameState.CHARACTERSTATE;
 			} else if(code == KeyEvent.VK_T) {
-				if(checkDrawTime) {
-					checkDrawTime = false;
+				if(showDebugText) {
+					showDebugText = false;
 				} else {
-					checkDrawTime = true;
+					showDebugText = true;
 				}
 			} else if(code == KeyEvent.VK_ESCAPE) {
 				System.out.println("Pressed Escape");
