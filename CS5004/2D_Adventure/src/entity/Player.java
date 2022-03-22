@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 
 import main.*;
 import main.GamePanel.GameState;
+import object.*;
 
 /**
  * 
@@ -22,6 +23,7 @@ public class Player extends Entity{
 	public final int screenY;
 	private int hasKey = 0;
 	int standCounter = 0;
+	private boolean attackCanceled = false;
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		super(gp);
@@ -39,6 +41,9 @@ public class Player extends Entity{
 		solidArea.width = (int) (gp.tileSize/1.5);
 		solidArea.height = (int) (gp.tileSize/1.5);
 		
+		attackArea.width = 36;
+		attackArea.height = 36;
+		
 		setDefaultValues();
 		getImage();
 		getPlayerAttackImage();
@@ -55,8 +60,26 @@ public class Player extends Entity{
 		direction = "down";
 		
 		// Player status
+		setLevel(1);
 		setMaxLife(6);
 		setLife(getMaxLife());
+		setStrength(1);
+		setDexterity(1);
+		setExp(0);
+		setNextLevelExp(5);
+		setCoin(0);
+		currentWeapon = new OBJ_Sword_Normal(gp);
+		currentShield = new OBJ_Shield_Wooden(gp);
+		setAttack(getAttack());
+		setDefense(getDefense());
+	}
+	
+	public int getAttack() {
+		return attack = getStrength() * currentWeapon.attackValue;
+	}
+	
+	public int getDefense() { 
+		return defense = getDexterity() * currentShield.defenseValue;
 	}
 	
 	public void getImage() {		
@@ -119,7 +142,8 @@ public class Player extends Entity{
 				} else {
 					direction = "right";
 				}
-			} else if(keyH.enterPressed) {
+			}  
+			if(keyH.enterPressed) {
 				attacking = true;
 			}
 			
@@ -141,6 +165,7 @@ public class Player extends Entity{
 			
 			// Check events
 			gp.eHandler.checkEvent();
+			
 			
 			// if collision is False, Player can move
 			if(collisionOn == false) {
@@ -258,6 +283,14 @@ public class Player extends Entity{
 				}
 			}
 			
+			if(keyH.enterPressed && !attackCanceled) {
+				gp.playSE(7);
+				attacking = true;
+				spriteCounter = 0;
+			}
+			
+			attackCanceled = false;
+			gp.keyH.enterPressed = false;
 			
 			spriteCounter++;
 			if(spriteCounter > 12) {
@@ -294,6 +327,35 @@ public class Player extends Entity{
 			spriteNum = 1;
 		} else if(spriteCounter > 5 && spriteCounter <= 25) {
 			spriteNum = 2;
+			
+			// save current worldX, worldY, solidArea
+			int currentWorldX = worldX;
+			int currentWorldY = worldY;
+			int solidAreaWidth = solidArea.width;
+			int solidAreaHeight = solidArea.height;
+			
+			// Adjust player's worldX/Y for the attackArea
+			switch(direction) {
+			case "up": worldY -= attackArea.height; break;
+			case "down": worldY += attackArea.height; break;
+			case "left": worldX -= attackArea.width; break;
+			case "right": worldX += attackArea.width; break;
+			}
+			
+			
+			// Attack area becomes solid area
+			solidArea.width = attackArea.width;
+			solidArea.height = attackArea.height;
+			
+			// Check collision of sword and monster
+			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
+			
+			worldX = currentWorldX;
+			worldY = currentWorldY;
+			solidArea.width = solidAreaWidth;
+			solidArea.height = solidAreaHeight;
+			damageMonster(monsterIndex);
+			
 		} else {
 			spriteNum = 1;
 			spriteCounter = 0;
@@ -312,23 +374,23 @@ public class Player extends Entity{
 				gp.playSE(1);
 				hasKey++;
 				gp.obj[index] = null;
-				gp.ui.showMessage("You got a key!");
+				gp.ui.addMessage("You got a key!");
 				break;
 			case "Door":
 				if(hasKey > 0) {
 					gp.playSE(3);
 					gp.obj[index] = null;
 					hasKey--;
-					gp.ui.showMessage("Door Unlocked!");
+					gp.ui.addMessage("Door Unlocked!");
 				} else {
-					gp.ui.showMessage("Door Locked!");
+					gp.ui.addMessage("Door Locked!");
 				}
 				break;
 			case "Boots":
 				gp.playSE(2);
 				speed += 2;
 				gp.obj[index] = null;
-				gp.ui.showMessage("Speed boost");
+				gp.ui.addMessage("Speed boost");
 				break;
 			case "Chest":
 				gp.ui.levelFinished = true;
@@ -342,17 +404,66 @@ public class Player extends Entity{
 	
 	public void interactNPC(int index) {
 		if(index != 999) {
+			attackCanceled = true;
 			gp.gameState = GameState.DIALOGUESTATE;
 			gp.npc[index].speak();
 		}
 	}
 	
-	public void contactMonster(int i) {
-		if(i != 999) {
+	public void contactMonster(int index) {
+		if(index != 999) {
 			if(!invincible ) {
-				life--;
+				int damage = gp.monster[index].attack - defense;
+				if(damage < 0) {
+					damage = 0;
+				}
+				life -= damage;
 				invincible = true;
+				gp.playSE(6);
 			}
+		}
+	}
+	
+	public void damageMonster(int index) {
+		if(index != 999) {
+			if(!gp.monster[index].invincible) {
+				int damage = attack - gp.monster[index].defense;
+				if(damage < 0) {
+					damage = 0;
+				}
+				
+				gp.monster[index].life -= damage;
+				gp.ui.addMessage(damage + " damage!");
+				
+				gp.monster[index].invincible = true;
+				gp.monster[index].damageReaction();
+				
+				if(gp.monster[index].life <= 0) {
+					gp.monster[index].setDying(true);
+					gp.ui.addMessage("Killed the " + gp.monster[index].name + "!");
+					exp += gp.monster[index].exp;
+					checkLevelUp();
+					gp.playSE(8);
+				} else {
+					gp.playSE(5);
+				}
+			}
+		}
+	}
+	
+	public void checkLevelUp() {
+		if(exp >= nextLevelExp ) {
+			level++;
+			nextLevelExp *= 2;
+			maxLife += 2;
+			setLife(getMaxLife());
+			setStrength(getStrength() + 1);
+			setDexterity(getDexterity() +1);
+			attack = getAttack();
+			defense = getDefense();
+			gp.playSE(9);
+			gp.gameState = GameState.DIALOGUESTATE;
+			gp.ui.currentDialogue = "You are now level " + level + "\nYou feel stronger!";
 		}
 	}
 	
@@ -440,11 +551,11 @@ public class Player extends Entity{
 		}
 		
 		if(invincible) {
-			if(invincibleCounter%20 == 0) {
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1F));
-			} else if(invincibleCounter%10 == 0) {
+			if(invincibleCounter <= 10) {
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3F));
-			}
+			} else if(invincibleCounter <= 20) {
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1F));
+			} 
 		}
 		
 		g2.drawImage(image,  x,  y, null);
@@ -452,5 +563,13 @@ public class Player extends Entity{
 		
 		// Reset alpha
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));
+	}
+
+	public boolean isAttackCanceled() {
+		return attackCanceled;
+	}
+
+	public void setAttackCanceled(boolean attackCanceled) {
+		this.attackCanceled = attackCanceled;
 	}
 }

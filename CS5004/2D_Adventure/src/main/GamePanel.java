@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -20,6 +21,12 @@ import object.*;
  *
  */
 public class GamePanel extends JPanel implements Runnable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	
 	// Screen Settings
 	final int originalTileSize = 16;	// 16 x 16 tile
@@ -45,14 +52,15 @@ public class GamePanel extends JPanel implements Runnable {
 		TITLESTATE,
 		PLAYSTATE, 
 		PAUSESTATE,
-		DIALOGUESTATE
+		DIALOGUESTATE,
+		CHARACTERSTATE
 	}
 	public GameState gameState = GameState.TITLESTATE;
 	public GameState gameStatePrev;
 	
 	// System
 	TileManager tileM = new TileManager(this);
-	KeyHandler keyH = new KeyHandler(this);
+	public KeyHandler keyH = new KeyHandler(this);
 	Sound music = new Sound();
 	Sound se = new Sound();
 	public CollisionChecker cChecker = new CollisionChecker(this);
@@ -99,7 +107,7 @@ public class GamePanel extends JPanel implements Runnable {
 		long lastTime = System.nanoTime();
 		long currentTime;
 		long timer = 0;
-		int drawCount = 0;
+		int frames = 0;
 		
 		while(gameThread != null) {
 			
@@ -116,12 +124,12 @@ public class GamePanel extends JPanel implements Runnable {
 				// DRAW: draw the screen with the updated information
 				repaint();
 				delta--;
-				drawCount++;
+				frames++;
 			}
 			
 			if(timer >= 1000000000) {
-				System.out.println("FPS: " + drawCount);
-				drawCount = 0;
+				System.out.println("FPS: " + frames);
+				frames = 0;
 				timer = 0;
 			}
 		}
@@ -140,15 +148,40 @@ public class GamePanel extends JPanel implements Runnable {
 					npc[i].update();
 				}
 			}
-			for(Entity m: monster) {
-				if(m != null) {
-					m.update();
+			
+			for(int i = 0; i < monster.length; i++) {
+				if(monster[i] != null) {
+					if(monster[i].isAlive() == true && monster[i].isDying() == false) {
+						monster[i].update();
+					}
+					if(monster[i].isAlive() == false) {
+						monster[i] = null;
+					}
 				}
 			}
+			
+			/*
+			for(Entity m: monster) {
+				if(m != null) {
+					System.out.println(m);
+					if(m.isAlive() && !m.isDying()) {
+						m.update();
+					}
+					if(!m.isAlive()) {
+						System.out.println("monster has died: " + m);
+						m.remove();
+						System.out.println(m);
+					}
+					
+				}
+			}
+			*/
 			break;
 		case PAUSESTATE:
 			break;
 		case DIALOGUESTATE:
+			break;
+		case CHARACTERSTATE:
 			break;
 		default:
 			break;
@@ -163,7 +196,7 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		// Debug
 		long drawStart = 0;
-		if(keyH.checkDrawTime) {
+		if(keyH.showDebugText) {
 			drawStart = System.nanoTime();
 		}
 		
@@ -224,6 +257,7 @@ public class GamePanel extends JPanel implements Runnable {
 			ui.draw(g2);
 			break;
 			*/
+		case CHARACTERSTATE:
 		case PLAYSTATE:
 			// Tile
 			tileM.draw(g2);
@@ -274,11 +308,26 @@ public class GamePanel extends JPanel implements Runnable {
 			ui.draw(g2);
 			
 			// Debug
-			if(keyH.checkDrawTime) {
+			if(keyH.showDebugText) {
 				long drawEnd = System.nanoTime();
 				long passed = drawEnd - drawStart;
+				
+				g2.setFont(ui.arial_40);
+				g2.setFont(getFont().deriveFont(Font.PLAIN, 20f));
 				g2.setColor(Color.white);
-				g2.drawString("Draw Time: " + passed, 10, 400);
+				int x = 10;
+				int y = 400;
+				int lineHeight = 20;
+				
+				g2.drawString("WorldX: " + player.worldX, x, y);
+				y += lineHeight;
+				g2.drawString("WorldY: " + player.worldY, x, y);
+				y += lineHeight;
+				g2.drawString("Col: " + (player.worldX + player.solidArea.x)/tileSize, x, y);
+				y += lineHeight;
+				g2.drawString("Row: " + (player.worldY + player.solidArea.y)/tileSize, x, y);
+				y += lineHeight;
+				g2.drawString("Draw Time: " + passed, x, y);
 				System.out.println("Draw Time: " + passed);
 			}
 			break;

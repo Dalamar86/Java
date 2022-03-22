@@ -15,7 +15,7 @@ public class KeyHandler implements KeyListener {
 	public boolean upPressed, downPressed, ltPressed, rtPressed, enterPressed;
 	
 	// Debug
-	boolean checkDrawTime = false;
+	boolean showDebugText = false;
 	
 	public KeyHandler(GamePanel gp) {
 		this.gp = gp;
@@ -29,6 +29,12 @@ public class KeyHandler implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		
 		int code = e.getKeyCode();
+		
+		if(showDebugText) {
+			if(code == KeyEvent.VK_R ) {
+				gp.tileM.loadMap("/maps/worldV2.txt");
+			}
+		}
 		
 		switch(gp.gameState) {
 		case TITLESTATE:
@@ -47,7 +53,7 @@ public class KeyHandler implements KeyListener {
 						gp.ui.titleScreenState = 1;
 						break;
 					case 1:
-						// TODO
+						// TODO add Load method
 						gp.gameState = GameState.PLAYSTATE;
 						break;
 					case 2:
@@ -84,63 +90,75 @@ public class KeyHandler implements KeyListener {
 				}
 			}
 			break;
-			
-			case PLAYSTATE:
-				if(code == KeyEvent.VK_W) {
-					upPressed = true;
-				} else if(code == KeyEvent.VK_S) {
-					downPressed = true;
-				} else if(code == KeyEvent.VK_A) {
-					ltPressed = true;
-				} else if(code == KeyEvent.VK_D) {
-					rtPressed = true;
-				} else if(code == KeyEvent.VK_T) {
-					if(checkDrawTime) {
-						checkDrawTime = false;
-					} else {
-						checkDrawTime = true;
-					}
-				} else if(code == KeyEvent.VK_ESCAPE) {
-					System.out.println("Pressed Escape");
-					System.out.println("In Play Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-					gp.gameStatePrev = gp.gameState;
-					System.out.println("In Play After: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-					gp.gameState = GameState.PAUSESTATE;
-					System.out.println("In Play End: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-					
-				} else if(code == KeyEvent.VK_ENTER) {
-					enterPressed = true;
-				}
-				break;
-				
-			case PAUSESTATE:
-				if(code == KeyEvent.VK_ESCAPE) {
-					System.out.println("Pressed Escape");
-					System.out.println("In Pause Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-					gp.gameState = gp.gameStatePrev;
-					System.out.println("In Pause After: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-				}
-				break;
-				
-			case DIALOGUESTATE:
-				if(code == KeyEvent.VK_ENTER) {
-					System.out.println("Pressed Enter");
-					System.out.println("gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-					gp.gameState = GameState.PLAYSTATE;
-					System.out.println("gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-				} else if(code == KeyEvent.VK_ESCAPE) {
-					System.out.println("Pressed Escape");
-					System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-					gp.gameStatePrev = gp.gameState;
-					System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-					gp.gameState = GameState.PAUSESTATE;
-					System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-				}
-				break;
-				
-			default:
-				break;
 		
+		case PLAYSTATE:
+			if(code == KeyEvent.VK_W) {
+				upPressed = true;
+			} else if(code == KeyEvent.VK_S) {
+				downPressed = true;
+			} else if(code == KeyEvent.VK_A) {
+				ltPressed = true;
+			} else if(code == KeyEvent.VK_D) {
+				rtPressed = true;
+			} else if (code == KeyEvent.VK_C) {
+				gp.gameState = GameState.CHARACTERSTATE;
+			} else if(code == KeyEvent.VK_T) {
+				if(showDebugText) {
+					showDebugText = false;
+				} else {
+					showDebugText = true;
+				}
+			} else if(code == KeyEvent.VK_ESCAPE) {
+				System.out.println("Pressed Escape");
+				System.out.println("In Play Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+				gp.gameStatePrev = gp.gameState;
+				System.out.println("In Play After: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+				gp.gameState = GameState.PAUSESTATE;
+				System.out.println("In Play End: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+				
+			} else if(code == KeyEvent.VK_ENTER) {
+				enterPressed = true;
+			}
+			break;
+			
+		case PAUSESTATE:
+			if(code == KeyEvent.VK_ESCAPE) {
+				System.out.println("Pressed Escape");
+				System.out.println("In Pause Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+				gp.gameState = gp.gameStatePrev;
+				System.out.println("In Pause After: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+			}
+			break;
+			
+		case DIALOGUESTATE:
+			if(code == KeyEvent.VK_ENTER) {
+				System.out.println("Pressed Enter");
+				System.out.println("gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+				gp.gameState = GameState.PLAYSTATE;
+				System.out.println("gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+			} else if(code == KeyEvent.VK_ESCAPE) {
+				System.out.println("Pressed Escape");
+				System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+				gp.gameStatePrev = gp.gameState;
+				System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+				gp.gameState = GameState.PAUSESTATE;
+				System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+			}
+			break;
+		case CHARACTERSTATE:
+			if (code == KeyEvent.VK_C) {
+				gp.gameState = GameState.PLAYSTATE;
+			} else if(code == KeyEvent.VK_ESCAPE) {
+				System.out.println("Pressed Escape");
+				System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+				gp.gameStatePrev = gp.gameState;
+				System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+				gp.gameState = GameState.PAUSESTATE;
+				System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+			}
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -151,14 +169,14 @@ public class KeyHandler implements KeyListener {
 		
 		if(code == KeyEvent.VK_W) {
 			upPressed = false;
-		} else if(code == KeyEvent.VK_S) {
+		}  if(code == KeyEvent.VK_S) {
 			downPressed = false;
-		} else if(code == KeyEvent.VK_A) {
+		}  if(code == KeyEvent.VK_A) {
 			ltPressed = false;
-		} else if(code == KeyEvent.VK_D) {
+		}  if(code == KeyEvent.VK_D) {
 			rtPressed = false;
-		} else if(code == KeyEvent.VK_ENTER) {
-			enterPressed = false;
+		}  if(code == KeyEvent.VK_ENTER) {
+			//enterPressed = false;
 		}
 		
 	}
