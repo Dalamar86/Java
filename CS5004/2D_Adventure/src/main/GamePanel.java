@@ -22,6 +22,12 @@ import object.*;
  */
 public class GamePanel extends JPanel implements Runnable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	
 	// Screen Settings
 	final int originalTileSize = 16;	// 16 x 16 tile
 	final int scale = 3;				// Make it larger for larger resolution
@@ -101,7 +107,7 @@ public class GamePanel extends JPanel implements Runnable {
 		long lastTime = System.nanoTime();
 		long currentTime;
 		long timer = 0;
-		int drawCount = 0;
+		int frames = 0;
 		
 		while(gameThread != null) {
 			
@@ -118,12 +124,12 @@ public class GamePanel extends JPanel implements Runnable {
 				// DRAW: draw the screen with the updated information
 				repaint();
 				delta--;
-				drawCount++;
+				frames++;
 			}
 			
 			if(timer >= 1000000000) {
-				System.out.println("FPS: " + drawCount);
-				drawCount = 0;
+				System.out.println("FPS: " + frames);
+				frames = 0;
 				timer = 0;
 			}
 		}
