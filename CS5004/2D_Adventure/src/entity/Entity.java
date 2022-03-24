@@ -65,6 +65,7 @@ public abstract class Entity implements EntityInt {
 	public boolean collision = false;
 	protected int attackValue;
 	protected int defenseValue;
+	private String description = "";
 	
 	// Counters
 	public int spriteCounter = 0;
@@ -405,5 +406,13 @@ public abstract class Entity implements EntityInt {
 
 	public void setCoin(int coin) {
 		this.coin = coin;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

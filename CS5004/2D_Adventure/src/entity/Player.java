@@ -5,6 +5,7 @@ import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import main.*;
 import main.GamePanel.GameState;
@@ -24,6 +25,8 @@ public class Player extends Entity{
 	private int hasKey = 0;
 	int standCounter = 0;
 	private boolean attackCanceled = false;
+	private ArrayList<Entity> inventory = new ArrayList<>();
+	private final int inventorySize = 20;
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		super(gp);
@@ -47,6 +50,7 @@ public class Player extends Entity{
 		setDefaultValues();
 		getImage();
 		getPlayerAttackImage();
+		setItems();
 	}
 	
 	public void setDefaultValues() {
@@ -72,6 +76,17 @@ public class Player extends Entity{
 		currentShield = new OBJ_Shield_Wooden(gp);
 		setAttack(getAttack());
 		setDefense(getDefense());
+	}
+	
+	private void setItems() {
+		getInventory().add(currentWeapon);
+		getInventory().add(currentShield);
+		getInventory().add(new OBJ_Key(gp));
+		getInventory().add(new OBJ_PotionRed(gp));
+		getInventory().add(new OBJ_PotionRed(gp));
+		getInventory().add(new OBJ_PotionRed(gp));
+		getInventory().add(new OBJ_PotionRed(gp));
+		getInventory().add(new OBJ_PotionRed(gp));
 	}
 	
 	public int getAttack() {
@@ -571,5 +586,13 @@ public class Player extends Entity{
 
 	public void setAttackCanceled(boolean attackCanceled) {
 		this.attackCanceled = attackCanceled;
+	}
+
+	public ArrayList<Entity> getInventory() {
+		return inventory;
+	}
+
+	public void setInventory(ArrayList<Entity> inventory) {
+		this.inventory = inventory;
 	}
 }

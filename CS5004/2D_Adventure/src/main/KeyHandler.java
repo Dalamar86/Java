@@ -156,6 +156,23 @@ public class KeyHandler implements KeyListener {
 				gp.gameState = GameState.PAUSESTATE;
 				System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
 			}
+			if(code == KeyEvent.VK_W) { 
+				if(gp.ui.slotRow != 0) {
+					gp.ui.slotRow--; gp.playSE(10);} 
+				}
+			if(code == KeyEvent.VK_S) {	
+				if(gp.ui.slotRow != gp.ui.slotRowMax-1) {
+					gp.ui.slotRow++; gp.playSE(10);} 
+				}
+			if(code == KeyEvent.VK_A) {	
+				if(gp.ui.slotCol != 0) {
+					gp.ui.slotCol--; gp.playSE(10);} 
+				}
+			if(code == KeyEvent.VK_D) {	
+				if(gp.ui.slotCol != gp.ui.slotColMax-1) {
+					gp.ui.slotCol++; gp.playSE(10);
+				}
+			}
 			break;
 		default:
 			break;
