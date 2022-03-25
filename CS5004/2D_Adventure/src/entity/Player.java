@@ -44,8 +44,8 @@ public class Player extends Entity{
 		solidArea.width = (int) (gp.tileSize/1.5);
 		solidArea.height = (int) (gp.tileSize/1.5);
 		
-		attackArea.width = 36;
-		attackArea.height = 36;
+		//attackArea.width = 36;
+		//attackArea.height = 36;
 		
 		setDefaultValues();
 		getImage();
@@ -58,7 +58,7 @@ public class Player extends Entity{
 		worldX = gp.tileSize * 23;
 		worldY = gp.tileSize * 21;
 		
-		type = 0;
+		setType(EntityType.PLAYER);
 		speed = 4;
 		speeddiag = speed - 1;
 		direction = "down";
@@ -82,14 +82,16 @@ public class Player extends Entity{
 		getInventory().add(currentWeapon);
 		getInventory().add(currentShield);
 		getInventory().add(new OBJ_Key(gp));
+		hasKey++;
 		getInventory().add(new OBJ_PotionRed(gp));
 		getInventory().add(new OBJ_PotionRed(gp));
 		getInventory().add(new OBJ_PotionRed(gp));
-		getInventory().add(new OBJ_PotionRed(gp));
-		getInventory().add(new OBJ_PotionRed(gp));
+		//getInventory().add(new OBJ_Shield_Blue(gp));
+		getInventory().add(new OBJ_Axe(gp));
 	}
 	
 	public int getAttack() {
+		attackArea = currentWeapon.attackArea;
 		return attack = getStrength() * currentWeapon.attackValue;
 	}
 	
@@ -109,14 +111,26 @@ public class Player extends Entity{
 	}
 	
 	public void getPlayerAttackImage() {
-		attackUp1 = setup("/player/boy_attack_up_1", 		gp.tileSize,   gp.tileSize*2);
-		attackUp2 = setup("/player/boy_attack_up_2", 		gp.tileSize,   gp.tileSize*2);
-		attackDown1 = setup("/player/boy_attack_down_1",	gp.tileSize,   gp.tileSize*2);
-		attackDown2 = setup("/player/boy_attack_down_2", 	gp.tileSize,   gp.tileSize*2);
-		attackLeft1 = setup("/player/boy_attack_left_1", 	gp.tileSize*2, gp.tileSize);
-		attackLeft2 = setup("/player/boy_attack_left_2", 	gp.tileSize*2, gp.tileSize);
-		attackRight1 = setup("/player/boy_attack_right_1",	gp.tileSize*2, gp.tileSize);
-		attackRight2 = setup("/player/boy_attack_right_2", 	gp.tileSize*2, gp.tileSize);
+		if(currentWeapon.name == "sword_normal") {
+			attackUp1 = setup("/player/boy_attack_up_1", 		gp.tileSize,   gp.tileSize*2);
+			attackUp2 = setup("/player/boy_attack_up_2", 		gp.tileSize,   gp.tileSize*2);
+			attackDown1 = setup("/player/boy_attack_down_1",	gp.tileSize,   gp.tileSize*2);
+			attackDown2 = setup("/player/boy_attack_down_2", 	gp.tileSize,   gp.tileSize*2);
+			attackLeft1 = setup("/player/boy_attack_left_1", 	gp.tileSize*2, gp.tileSize);
+			attackLeft2 = setup("/player/boy_attack_left_2", 	gp.tileSize*2, gp.tileSize);
+			attackRight1 = setup("/player/boy_attack_right_1",	gp.tileSize*2, gp.tileSize);
+			attackRight2 = setup("/player/boy_attack_right_2", 	gp.tileSize*2, gp.tileSize);
+		} else if(currentWeapon.name == "Axe") {
+			attackUp1 = setup("/player/boy_axe_up_1", 		gp.tileSize,   gp.tileSize*2);
+			attackUp2 = setup("/player/boy_axe_up_2", 		gp.tileSize,   gp.tileSize*2);
+			attackDown1 = setup("/player/boy_axe_down_1",	gp.tileSize,   gp.tileSize*2);
+			attackDown2 = setup("/player/boy_axe_down_2", 	gp.tileSize,   gp.tileSize*2);
+			attackLeft1 = setup("/player/boy_axe_left_1", 	gp.tileSize*2, gp.tileSize);
+			attackLeft2 = setup("/player/boy_axe_left_2", 	gp.tileSize*2, gp.tileSize);
+			attackRight1 = setup("/player/boy_axe_right_1",	gp.tileSize*2, gp.tileSize);
+			attackRight2 = setup("/player/boy_axe_right_2", 	gp.tileSize*2, gp.tileSize);
+		}
+		
 	}
 	
 	public void update() {
@@ -380,40 +394,74 @@ public class Player extends Entity{
 	
 	public void pickUpObject(int index) {
 		if(index != 999) {
-			
-			
-			String objectName = gp.obj[index].name;
-			
-			switch(objectName) {
-			case "Key":
-				gp.playSE(1);
-				hasKey++;
-				gp.obj[index] = null;
-				gp.ui.addMessage("You got a key!");
-				break;
-			case "Door":
-				if(hasKey > 0) {
-					gp.playSE(3);
-					gp.obj[index] = null;
-					hasKey--;
-					gp.ui.addMessage("Door Unlocked!");
-				} else {
-					gp.ui.addMessage("Door Locked!");
+			if(inventory.size() != inventorySize) {
+				
+				String objectName = gp.obj[index].name;
+				String text = "";
+				if(objectName != "Door" && objectName != "Chest") {
+					inventory.add(gp.obj[index]);
 				}
-				break;
-			case "Boots":
-				gp.playSE(2);
-				speed += 2;
-				gp.obj[index] = null;
-				gp.ui.addMessage("Speed boost");
-				break;
-			case "Chest":
-				gp.ui.levelFinished = true;
-				gp.stopMusic();
-				gp.playSE(4);
-				break;
+				
+				boolean doorUnlocked = false;
+				
+				switch(objectName) {
+				case "Key":
+					gp.playSE(1);
+					setHasKey(getHasKey() + 1);
+					text = "You got a key!";
+					break;
+				case "Door":
+					if(getHasKey() > 0) {
+						gp.playSE(3);
+						setHasKey(getHasKey() - 1);
+						text = "Door Unlocked!";
+						doorUnlocked = true;
+						useKey();
+					} else {
+						text = "Door Locked!";
+					}
+					break;
+				case "Boots":
+					gp.playSE(2);
+					speed += 2;
+					text = "Speed boost";
+					break;
+				case "Chest":
+					gp.ui.levelFinished = true;
+					gp.stopMusic();
+					gp.playSE(4);
+					break;
+				case "Shield_blue":
+					gp.playSE(2);
+					text = "Beat up blue shield";
+					break;
+				case "shield_wood":
+					gp.playSE(2);
+					text = "Bark from a nearby tree";
+					break;
+				case "Axe":
+					gp.playSE(2);
+					text = "Wood cutting axe";
+					break;
+				case "Sword_normal":
+					gp.playSE(2);
+					text = "Rusty sword";
+					break;
+				case "Potion_red":
+					gp.playSE(2);
+					text = "mysterious liquid";
+					break;
+				}
+				if(objectName == "Door") {
+					if(doorUnlocked) {
+						gp.obj[index] = null;
+					}
+				} else {
+					gp.obj[index] = null;
+				}
+				
+				gp.ui.addMessage(text);
 			}
-			
 		}
 	}
 	
@@ -479,6 +527,27 @@ public class Player extends Entity{
 			gp.playSE(9);
 			gp.gameState = GameState.DIALOGUESTATE;
 			gp.ui.currentDialogue = "You are now level " + level + "\nYou feel stronger!";
+		}
+	}
+	
+	public void equipItem() {
+		int itemIndex = gp.ui.getItemIndex();
+		
+		if(itemIndex < inventory.size()) {
+			Entity selectedItem = inventory.get(itemIndex);
+			if(selectedItem.getType() == EntityType.WEAPON) {
+				currentWeapon = selectedItem;
+				attack = getAttack();
+				getPlayerAttackImage();
+			}
+			if(selectedItem.getType() == EntityType.SHIELD) {
+				currentShield = selectedItem;
+				defense = getDefense();
+			}
+			if(selectedItem.getType() == EntityType.CONSUMABLE) {
+				selectedItem.use(this);
+				inventory.remove(itemIndex);
+			}
 		}
 	}
 	
@@ -594,5 +663,23 @@ public class Player extends Entity{
 
 	public void setInventory(ArrayList<Entity> inventory) {
 		this.inventory = inventory;
+	}
+
+	private void useKey() {
+		int i;
+		for(i = 0; i < inventory.size(); i++) {
+			if(inventory.get(i).getType() == EntityType.KEY) {
+				inventory.remove(i);
+				break;
+			}
+		}
+	}
+	
+	public int getHasKey() {
+		return hasKey;
+	}
+
+	public void setHasKey(int hasKey) {
+		this.hasKey = hasKey;
 	}
 }

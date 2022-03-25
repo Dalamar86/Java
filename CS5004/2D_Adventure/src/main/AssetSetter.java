@@ -22,7 +22,7 @@ public class AssetSetter {
 		gp.obj[1].worldX = 23 * gp.tileSize;
 		gp.obj[1].worldY = 40 * gp.tileSize;
 		
-		gp.obj[2] = new OBJ_Key(gp);
+		gp.obj[2] = new OBJ_Shield_Blue(gp);
 		gp.obj[2].worldX = 38 * gp.tileSize;
 		gp.obj[2].worldY = 8 * gp.tileSize;
 		

@@ -173,6 +173,9 @@ public class KeyHandler implements KeyListener {
 					gp.ui.slotCol++; gp.playSE(10);
 				}
 			}
+			if(code == KeyEvent.VK_ENTER) {	
+				gp.player.equipItem();
+			}
 			break;
 		default:
 			break;

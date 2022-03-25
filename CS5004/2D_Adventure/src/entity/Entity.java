@@ -21,6 +21,18 @@ public abstract class Entity implements EntityInt {
 	//Setup
 	protected GamePanel gp;
 	
+	// Enums
+	public enum EntityType{
+		CONSUMABLE,
+		KEY,
+		MONSTER,
+		NPC,
+		PLAYER,
+		SHIELD,
+		WEAPON		
+	}
+	private EntityType type;
+	
 	// State
 	public int worldX, worldY;
 	public String direction = "";
@@ -41,7 +53,6 @@ public abstract class Entity implements EntityInt {
 	// Character status
 	protected int level;
 	public int speeddiag;
-	protected int type;
 	protected int exp;
 	protected int nextLevelExp;
 	private int coin;
@@ -102,6 +113,8 @@ public abstract class Entity implements EntityInt {
 		}
 	}
 	
+	public void use(Entity entity) {}
+	
 	public void update() {
 		setAction();
 		
@@ -112,7 +125,7 @@ public abstract class Entity implements EntityInt {
 		gp.cChecker.checkEntity(this, gp.monster);
 		boolean contactPlayer = gp.cChecker.checkPlayer(this);
 		
-		if(this.type == 2 && contactPlayer == true) {
+		if(this.getType() == EntityType.MONSTER && contactPlayer == true) {
 			if(!gp.player.invincible) {
 				gp.playSE(6);
 				
@@ -124,6 +137,7 @@ public abstract class Entity implements EntityInt {
 				gp.player.invincible = true;
 			}
 		}
+		
 		// if collision is false, player can move
 		if(collisionOn == false) {
 			
@@ -214,8 +228,8 @@ public abstract class Entity implements EntityInt {
 				break;	
 			}
 			
-			// Monster Hp Bar
-			if(type == 2) {
+			// Monster HP Bar
+			if(getType() == EntityType.MONSTER) {
 				if(life < maxLife && life >= 0) {
 					double oneScale = (double)gp.tileSize/maxLife;
 					double hpBarValue = oneScale*life;
@@ -414,5 +428,13 @@ public abstract class Entity implements EntityInt {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public EntityType getType() {
+		return type;
+	}
+
+	protected void setType(EntityType type) {
+		this.type = type;
 	}
 }

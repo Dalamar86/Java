@@ -115,8 +115,6 @@ public class UI {
 			break;
 		}
 	}
-	
-	
 
 	public void drawHUD() {
 		
@@ -130,7 +128,7 @@ public class UI {
 			i++;
 			x += gp.tileSize;
 		}
-		
+		int xKey = x;
 		// Full hearts
 		x = gp.tileSize/2;
 		y = gp.tileSize/2;
@@ -145,6 +143,18 @@ public class UI {
 			i++;
 			x += gp.tileSize;
 		}
+		
+		// Keys
+		x = xKey; 
+		x += gp.tileSize;
+		y = gp.tileSize/2;
+		i = 0;
+		String text = " x " + gp.player.getHasKey();
+		g2.drawImage(new OBJ_Key(gp).image1, x, y, null);
+		x += gp.tileSize;
+		y = (int) (gp.tileSize*1.5);
+		g2.setColor(Color.white);
+		g2.drawString(text, x, y);
 	}
 	
 	public void drawMessage() {
@@ -397,6 +407,10 @@ public class UI {
 		
 		// Draw player inventory
 		for(Entity obj: gp.player.getInventory()) {
+			if(obj == gp.player.currentWeapon || obj == gp.player.currentShield) {
+				g2.setColor(new Color(240, 190, 90));
+				g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
+			}
 			g2.drawImage(obj.image1, slotX, slotY, null);
 			slotX += slotSize;
 			if(slotX >= slotXstart + (slotSize*slotColMax)) {
@@ -444,6 +458,7 @@ public class UI {
 		int itemIndex = slotCol + (slotRow*5);
 		return itemIndex;
 	}
+	
 	public void drawSubWindow(int x, int y, int width, int height) {
 		Color c = new Color(0, 0, 0, 200);
 		g2.setColor(c);
@@ -454,9 +469,11 @@ public class UI {
 		g2.setStroke(new BasicStroke(5));
 		g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);
 	}
+	
 	public int getXforCenteredText(String text) {
 		return gp.screenWidth/2 - (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
 	}
+	
 	public int getXforRightJustifiedText(String text, int rightJust) {
 		return rightJust - (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
 	}
