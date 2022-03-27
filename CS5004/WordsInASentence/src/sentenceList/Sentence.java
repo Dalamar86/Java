@@ -11,8 +11,9 @@ public interface Sentence {
      * Add an object to the front of this list.
      * 
      * @param word (String) the object to be added to the front of this list.
+	 * @return 
      */
-	void addFront(String word);
+	Sentence addFront(String word, boolean isWord);
 
 	/**
 	 * Add an object to the back of this list (so it is the last object in the
@@ -20,7 +21,7 @@ public interface Sentence {
 	 * 
 	 * @param word (String) the object to be added to teh back of this list.
 	 */
-	void addBack(String word);
+	Sentence addBack(String word, boolean isWord);
 
 	/**
 	 * Add an object to this list so that it occupies the provided index. Index
@@ -29,7 +30,7 @@ public interface Sentence {
 	 * @param index (int) the index to be occupied by this object, beginning at 0.
 	 * @param word (String) the object to be added to the list.
 	 */
-	void add(int index, String word);
+	Sentence add(int index, String word, boolean isWord);
 
 	/**
 	 * Return the number of objects currently in this list.
@@ -109,8 +110,29 @@ public interface Sentence {
 	
 	/**
 	 * 
-	 * 
-	 *
+	 * @param numWords
+	 * @return
 	 */
 	int countHelper(int numWords);
+	
+	/**
+	 * 
+	 * @param numWords
+	 * @return
+	 */
+	int numWordsHelper(int numWords);
+	
+	/**
+	 * 
+	 * @param word
+	 * @return
+	 */
+	String longestWordHelper(String word);
+	
+	/**
+	 * 
+	 * @param word
+	 * @param prevNode
+	 */
+	Sentence removeHelper(String word);
 }

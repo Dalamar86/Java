@@ -33,7 +33,7 @@ public class SentenceTest {
 	 */
 	@Test
 	public void addTest() {
-		s1.add(0, null);
+		s1.add(0, "Hello", false);
 		//s2.addBack(null);
 		//s3.addFront(null);
 		assertEquals("", s1.get(0));

@@ -1,8 +1,5 @@
 package sentenceList;
 
-import java.util.Arrays;
-import java.util.regex.Pattern;
-
 public class SentenceList implements Sentence{
 
 	// Create a Sentence list
@@ -13,108 +10,112 @@ public class SentenceList implements Sentence{
 	}
 	
 	public SentenceList(String sen) {
-		if(!(sen.trim()).isEmpty()) {
-			if((sen.trim()).contains(" ")) {
-				String[] words = sentenceSplitter(sen.trim(), " ");
-				System.out.println(words[0] + " : " + words[1]);
-				nodeBuilder(words, 0);
-			} 
-			head = new WordNode(sen.trim(), new EmptyNode());
-		} else {
-			head = new EmptyNode();
-		}
+		sen = sen.trim();
+		head = new EmptyNode();
+		if(!sen.isEmpty()) {
+			sentenceSplitter(sen);
+		} 
 	}
 
-	private String[] sentenceSplitter(String head, String splitter) {;
-		return head.split(splitter);
+	public SentenceList(String sen, Sentence node) {
+		sen = sen.trim();
+		head = new EmptyNode();
+		if(!sen.isEmpty()) {
+			sentenceSplitter(sen);
+		} 
 	}
 	
-	private void nodeBuilder(String[] words, int index) {
-		System.out.println("index: " + index + "\tlength: " + words.length);
-		//String[] wordpun = sentenceSplitter(words[index], "");
-		//String word = punctuationChecker(wordpun, 0);
-		if(index == words.length-1) {
-			System.out.println(words[index]);
-			if(punctuationChecker(words[index])) {
-				removepunctuation(words);
-			} else {
-				this.head = new WordNode(words[index], new EmptyNode());
+	public SentenceList(SentenceList other) {
+		head = other.head;
+	}
+	
+	private void sentenceSplitter(String head) {
+		int index = 0;
+		String[] tempWords = head.split(" ");
+		for(String word: tempWords) {
+			splitWord(word);
+			if(index < tempWords.length-1) {
+				this.head = this.head.addBack(" ", false);
+				index++;
 			}
-			return;
-		} if(punctuationChecker(words[index])) {
-			removepunctuation(words);
-			nodeBuilder(words, index+1);
-		} else {
-			this.head = new WordNode(words[index], head);
-			nodeBuilder(words, index+1);
-		}		
+		}
 	}
 	
-	private void removepunctuation(String[] words) {
-		// TODO Auto-generated method stub
-		
+	private void splitWord(String word) {
+		if(!word.isEmpty()) {
+			for(int i = 0; i < word.length(); i++) {
+				char c = word.charAt(i);
+				if(!Character.isLetter(c)) {
+					String punc = Character.toString(c);
+					String[] tempWord = word.split("\\"+ punc);
+					if(!tempWord[0].isEmpty()) {
+						this.head = head.addBack(tempWord[0], true);
+					}
+					this.head = head.addBack(punc, false);
+					for(int j = 1; j < tempWord.length; j++) {
+						splitWord(tempWord[j]);
+						if(j+1 < tempWord.length) {
+							this.head = head.addBack(punc, false);
+						}
+					}
+					return;
+				}
+			}
+			this.head = head.addBack(word, true);
+			return;
+		}
+		return;
 	}
-
-	private boolean punctuationChecker(String word) {
-		System.out.println("made it here first: " + word);
-		if (Pattern.matches(".*[\\p{Punct}\\p{IsPunctuation}]", word)) { 
-			this.head = new PunctuationNode((String.valueOf(word.charAt(word.length()-1))), head);
-			// ]$", word)) {
-			//
-			//word[index].replace(getWord(), getWord())
-			System.out.println("made it here second: " + word);
-			return true;			
-		}
-		return false;
-		/*
-		System.out.println(word);
-		if(index == word.length()-1) {
-			
-		}
-		if (Pattern.matches("[\\p{Punct}\\p{IsPunctuation}]", word)) {
-			
-			return true;
-		} return false;
-		*/
+	
+	public int numWordsHelper(int numWord) {
+		return head.getNumberOfWords();
 	}
 	
 	@Override
 	public int getNumberOfWords() {
-		// TODO Auto-generated method stub
-		return 0;
+		return numWordsHelper(0);
 	}
 
 	@Override
+	public String longestWordHelper(String word) {
+		return head.longestWordHelper(word);
+	}
+	
+	@Override
 	public String longestWord() {
-		// TODO Auto-generated method stub
-		return null;
+		return head.longestWordHelper("");
 	}
 	
 	@Override
 	public Sentence clone() {
-		
-		return null;
+		SentenceList other = new SentenceList(this);
+		other.head = ((SentenceList)other).head.clone();
+		return other;
 	}
 	
 	@Override
 	public Sentence merge(Sentence other) {
-		// TODO Auto-generated method stub
-		return null;
+		Sentence copy = (SentenceList)this.clone();
+		copy = ((SentenceList)copy).head.merge(other);
+		return copy;
 	}
 
 	@Override
-	public void addFront(String word) {
-		head.addFront(word);
+	public Sentence addFront(String word, boolean isWord) {
+		head = head.addFront(word, isWord);
+		return this;
 	}
 
 	@Override
-	public void addBack(String word) {
-		head.addBack(word);
+	public Sentence addBack(String word, boolean isWord) {
+		head = head.addBack(word, isWord);
+		return this.head;
 	}
 
 	@Override
-	public void add(int index, String word) {
-		head.add(index, word);		
+	public Sentence add(int index, String word, boolean isWord) {
+		head = head.add(index, word, isWord);	
+		return this;
 	}
 
 	@Override
@@ -123,13 +124,17 @@ public class SentenceList implements Sentence{
 	@Override
 	public int getSize() {
 		int acc = 0;
-		acc = countHelper(acc);
-		return acc;
+		return countHelper(acc);
 	}
 
 	@Override
+	public Sentence removeHelper(String word) {
+		return head.removeHelper(word);
+	}
+	
+	@Override
 	public void remove(String word) {
-		head.remove(word);		
+		head = removeHelper(word);		
 	}
 
 	@Override
@@ -152,7 +157,16 @@ public class SentenceList implements Sentence{
 	}
 
 	@Override
+	public String toString() {
+		return head.toString();
+	}
+
+	@Override
 	public String getWord() {
 		return head.getWord();
-	};
+	}
+	
+	public Sentence getHead() {
+		return head;
+	}
 }

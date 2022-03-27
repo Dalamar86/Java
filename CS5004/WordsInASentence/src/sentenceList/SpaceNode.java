@@ -1,24 +1,24 @@
 package sentenceList;
 
-public class PunctuationNode implements Sentence {
+public class SpaceNode implements Sentence {
 
-	private String punc;
+	private String space;
 	private Sentence nextNode;
 	
-	public PunctuationNode(String punctuation, Sentence nextNode) {
-		this.punc = punctuation;
+	public SpaceNode(String punctuation, Sentence nextNode) {
+		this.space = punctuation;
 		this.nextNode = nextNode;
 	}
 
 	@Override
 	public String toString() {
-		String str = punc;
+		String str = space;
 		return str + nextNode.toString();
 	}
 	
 	@Override
 	public int countHelper(int numWords) {
-		return nextNode.countHelper(numWords + 1);
+		return nextNode.countHelper(numWords);
 	}
 	
 	@Override
@@ -44,16 +44,16 @@ public class PunctuationNode implements Sentence {
 
 	@Override
 	public Sentence clone() {
-		String punc = new String(this.punc);
-		PunctuationNode other = new PunctuationNode(punc, nextNode.clone());
-		return other;
+		String space = new String(this.space);
+		SpaceNode other = new SpaceNode(space, nextNode.clone());
+		return other; 
 	};
 	
 	@Override
 	public Sentence merge(Sentence other) {
-		String punc = new String(this.punc);
-		PunctuationNode copy = new PunctuationNode(punc, nextNode.merge(other));
-		return copy;
+		String space = new String(this.space);
+		SpaceNode copy = new SpaceNode(space, nextNode.merge(other));
+		return copy; 
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class PunctuationNode implements Sentence {
 			if(word.isBlank()) {
 				return new SpaceNode(word, this);
 			}
-			return new PunctuationNode(word, this);
+			return new SpaceNode(word, this);
 		}
 	}
 
@@ -91,7 +91,7 @@ public class PunctuationNode implements Sentence {
 
 	@Override
 	public Sentence removeHelper(String word) {
-		if(this.punc.equals(word)) {
+		if(this.space == word) {
 			return nextNode;
 		}
 		nextNode = nextNode.removeHelper(word);
@@ -113,13 +113,13 @@ public class PunctuationNode implements Sentence {
 	}
 
 	public String getWord() {
-		return punc;
+		return space;
 	}
 
 	@Override
 	public String getWord(int index) throws IllegalArgumentException {
 		if(index == 0) {
-			return this.punc;
+			return this.space;
 		} else {
 			String str = nextNode.get(index--).getWord(index);
 			return str;
