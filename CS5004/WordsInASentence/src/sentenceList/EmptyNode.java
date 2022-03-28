@@ -1,7 +1,7 @@
 package sentenceList;
 
 public class EmptyNode implements Sentence {
-
+	
 	@Override
 	public String toString() {
 		return "";
@@ -41,7 +41,7 @@ public class EmptyNode implements Sentence {
 	@Override
 	public Sentence merge(Sentence other) {
 		Sentence copy = ((SentenceList)other).clone();
-		Sentence head = new SpaceNode(" ", ((SentenceList)copy).getHead());
+		Sentence head = ((SentenceList)copy).getHead();
 		return head;
 	}
 
@@ -99,4 +99,10 @@ public class EmptyNode implements Sentence {
 	public String getWord() {
 		return "";
 	}
+
+	@Override
+	public void addFront(String word) {}
+
+	@Override
+	public void addBack(String word) {}
 }

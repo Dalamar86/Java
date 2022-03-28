@@ -13,10 +13,10 @@ public class WordNode implements Sentence {
 	@Override
 	public String toString() {
 		String str = word;
-		if(nextNode instanceof PunctuationNode) {
+		if(nextNode instanceof PunctuationNode || nextNode instanceof EmptyNode) {
 			return str + nextNode.toString();
-		}
-		return str + nextNode.toString();
+		} 
+		return str + " " + nextNode.toString();
 	}
 	
 	@Override
@@ -135,4 +135,10 @@ public class WordNode implements Sentence {
 	public Sentence getNext() {
 		return nextNode;
 	}
+
+	@Override
+	public void addFront(String word) {}
+
+	@Override
+	public void addBack(String word) {}
 }

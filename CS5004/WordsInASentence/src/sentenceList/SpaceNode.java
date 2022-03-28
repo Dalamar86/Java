@@ -1,6 +1,6 @@
 package sentenceList;
 
-public class SpaceNode implements Sentence {
+public class SpaceNode extends SentenceList {
 
 	private String space;
 	private Sentence nextNode;

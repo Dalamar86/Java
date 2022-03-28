@@ -13,7 +13,10 @@ public class PunctuationNode implements Sentence {
 	@Override
 	public String toString() {
 		String str = punc;
-		return str + nextNode.toString();
+		if(nextNode instanceof PunctuationNode || nextNode instanceof EmptyNode) {
+			return str + nextNode.toString();
+		} 
+		return str + " " + nextNode.toString();
 	}
 	
 	@Override
@@ -129,4 +132,10 @@ public class PunctuationNode implements Sentence {
 	public Sentence getNext() {
 		return nextNode;
 	}
+
+	@Override
+	public void addFront(String word) {}
+
+	@Override
+	public void addBack(String word) {}
 }

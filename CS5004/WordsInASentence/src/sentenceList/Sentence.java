@@ -135,4 +135,7 @@ public interface Sentence {
 	 * @param prevNode
 	 */
 	Sentence removeHelper(String word);
+	
+	public void addFront(String word);
+	public void addBack(String word);
 }
