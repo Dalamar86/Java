@@ -17,32 +17,16 @@ public class WordNode implements Sentence {
 	}
 	
 	@Override
-	public int countHelper(int numWords) {
-		return nextNode.countHelper(numWords + 1);
-	}
-	
-	@Override
-	public int numWordsHelper(int numWords) {
-		return nextNode.numWordsHelper(numWords + 1);
-	}
-	
-	@Override
-	public int getNumberOfWords() {
-		int numWords = 0;
-		return numWordsHelper(numWords);
+	public int getNumberOfWords(int numWords) {
+		return nextNode.getNumberOfWords(++numWords);
 	}
 
 	@Override
-	public String longestWordHelper(String word) {
+	public String longestWord(String word) {
 		if(this.word.length() > word.length()) {
-			return nextNode.longestWordHelper(this.word);
+			return nextNode.longestWord(this.word);
 		}
-		return nextNode.longestWordHelper(word);
-	}
-	
-	@Override
-	public String longestWord() {
-		return longestWordHelper(word);
+		return nextNode.longestWord(word);
 	}
 
 	@Override
@@ -101,37 +85,32 @@ public class WordNode implements Sentence {
 			}
 			return this;
 		} else {
-			nextNode.add(--index, word);
+			nextNode = nextNode.add(--index, word);
 			return this;
 		}
 	}
 	
 	@Override
-	public int getSize() {
-		return countHelper(0);
+	public int getSize(int numNodes) {
+		return nextNode.getSize(++numNodes);
 	}
 
 	@Override
-	public Sentence removeHelper(String word) {
+	public Sentence remove(String word) {
 		if(this.word.equals(word)) {
 			return nextNode;
 		}
-		nextNode = nextNode.removeHelper(word);
+		nextNode = nextNode.remove(word);
 		return this;
 	}
 	
 	@Override
-	public Sentence removeHelper(int index) {
+	public Sentence remove(int index) {
 		if(index == 0) {
 			return nextNode;
 		}
-		nextNode = nextNode.removeHelper(--index);
+		nextNode = nextNode.remove(--index);
 		return this;
-	}
-
-	@Override 
-	public void remove(String word) {
-		nextNode = removeHelper(word);
 	}
 	
 	@Override
@@ -154,9 +133,5 @@ public class WordNode implements Sentence {
 		} else {
 			return nextNode.getWord(--index);
 		}
-	}
-	
-	public Sentence getNext() {
-		return nextNode;
 	}
 }

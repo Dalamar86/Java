@@ -12,6 +12,7 @@ public class SentenceTest {
 	private SentenceList s3;
 	private SentenceList s4;
 	private SentenceList s5;
+	private SentenceList s6;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -20,6 +21,7 @@ public class SentenceTest {
 		s3 = new SentenceList("Hello World! My name is Tony.");
 		s4 = new SentenceList(s2);
 		s5 = s2.clone();
+		s6 = s5.clone();
 	}
 
 	/**
@@ -41,10 +43,12 @@ public class SentenceTest {
 		s2.addBack(".");
 		s3.addBack(" It isn't Mark!");
 		s5.addBack("world");
+		s6.addBack(" ");
 		assertEquals("Goodbye world.", s1.toString());
 		assertEquals("Hello .", s2.toString());
 		assertEquals("Hello World! My name is Tony. It isn't Mark!", s3.toString());
 		assertEquals("Hello world", s5.toString());
+		assertEquals("Hello  ", s6.toString());
 	}
 	
 	/**
@@ -56,10 +60,12 @@ public class SentenceTest {
 		s2.addFront(".");
 		s3.addFront("It isn't Mark! ");
 		s5.addFront("world");
+		s6.addFront(" ");
 		assertEquals(" Goodbye world.", s1.toString());
 		assertEquals(".Hello ", s2.toString());
 		assertEquals("It isn't Mark! Hello World! My name is Tony.", s3.toString());
 		assertEquals("worldHello ", s5.toString());
+		assertEquals(" Hello ", s6.toString());
 	}
 	
 	/**
@@ -69,13 +75,15 @@ public class SentenceTest {
 	public void addTest() {
 		s1.add(0, "Good.bye.bye. world.");
 		s2.add(1, "World");
-		s3.add( s3.getSize()-1, " It isn't Mark!");
+		s3.add( s3.getSize(), " It isn't Mark!");
 		s5.add(0, "");
 		s5.add(1, ".");
+		s6.add(1, " ");
 		assertEquals("Good.bye.bye. world.", s1.toString());
 		assertEquals("HelloWorld ", s2.toString());
 		assertEquals("Hello World! My name is Tony. It isn't Mark!", s3.toString());
 		assertEquals("Hello. ",s5.toString());
+		assertEquals("Hello  ", s6.toString());
 	}
 	
 	/**

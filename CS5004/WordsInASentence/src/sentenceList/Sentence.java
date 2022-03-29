@@ -45,14 +45,21 @@ public interface Sentence {
 	 * 
 	 * @return size (int) the size of the complete list.
 	 */
-	int getSize();
+	int getSize(int numNodes);
 
 	/**
 	 * Remove the first instance of this object from this list.
 	 * 
-	 * @param b (Generic) the object to be removed.
+	 * @param word (String) the object to be removed.
 	 */
-	void remove(String word);
+	Sentence remove(String word);
+	
+	/**
+	 * Remove the first instance of this object from this list.
+	 * 
+	 * @param index (int) the object to be removed.
+	 */
+	Sentence remove(int index);
 
 	/**
 	 * Get the (index)th object in this list.
@@ -84,14 +91,14 @@ public interface Sentence {
 	 * 
 	 * @return numWords (int) represents the number of words in the sentence.
 	 */
-	public int getNumberOfWords();
+	public int getNumberOfWords(int numWords);
 	
 	/**
 	 *Determines and returns the longest word in a sentence.  Returns an empty string if sentence if empty. 
 	 * 
 	 * @return longWord (String) longest word in a sentence, empty string on an empty sentence.
 	 */
-	public String longestWord();
+	public String longestWord(String word);
 	
 	/**
 	 * Overrides the object toString, which returns a string to print.
@@ -115,34 +122,4 @@ public interface Sentence {
 	 * @return SenNew (Sentence) New concatenated Sentence.
 	 */
 	public Sentence merge(SentenceList other);
-	
-	/**
-	 * 
-	 * @param numWords
-	 * @return
-	 */
-	int countHelper(int numWords);
-	
-	/**
-	 * 
-	 * @param numWords
-	 * @return
-	 */
-	int numWordsHelper(int numWords);
-	
-	/**
-	 * 
-	 * @param word
-	 * @return
-	 */
-	String longestWordHelper(String word);
-	
-	/**
-	 * 
-	 * @param word
-	 * @param prevNode
-	 */
-	Sentence removeHelper(String word);
-	
-	Sentence removeHelper(int index);
 }

@@ -45,7 +45,7 @@ public class SentenceList {
 			this.head = this.head.addBack(" ", false);
 		}
 		if(!head.endsWith(" ")) {
-			this.head.removeHelper(this.head.getSize()-1);
+			this.head.remove(this.getSize()-1);
 		}
 	}
 	
@@ -69,7 +69,7 @@ public class SentenceList {
 						}
 					}
 					if(!word.endsWith(punc)) {
-						this.head.removeHelper(this.head.getSize()-1);
+						this.head.remove(this.getSize()-1);
 					}
 					return;
 				}
@@ -79,17 +79,14 @@ public class SentenceList {
 		}
 		return;
 	}
-	
-	public int numWordsHelper(int numWord) {
-		return head.getNumberOfWords();
-	}
-		
+
 	public int getNumberOfWords() {
-		return numWordsHelper(0);
+		int numWords = 0;
+		return head.getNumberOfWords(numWords);
 	}
 		
 	public String longestWord() {
-		return head.longestWordHelper("");
+		return head.longestWord("");
 	}
 		
 	public SentenceList clone() {
@@ -122,7 +119,6 @@ public class SentenceList {
 			if(word.isBlank() || Pattern.matches("[\\p{Punct}\\p{IsPunctuation}]", word)) {
 				addFront(word, false);
 			} else{
-				//addFront(" ", false);
 				addFront(word, true);
 			}
 		}
@@ -146,7 +142,6 @@ public class SentenceList {
 			if(word.isBlank() || Pattern.matches("[\\p{Punct}\\p{IsPunctuation}]", word)) {
 				addBack(word, false);
 			} else{
-				//addBack(" ", false);
 				addBack(word, true);
 			}
 		}
@@ -163,34 +158,30 @@ public class SentenceList {
 			} else {
 				String[] words = SentenceList.sentenceSplitter(word);
 				if(words.length > 1) {
-					System.out.println(word);
 					head = head.add(index, word);
 				} else {
 					//https://stackoverflow.com/questions/13925454/check-if-string-is-a-punctuation-character
 					if(word.isBlank() || Pattern.matches("[\\p{Punct}\\p{IsPunctuation}]", word)) {
 						add(index, word, false);
 					} else{
-						//add(index, " ", false);
 						add(index, word, true);
 					}
 				}
 			}
 		}
 	}
-	
-	public int countHelper(int numWords) {return head.getSize();}
-		
+
 	public int getSize() {
 		int acc = 0;
-		return countHelper(acc);
+		return head.getSize(acc);
 	}
 	
 	public void remove(String word) {
-		head = head.removeHelper(word);		
+		head = head.remove(word);		
 	}
 	
 	public void remove(int index) {
-		head = head.removeHelper(index);		
+		head = head.remove(index);		
 	}
 	
 	public Sentence get(int index) throws IllegalArgumentException {
@@ -206,7 +197,6 @@ public class SentenceList {
 	}
 	
 	public String getWord(int index) throws IllegalArgumentException {
-		System.out.println("List: " + getSize());
 		if ((index >= 0) && (index < getSize())) {
 		      return head.getWord(index);
 		} else {
@@ -238,10 +228,8 @@ public class SentenceList {
 		String[] finishedWord = new String[index];
 		int i;
 		for(i = 0; i < words.length; i++) {
-			//System.out.println("words: " + words[i]);
 			if(words[i] != null) {
 				finishedWord[i] = words[i];
-				//System.out.println("finishedWords: " + finishedWord[i]);
 			}
 		}
 		return finishedWord;

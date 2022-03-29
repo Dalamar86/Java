@@ -6,31 +6,15 @@ public class EmptyNode implements Sentence {
 	public String toString() {
 		return "";
 	}
-	
+
 	@Override
-	public int countHelper(int numWords) {
+	public int getNumberOfWords(int numWords) {
 		return numWords;
-	}
-	
-	@Override
-	public int numWordsHelper(int numWords) {
-		return numWords;
-	}
-	
-	@Override
-	public int getNumberOfWords() {
-		int numWords = 0;
-		return numWordsHelper(numWords);
 	}
 
 	@Override
-	public String longestWordHelper(String word) {
+	public String longestWord(String word) {
 		return word;
-	}
-	
-	@Override
-	public String longestWord() {
-		return longestWordHelper("");
 	}
 
 	@Override
@@ -74,32 +58,26 @@ public class EmptyNode implements Sentence {
 	public Sentence add(int index, String word) {
 		if(index == 0) {
 			SentenceList other = new SentenceList(word);
-			System.out.println(other.toString());
 			Sentence sen = merge(other);
-			System.out.println(sen.toString());
 			return sen;
 		} else {
 			throw new IllegalArgumentException("Invalid index to add an element");
 		}
 	}
+	
 	@Override
-	public int getSize() {
-		return countHelper(0);
+	public int getSize(int numNodes) {
+		return numNodes;
 	}
 
 	@Override
-	public Sentence removeHelper(String word) {
+	public Sentence remove(String word) {
 		return this;
 	}
 	
 	@Override
-	public Sentence removeHelper(int index) {
+	public Sentence remove(int index) {
 		return this;
-	}
-
-	@Override 
-	public void remove(String word) {
-		removeHelper(word);
 	}
 
 	@Override
