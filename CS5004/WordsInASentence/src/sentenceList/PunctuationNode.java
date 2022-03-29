@@ -11,62 +11,107 @@ public class PunctuationNode implements Sentence {
 	}
 
 	@Override
-	public int countHelper(int numWords) {
-		
-		return nextNode.countHelper(numWords);
-	}
-	
-	@Override
-	public int getNumberOfWords() {
-		// TODO Auto-generated method stub
-		return 0;
+	public String toString() {
+		String str = punc;
+		/*
+		if(nextNode instanceof PunctuationNode || nextNode instanceof EmptyNode) {
+			return str + nextNode.toString();
+		} 
+		*/
+		return str + nextNode.toString();
 	}
 
 	@Override
-	public String longestWord() {
-		// TODO Auto-generated method stub
-		return null;
+	public int getNumberOfWords(int numWords) {
+		return nextNode.getNumberOfWords(numWords);
+	}
+
+	@Override
+	public String longestWord(String word) {
+		return nextNode.longestWord(word);
 	}
 
 	@Override
 	public Sentence clone() {
-		
-		return null;
+		String punc = new String(this.punc);
+		PunctuationNode other = new PunctuationNode(punc, nextNode.clone());
+		return other;
 	};
 	
 	@Override
-	public Sentence merge(Sentence other) {
-		// TODO Auto-generated method stub
-		return null;
+	public Sentence merge(SentenceList other) {
+		String punc = new String(this.punc);
+		PunctuationNode copy = new PunctuationNode(punc, nextNode.merge(other));
+		return copy;
 	}
 
 	@Override
-	public void addFront(String word) {
-		// TODO Auto-generated method stub
-		
+	public Sentence addFront(String word, boolean isWord) {
+		if(isWord) {
+			return new WordNode(word, this);
+		} else {
+			if(word.isBlank()) {
+				return new SpaceNode(word, this);
+			}
+			return new PunctuationNode(word, this);
+		}
 	}
 
 	@Override
-	public void addBack(String word) {
-		// TODO Auto-generated method stub
-		
+	public Sentence addBack(String word, boolean isWord) {
+		this.nextNode = this.nextNode.addBack(word, isWord);
+		return this;
 	}
 
 	@Override
-	public void add(int index, String word) {
-		// TODO Auto-generated method stub
-		
+	public Sentence add(int index, String word, boolean isWord) {
+		if(index == 0) {
+			return addFront(word, isWord);
+		} else {
+			this.nextNode = this.nextNode.add(index-1, word, isWord);
+			return this;
+		}
 	}
 
 	@Override
-	public int getSize() {
-		return countHelper(0);
+	public Sentence add(int index, String word) {
+		if(index == 0) {
+			SentenceList other = new SentenceList(word);
+			if(this.nextNode instanceof EmptyNode) {
+				System.out.println(other.toString());
+				this.nextNode = other.getHead();
+			} else {
+				SentenceList temp = new SentenceList(nextNode);
+				this.nextNode = other.merge(temp).getHead();
+			}
+			return this;
+		} else {
+			nextNode = nextNode.add(--index, word);
+			return this;
+		}
+	}
+	
+	@Override
+	public int getSize(int numNodes) {
+		return nextNode.getSize(++numNodes);
 	}
 
 	@Override
-	public void remove(String word) {
-		// TODO Auto-generated method stub
-		
+	public Sentence remove(String word) {
+		if(this.punc.equals(word)) {
+			return nextNode;
+		}
+		nextNode = nextNode.remove(word);
+		return this;
+	}
+
+	@Override
+	public Sentence remove(int index) {
+		if(index == 0) {
+			return nextNode;
+		}
+		nextNode = nextNode.remove(--index);
+		return this;
 	}
 
 	@Override
@@ -74,7 +119,7 @@ public class PunctuationNode implements Sentence {
 		if(index == 0) {
 			return this;
 		} else {
-			return nextNode.get(index--);
+			return nextNode.get(--index);
 		}
 	}
 
@@ -87,8 +132,7 @@ public class PunctuationNode implements Sentence {
 		if(index == 0) {
 			return this.punc;
 		} else {
-			String str = nextNode.get(index--).getWord(index);
-			return str;
+			return nextNode.getWord(--index);
 		}
 	}
 }

@@ -1,64 +1,83 @@
 package sentenceList;
 
 public class EmptyNode implements Sentence {
-
-	@Override
-	public int countHelper(int numWords) {
-		System.out.println("empty: " + numWords);
-		return numWords;
-	}
 	
 	@Override
-	public int getNumberOfWords() {
-		// TODO Auto-generated method stub
-		return 0;
+	public String toString() {
+		return "";
 	}
 
 	@Override
-	public String longestWord() {
-		// TODO Auto-generated method stub
-		return null;
+	public int getNumberOfWords(int numWords) {
+		return numWords;
+	}
+
+	@Override
+	public String longestWord(String word) {
+		return word;
 	}
 
 	@Override
 	public Sentence clone() {
-		
-		return null;
+		return new EmptyNode();
 	};
 	
 	@Override
-	public Sentence merge(Sentence other) {
-		// TODO Auto-generated method stub
-		return null;
+	public Sentence merge(SentenceList other) {
+		SentenceList copy = other.clone();
+		Sentence head = copy.getHead();
+		//Sentence head = new SpaceNode(" ", copy.getHead());
+		return head;
 	}
 
 	@Override
-	public void addFront(String word) {
-		// TODO Auto-generated method stub
-		
+	public Sentence addFront(String word, boolean isWord) {
+		if(isWord) {
+			return new WordNode(word, this);
+		} else {
+			if(word.isBlank()) {
+				return new SpaceNode(word, this);
+			}
+			return new PunctuationNode(word, this);
+		}
 	}
 
 	@Override
-	public void addBack(String word) {
-		// TODO Auto-generated method stub
-		
+	public Sentence addBack(String word, boolean isWord) {
+		return addFront(word, isWord);		
 	}
 
 	@Override
-	public void add(int index, String word) {
-		// TODO Auto-generated method stub
-		
+	public Sentence add(int index, String word, boolean isWord) {
+		if(index == 0) {
+			return addFront(word, isWord);
+		} 
+		throw new IllegalArgumentException("Invalid index to add an element");
+	}
+
+	public Sentence add(int index, String word) {
+		if(index == 0) {
+			SentenceList other = new SentenceList(word);
+			Sentence sen = merge(other);
+			return sen;
+		} else {
+			throw new IllegalArgumentException("Invalid index to add an element");
+		}
+	}
+	
+	@Override
+	public int getSize(int numNodes) {
+		return numNodes;
 	}
 
 	@Override
-	public int getSize() {
-		return countHelper(0);
+	public Sentence remove(String word) {
+		return this;
 	}
-
+	
 	@Override
-	public void remove(String word) {
-		// TODO Auto-generated method stub
-		
+	public Sentence remove(int index) {
+		return this;
 	}
 
 	@Override
@@ -75,5 +94,4 @@ public class EmptyNode implements Sentence {
 	public String getWord() {
 		return "";
 	}
-
 }

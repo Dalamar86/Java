@@ -11,8 +11,9 @@ public interface Sentence {
      * Add an object to the front of this list.
      * 
      * @param word (String) the object to be added to the front of this list.
+	 * @return 
      */
-	void addFront(String word);
+	Sentence addFront(String word, boolean isWord);
 
 	/**
 	 * Add an object to the back of this list (so it is the last object in the
@@ -20,7 +21,7 @@ public interface Sentence {
 	 * 
 	 * @param word (String) the object to be added to teh back of this list.
 	 */
-	void addBack(String word);
+	Sentence addBack(String word, boolean isWord);
 
 	/**
 	 * Add an object to this list so that it occupies the provided index. Index
@@ -29,21 +30,36 @@ public interface Sentence {
 	 * @param index (int) the index to be occupied by this object, beginning at 0.
 	 * @param word (String) the object to be added to the list.
 	 */
-	void add(int index, String word);
+	Sentence add(int index, String word, boolean isWord);
+	
+	/**
+	 * 
+	 * @param index
+	 * @param word
+	 * @return
+	 */
+	Sentence add(int index, String word);
 
 	/**
 	 * Return the number of objects currently in this list.
 	 * 
 	 * @return size (int) the size of the complete list.
 	 */
-	int getSize();
+	int getSize(int numNodes);
 
 	/**
 	 * Remove the first instance of this object from this list.
 	 * 
-	 * @param b (Generic) the object to be removed.
+	 * @param word (String) the object to be removed.
 	 */
-	void remove(String word);
+	Sentence remove(String word);
+	
+	/**
+	 * Remove the first instance of this object from this list.
+	 * 
+	 * @param index (int) the object to be removed.
+	 */
+	Sentence remove(int index);
 
 	/**
 	 * Get the (index)th object in this list.
@@ -75,14 +91,14 @@ public interface Sentence {
 	 * 
 	 * @return numWords (int) represents the number of words in the sentence.
 	 */
-	public int getNumberOfWords();
+	public int getNumberOfWords(int numWords);
 	
 	/**
 	 *Determines and returns the longest word in a sentence.  Returns an empty string if sentence if empty. 
 	 * 
 	 * @return longWord (String) longest word in a sentence, empty string on an empty sentence.
 	 */
-	public String longestWord();
+	public String longestWord(String word);
 	
 	/**
 	 * Overrides the object toString, which returns a string to print.
@@ -105,12 +121,5 @@ public interface Sentence {
 	 * @param other (Sentence) Sentence to merge with this sentence.
 	 * @return SenNew (Sentence) New concatenated Sentence.
 	 */
-	public Sentence merge(Sentence other);
-	
-	/**
-	 * 
-	 * 
-	 *
-	 */
-	int countHelper(int numWords);
+	public Sentence merge(SentenceList other);
 }
