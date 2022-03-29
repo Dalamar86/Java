@@ -1,6 +1,6 @@
 package sentenceList;
 
-public class SpaceNode extends SentenceList {
+public class SpaceNode implements Sentence {
 
 	private String space;
 	private Sentence nextNode;
@@ -18,7 +18,7 @@ public class SpaceNode extends SentenceList {
 	
 	@Override
 	public int countHelper(int numWords) {
-		return nextNode.countHelper(numWords);
+		return nextNode.countHelper(numWords + 1);
 	}
 	
 	@Override
@@ -50,7 +50,7 @@ public class SpaceNode extends SentenceList {
 	};
 	
 	@Override
-	public Sentence merge(Sentence other) {
+	public Sentence merge(SentenceList other) {
 		String space = new String(this.space);
 		SpaceNode copy = new SpaceNode(space, nextNode.merge(other));
 		return copy; 
@@ -85,6 +85,24 @@ public class SpaceNode extends SentenceList {
 	}
 
 	@Override
+	public Sentence add(int index, String word) {
+		if(index == 0) {
+			SentenceList other = new SentenceList(word);
+			if(this.nextNode instanceof EmptyNode) {
+				System.out.println(other.toString());
+				this.nextNode = other.getHead();
+			} else {
+				SentenceList temp = new SentenceList(nextNode);
+				this.nextNode = other.merge(temp).getHead();
+			}
+			return this;
+		} else {
+			nextNode.add(--index, word);
+			return this;
+		}
+	}
+	
+	@Override
 	public int getSize() {
 		return countHelper(0);
 	}
@@ -95,6 +113,15 @@ public class SpaceNode extends SentenceList {
 			return nextNode;
 		}
 		nextNode = nextNode.removeHelper(word);
+		return this;
+	}
+	
+	@Override
+	public Sentence removeHelper(int index) {
+		if(index == 0) {
+			return nextNode;
+		}
+		nextNode = nextNode.removeHelper(--index);
 		return this;
 	}
 
@@ -108,7 +135,7 @@ public class SpaceNode extends SentenceList {
 		if(index == 0) {
 			return this;
 		} else {
-			return nextNode.get(index--);
+			return nextNode.get(--index);
 		}
 	}
 
@@ -120,9 +147,8 @@ public class SpaceNode extends SentenceList {
 	public String getWord(int index) throws IllegalArgumentException {
 		if(index == 0) {
 			return this.space;
-		} else {
-			String str = nextNode.get(index--).getWord(index);
-			return str;
+		} else { 
+			return nextNode.getWord(--index);
 		}
 	}
 	

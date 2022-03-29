@@ -13,10 +13,12 @@ public class PunctuationNode implements Sentence {
 	@Override
 	public String toString() {
 		String str = punc;
+		/*
 		if(nextNode instanceof PunctuationNode || nextNode instanceof EmptyNode) {
 			return str + nextNode.toString();
 		} 
-		return str + " " + nextNode.toString();
+		*/
+		return str + nextNode.toString();
 	}
 	
 	@Override
@@ -53,7 +55,7 @@ public class PunctuationNode implements Sentence {
 	};
 	
 	@Override
-	public Sentence merge(Sentence other) {
+	public Sentence merge(SentenceList other) {
 		String punc = new String(this.punc);
 		PunctuationNode copy = new PunctuationNode(punc, nextNode.merge(other));
 		return copy;
@@ -88,6 +90,24 @@ public class PunctuationNode implements Sentence {
 	}
 
 	@Override
+	public Sentence add(int index, String word) {
+		if(index == 0) {
+			SentenceList other = new SentenceList(word);
+			if(this.nextNode instanceof EmptyNode) {
+				System.out.println(other.toString());
+				this.nextNode = other.getHead();
+			} else {
+				SentenceList temp = new SentenceList(nextNode);
+				this.nextNode = other.merge(temp).getHead();
+			}
+			return this;
+		} else {
+			nextNode.add(--index, word);
+			return this;
+		}
+	}
+	
+	@Override
 	public int getSize() {
 		return countHelper(0);
 	}
@@ -101,6 +121,15 @@ public class PunctuationNode implements Sentence {
 		return this;
 	}
 
+	@Override
+	public Sentence removeHelper(int index) {
+		if(index == 0) {
+			return nextNode;
+		}
+		nextNode = nextNode.removeHelper(--index);
+		return this;
+	}
+	
 	@Override 
 	public void remove(String word) {
 		nextNode = removeHelper(word);
@@ -111,7 +140,7 @@ public class PunctuationNode implements Sentence {
 		if(index == 0) {
 			return this;
 		} else {
-			return nextNode.get(index--);
+			return nextNode.get(--index);
 		}
 	}
 
@@ -124,18 +153,11 @@ public class PunctuationNode implements Sentence {
 		if(index == 0) {
 			return this.punc;
 		} else {
-			String str = nextNode.get(index--).getWord(index);
-			return str;
+			return nextNode.getWord(--index);
 		}
 	}
 	
 	public Sentence getNext() {
 		return nextNode;
 	}
-
-	@Override
-	public void addFront(String word) {}
-
-	@Override
-	public void addBack(String word) {}
 }

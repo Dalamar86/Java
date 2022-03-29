@@ -39,9 +39,10 @@ public class EmptyNode implements Sentence {
 	};
 	
 	@Override
-	public Sentence merge(Sentence other) {
-		Sentence copy = ((SentenceList)other).clone();
-		Sentence head = ((SentenceList)copy).getHead();
+	public Sentence merge(SentenceList other) {
+		SentenceList copy = other.clone();
+		Sentence head = copy.getHead();
+		//Sentence head = new SpaceNode(" ", copy.getHead());
 		return head;
 	}
 
@@ -67,9 +68,20 @@ public class EmptyNode implements Sentence {
 		if(index == 0) {
 			return addFront(word, isWord);
 		} 
-		throw new IllegalArgumentException("Invalid index to add an element");		
+		throw new IllegalArgumentException("Invalid index to add an element");
 	}
 
+	public Sentence add(int index, String word) {
+		if(index == 0) {
+			SentenceList other = new SentenceList(word);
+			System.out.println(other.toString());
+			Sentence sen = merge(other);
+			System.out.println(sen.toString());
+			return sen;
+		} else {
+			throw new IllegalArgumentException("Invalid index to add an element");
+		}
+	}
 	@Override
 	public int getSize() {
 		return countHelper(0);
@@ -77,6 +89,11 @@ public class EmptyNode implements Sentence {
 
 	@Override
 	public Sentence removeHelper(String word) {
+		return this;
+	}
+	
+	@Override
+	public Sentence removeHelper(int index) {
 		return this;
 	}
 
@@ -99,10 +116,4 @@ public class EmptyNode implements Sentence {
 	public String getWord() {
 		return "";
 	}
-
-	@Override
-	public void addFront(String word) {}
-
-	@Override
-	public void addBack(String word) {}
 }

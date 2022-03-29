@@ -31,6 +31,14 @@ public interface Sentence {
 	 * @param word (String) the object to be added to the list.
 	 */
 	Sentence add(int index, String word, boolean isWord);
+	
+	/**
+	 * 
+	 * @param index
+	 * @param word
+	 * @return
+	 */
+	Sentence add(int index, String word);
 
 	/**
 	 * Return the number of objects currently in this list.
@@ -106,7 +114,7 @@ public interface Sentence {
 	 * @param other (Sentence) Sentence to merge with this sentence.
 	 * @return SenNew (Sentence) New concatenated Sentence.
 	 */
-	public Sentence merge(Sentence other);
+	public Sentence merge(SentenceList other);
 	
 	/**
 	 * 
@@ -136,6 +144,5 @@ public interface Sentence {
 	 */
 	Sentence removeHelper(String word);
 	
-	public void addFront(String word);
-	public void addBack(String word);
+	Sentence removeHelper(int index);
 }
