@@ -1,10 +1,14 @@
 package sentenceList;
 
-public class EmptyNode implements Sentence {
+public class EmptyNode extends SentenceNode {
+	
+	public EmptyNode() {
+		super("", null);
+	}
 	
 	@Override
 	public String toString() {
-		return "";
+		return word;
 	}
 
 	@Override
@@ -24,10 +28,7 @@ public class EmptyNode implements Sentence {
 	
 	@Override
 	public Sentence merge(SentenceList other) {
-		SentenceList copy = other.clone();
-		Sentence head = copy.getHead();
-		//Sentence head = new SpaceNode(" ", copy.getHead());
-		return head;
+		return other.clone().getHead();
 	}
 
 	@Override
@@ -57,9 +58,7 @@ public class EmptyNode implements Sentence {
 
 	public Sentence add(int index, String word) {
 		if(index == 0) {
-			SentenceList other = new SentenceList(word);
-			Sentence sen = merge(other);
-			return sen;
+			return merge(new SentenceList(word));
 		} else {
 			throw new IllegalArgumentException("Invalid index to add an element");
 		}
@@ -88,10 +87,5 @@ public class EmptyNode implements Sentence {
 	@Override
 	public String getWord(int index) throws IllegalArgumentException {
 		throw new IllegalArgumentException("wrong index");
-	}
-
-	@Override
-	public String getWord() {
-		return "";
 	}
 }

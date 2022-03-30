@@ -1,5 +1,7 @@
 package sentenceList;
 
+import static org.junit.Assert.assertEquals;
+
 public class SentenceController {
 
 	public static void main(String[] args) {
@@ -14,6 +16,49 @@ public class SentenceController {
 		System.out.println("\nDemonstrating getWord method");
 		System.out.println(s1a.getWord());
 		System.out.println(s2.getWord());
+		
+		System.out.println("\nDemonstrating exception handling");
+		try {
+			s1a.getHead().get(0);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			s1a.getHead().getWord(0);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			s1a.getWord(5);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			s1a.getHead().get(1);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			s1a.getHead().getWord(1);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			s1a.add(1, "word");
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			s1a.getHead().add(1, "word");
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
 		
 		System.out.println("\nDemonstrating getSize method");
 		System.out.println(s1a.getSize());
