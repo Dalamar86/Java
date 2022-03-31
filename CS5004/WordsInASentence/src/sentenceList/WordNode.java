@@ -1,5 +1,11 @@
 package sentenceList;
 
+/**
+ * Node which holds a single word.
+ * 
+ * @author Robert Wilson
+ *
+ */
 public class WordNode extends SentenceNode {
 
 	public WordNode(String word, Sentence nextNode) {

@@ -1,0 +1,28 @@
+Extension File
+
+1. Complete Java Documents.
+	- The Java Docs for this assignment have been added to all relevant methods and classes.
+	- They are complete with explanations fore each method including all:
+		@author
+		@param
+		@return
+		@throws
+		@Before
+		@Test
+	- An @Test(expected) was attempted, but this did not seem to provide coverage for the 
+		program even though these test passed.
+2. Static splitting methods
+	- Added a static version of the splitting methods which returns an array of String elements that holds the full 
+		sentence.
+3. Added functionality.
+	- Added additional add methods:
+		- addBack: adds to the end of the linked list recursively.
+		- addFront: adds String to the front of the current node. Also uses boolean to determine which new node to create.
+		- add(index, String): adds String at the specified index in the linked list.  Also can add sentences to any
+			position of the linked list while preserving the order of the lists. 
+		- remove(index): ability to remove a node by the index provided.
+		- remove(String): ability to remove the first instance of the given word.
+4. Abstracted Sentence Node.
+	- Added an abstract Sentence node which holds all fields and most methods for the various nodes.  The word node has 
+		two @Override methods, otherwise the three main nodes share the abstracted methods.
+	- The empty node was only able to use two of the abstracted methods, otherwise all others had to be overridden.   
