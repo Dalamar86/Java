@@ -1,8 +1,17 @@
 package sentenceList;
 
+/**
+ * Abstract class for the nodes.  Holds the defaults methods for the various sentenceNodes.
+ * 
+ * @author Robert Wilson
+ *
+ */
 public abstract class SentenceNode implements Sentence {
 
+	// Word stored in the node
 	protected String word;
+	
+	// The next node in the list
 	protected Sentence nextNode;
 	
 	public SentenceNode(String word, Sentence nextNode) {
@@ -23,7 +32,7 @@ public abstract class SentenceNode implements Sentence {
 			if(word.isBlank()) {
 				return new SpaceNode(word, this);
 			}
-			return new SpaceNode(word, this);
+			return new PunctuationNode(word, this);
 		}
 	}
 

@@ -1,7 +1,5 @@
 package sentenceList;
 
-import static org.junit.Assert.assertEquals;
-
 public class SentenceController {
 
 	public static void main(String[] args) {

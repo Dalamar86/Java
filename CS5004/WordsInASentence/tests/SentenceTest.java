@@ -5,6 +5,12 @@ import org.junit.Test;
 
 import sentenceList.*;
 
+/**
+ * JUnit test for Sentence list.
+ * 
+ * @author white
+ *
+ */
 public class SentenceTest {
 
 	private SentenceList s1;
@@ -54,6 +60,7 @@ public class SentenceTest {
 	@Test
 	public void getTest() {
 		assertEquals("", s1.getWord());
+		assertEquals("", s1.getWord(0));
 		assertEquals(" ", s2.getWord(1));
 		assertEquals("Tony", s3.get(11).getWord());
 	}
@@ -103,7 +110,7 @@ public class SentenceTest {
 		s5.add(0, "");
 		s5.add(1, ".");
 		s6.add(1, " ");
-		s7.add(0, "word", true);
+		s7.setHead(s7.get(0).add(0, "word", true));
 		s8.add(s8.getSize()-1, "Why hello Mark!");
 		s9.add(1, "Why hello Mark!");
 		assertEquals("Good.bye.bye. world.", s1.toString());
