@@ -1,3 +1,4 @@
+package tree;
 /*
 GroupNode is a generic class and child of AbstractTreeNode. 
 This node basically take the place of a supervisor. 

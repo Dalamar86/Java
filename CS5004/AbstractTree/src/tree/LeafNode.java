@@ -1,3 +1,4 @@
+package tree;
 /*
 LeafNode is a generic class and child of AbstractTreeNode. 
 This node allows for a single data element. 
