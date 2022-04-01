@@ -47,7 +47,7 @@ public abstract class Entity implements EntityInt {
 	private boolean dying = false;
 	
 	// NPC specific
-	String dialogues[] = new String[20];
+	protected String dialogues[] = new String[20];
 	int dialogueIndex = 0;
 	
 	// Character status

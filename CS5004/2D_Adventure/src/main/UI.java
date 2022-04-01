@@ -351,7 +351,7 @@ public class UI {
 		textY += lineHeight;
 		value = String.valueOf(gp.player.getLife() + "/"+ gp.player.getMaxLife());
 		textX = getXforRightJustifiedText(value, rightJust);
-		g2.drawString(value, textX-5, textY);
+		g2.drawString(value, textX-15, textY);
 		textY += lineHeight;
 		value = String.valueOf(gp.player.getStrength());
 		textX = getXforRightJustifiedText(value, rightJust);

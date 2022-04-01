@@ -3,6 +3,7 @@ package main;
 import object.*;
 import entity.*;
 import monster.*;
+import npc.NPC_OldMan;
 
 public class AssetSetter {
 
