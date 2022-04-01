@@ -23,7 +23,7 @@ public class Player extends Entity{
 	public final int screenX;
 	public final int screenY;
 	private int hasKey = 0;
-	int standCounter = 0;
+	private int standCounter = 0;
 	private boolean attackCanceled = false;
 	private ArrayList<Entity> inventory = new ArrayList<>();
 	private final int inventorySize = 20;
@@ -43,9 +43,6 @@ public class Player extends Entity{
 		solidAreaDefaultY = solidArea.y;
 		solidArea.width = (int) (gp.tileSize/1.5);
 		solidArea.height = (int) (gp.tileSize/1.5);
-		
-		//attackArea.width = 36;
-		//attackArea.height = 36;
 		
 		setDefaultValues();
 		getImage();

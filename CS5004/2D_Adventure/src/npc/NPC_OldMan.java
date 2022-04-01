@@ -1,7 +1,8 @@
-package entity;
+package npc;
 
 import java.util.Random;
 
+import entity.*;
 import main.GamePanel;
 
 public class NPC_OldMan extends Entity {
