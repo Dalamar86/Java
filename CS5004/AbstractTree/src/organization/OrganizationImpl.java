@@ -28,6 +28,17 @@ public class OrganizationImpl implements Organization {
 	    root = root.addChild(e->e.getName().equals(supervisorName), newNode);
 	}
 
+	/**
+	 * Adds an employee who has already been created.
+	 * 
+	 * @param m (Employee) The employee to add to the hierarchy
+	 * @param supervisorName (String) the employees supervisor
+	 */
+	public void addEmployee(Employee m, String supervisorName) {
+	    TreeNode<Employee> newNode = new LeafNode<>(m);
+	    root = root.addChild(e->e.getName().equals(supervisorName), newNode);
+	}
+	
 	@Override
 	public void addContractEmployee(String name, double pay, Gender gender, int endDate, int endMonth, int endYear, String supervisorName) {
 		Employee newEmployee = new ContractEmployee(name, pay, gender, endDate, endMonth, endYear);
@@ -103,17 +114,6 @@ public class OrganizationImpl implements Organization {
 		return root.map(e-> condition.test(e)).toList();
 	}
 	*/
-
-	/**
-	 * Adds an employee who has already been created.
-	 * 
-	 * @param m (Employee) The employee to add to the hierarchy
-	 * @param supervisorName (String) the employees supervisor
-	 */
-	public void addEmployee(Employee m, String supervisorName) {
-	    TreeNode<Employee> newNode = new LeafNode<>(m);
-	    root = root.addChild(e->e.getName().equals(supervisorName), newNode);
-	}
 
 	/**
 	 * Prints all employees details.  Calls the Tree's print() method.
