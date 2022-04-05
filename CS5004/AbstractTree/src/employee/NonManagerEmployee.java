@@ -17,7 +17,7 @@ public class NonManagerEmployee extends GenericEmployee{
   }
 
   @Override
-  public Employee addSupervisee(String supervisorName,Employee supervisee) {
+  public Employee addSupervisee(String supervisorName, Employee supervisee) {
     if (this.name.equals(supervisorName)) {
       //must first "promote" this employee
       Supervisor newSelf = new Supervisor(this.name,this.pay,this

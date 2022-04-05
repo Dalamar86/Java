@@ -3,7 +3,7 @@ package organization;
 import java.util.List;
 import java.util.function.Predicate;
 
-import employee.Gender;
+import employee.*;
 
 
 /**
