@@ -1,8 +1,16 @@
+package organization;
+import employee.*;
+
 /*
 This is your starting point and your testing file. 
 Except for task 3 the code should work without modifications once you have everything else implemented.
 */
 
+/**
+ * 
+ * @author Robert Wilson
+ *
+ */
 class OrganizationDriver
 {
 	public static void main(String [] args)
@@ -19,37 +27,40 @@ class OrganizationDriver
 		ContractEmployee m9 = new ContractEmployee("Blarg the big", 300.00, Gender.Female,31,10,2020);
 		
 		//Generate the organization
-		OrganizationImpl MonsterCorp = new OrganizationImpl("Ug the Terrible", 300000.00,Gender.UnDisclosed);
+		OrganizationImpl monsterCorp = new OrganizationImpl("Ug the Terrible", 300000.00,Gender.UnDisclosed);
 		
 		
 		//Create a hierarchy and test
-		MonsterCorp.addEmployee(m2, "Ug the Terrible");
-		MonsterCorp.addEmployee(m3,m1.getName());
-		MonsterCorp.addEmployee(m4,m2.getName());
-		MonsterCorp.addEmployee(m5,m2.getName());
-		MonsterCorp.addEmployee(m6,m4.getName());
-		MonsterCorp.addEmployee(m7,m4.getName());
-		MonsterCorp.addEmployee(m8,m5.getName());
-		MonsterCorp.addEmployee(m9,m5.getName());
+		monsterCorp.addEmployee(m2, "Ug the Terrible");
+		monsterCorp.addEmployee(m3,m1.getName()); // Here we will not be adding m3 as m1 is not already in the tree.
+		monsterCorp.addEmployee(m4,m2.getName());
+		monsterCorp.addEmployee(m5,m2.getName());
+		monsterCorp.addEmployee(m6,m4.getName());
+		monsterCorp.addEmployee(m7,m4.getName());
+		monsterCorp.addEmployee(m8,m5.getName());
+		monsterCorp.addEmployee(m9,m5.getName());
+		
+		// Therefore, m1 and m3 will not be added to the organization 
 		
 		//This was part of the sample code provided my the module
-		System.out.println(MonsterCorp.getSize());
+		System.out.println(monsterCorp.getSize());
 
 		//Task 1: 
 		//This you'll have to add. We did it as part of the demo code, but you'll have to modify it to make it work with the new structure
 		//Print all the employees along with all their information
-		//MonsterCorp.printEmployees();
+		monsterCorp.printEmployees();
 		
 		//Task 2: 
 		//This too is something we did in the demo code, but you'll have to modify it to work here.
 		//The syntax on this is a bit challenging, but if you study the getSizeByGender you should be able to figure it out
 		//Remember, don't try to guess. Try and understand the existing code and then see how you can change it
-		//System.out.println(MonsterCorp.getSize(m->m.getAnnualPay()==300.00));
+		System.out.println(monsterCorp.getSize(m->m.getAnnualPay()==300.00));
+		
 		
 		//Task 3: 
 		//Print out a list of just employee names using allEmployees()
 		//This is not a hard task. Just make sure you understand what all Employees returns
-
+		System.out.println(monsterCorp.allEmployees());
 
 		
 		//Extra Task
@@ -62,6 +73,8 @@ class OrganizationDriver
 		
 		//Extra Task
 		//Implement some new functionality on your own or add back some of the functionality that we had to remove for this new structure.
+		System.out.println(monsterCorp.getSizeGender(Gender.Male));
+		System.out.println(monsterCorp.getSizePay(300.00));
 	}
 	
 }

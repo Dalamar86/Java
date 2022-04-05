@@ -1,3 +1,4 @@
+package employee;
 //package organization;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.function.Predicate;
  */
 
 public interface Employee {
+	
   /**
    * Get the name of this employee
    * @return the name of this employee as a string
