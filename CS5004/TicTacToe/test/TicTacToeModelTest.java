@@ -2,7 +2,7 @@ import org.junit.Test;
 
 /**
  * @author Robert Wilson
- * date: 05 Apr 2022
+ * date: 05 APR 2022
  * class: CS5004 
  */
 
@@ -40,10 +40,10 @@ public class TicTacToeModelTest {
     assertTrue(ttt1.isGameOver());
     assertEquals(Player.X, ttt1.getWinner());
     assertEquals(" X | X | X\n"
-                          + "-----------\n"
-                          + " O |   |  \n"
-                          + "-----------\n"
-                          + " O |   |  ", ttt1.toString());
+               + "-----------\n"
+               + " O |   |  \n"
+               + "-----------\n"
+               + " O |   |  ", ttt1.toString());
   }
 
   @Test
@@ -52,10 +52,10 @@ public class TicTacToeModelTest {
     assertTrue(ttt1.isGameOver());
     assertEquals(Player.O, ttt1.getWinner());
     assertEquals(" X | X | O\n"
-            + "-----------\n"
-            + " X | O |  \n"
-            + "-----------\n"
-            + " O |   |  ", ttt1.toString());
+            	+ "-----------\n"
+            	+ " X | O |  \n"
+            	+ "-----------\n"
+            	+ " O |   |  ", ttt1.toString());
   }
 
   // set up situation where game is over, O wins on the diagonal, board is not full
@@ -113,10 +113,10 @@ public class TicTacToeModelTest {
     assertTrue(ttt1.isGameOver());
     assertNull(ttt1.getWinner());
     assertEquals( " X | O | X\n"
-            + "-----------\n"
-            + " O | O | X\n"
-            + "-----------\n"
-            + " X | X | O", ttt1.toString());
+            	+ "-----------\n"
+            	+ " O | O | X\n"
+            	+ "-----------\n"
+            	+ " X | X | O", ttt1.toString());
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -148,5 +148,26 @@ public class TicTacToeModelTest {
     assertEquals(Player.O, bd2[2][0]);
   }
 
-  // TODO: test case where board is full AND there is a winner
+  // test case where board is full AND there is a winner
+  @Test
+  public void testBoardFullWin() {
+    ttt1.move(0, 0);
+    assertEquals(Player.O, ttt1.getTurn());
+    ttt1.move(1, 1);
+    assertEquals(Player.X, ttt1.getTurn());
+    ttt1.move(0, 2);
+    ttt1.move(0, 1);
+    ttt1.move(2, 1);
+    ttt1.move(1, 2);
+    ttt1.move(1, 0);
+    ttt1.move(2, 2);
+    ttt1.move(2, 0);
+    assertTrue(ttt1.isGameOver());
+    assertEquals(Player.X, ttt1.getWinner());
+    assertEquals( " X | O | X\n"
+            	+ "-----------\n"
+            	+ " X | O | O\n"
+            	+ "-----------\n"
+            	+ " X | X | O", ttt1.toString());
+  }
 }
