@@ -29,8 +29,7 @@ public class TicTacToeController {
 	 */
 	public TicTacToeController() {
 		this.model = new TicTacToeModel();
-		this.view = new TicTacToeView();
-		this.view.setActionListener(this);
+		this.view = new TicTacToeView(this);
 	}
 	
 	/**
@@ -38,10 +37,9 @@ public class TicTacToeController {
 	 * 
 	 * @param e (ActionEvent) the event notification from the button pressed
 	 */
-	public void reset(ActionEvent e) {
+	public void reset() {
 		model = new TicTacToeModel();
-		view.resetButton(e);
-		view.setActionListener(this);
+		view.resetButton();
 	}
 	
 	/**

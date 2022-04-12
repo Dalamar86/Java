@@ -33,7 +33,7 @@ public class Listener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// Perform the requested action depending on button pressed
 		if(view.isReset(e)) {
-			controller.reset(e);
+			controller.reset();
 		} else {
 			controller.update(e);
 		}
