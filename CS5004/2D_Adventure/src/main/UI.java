@@ -107,16 +107,20 @@ public class UI {
 		case CHARACTERSTATE:
 			g2.setFont(baskerville);
 			g2.setColor(Color.white);
-			drawHUD();
+			
 			drawCharacterScreen();
 			drawInventory();
+			drawHUD();
+			break;
+		case DEADSTATE:
+			drawDeathScreen();
 			break;
 		default:
 			break;
 		}
 	}
 
-	public void drawHUD() {
+	private void drawHUD() {
 		
 		// Empty hearts
 		int x = gp.tileSize/2;
@@ -153,11 +157,12 @@ public class UI {
 		g2.drawImage(new OBJ_Key(gp).image1, x, y, null);
 		x += gp.tileSize;
 		y = (int) (gp.tileSize*1.5);
+		g2.setFont(arial_40);
 		g2.setColor(Color.white);
 		g2.drawString(text, x, y);
 	}
 	
-	public void drawMessage() {
+	private void drawMessage() {
 		int messageX = gp.tileSize;
 		int messageY = gp.tileSize*4;
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20F));
@@ -182,7 +187,7 @@ public class UI {
 		}
 	}
 	
-	public void drawTitleScreen() {
+	private void drawTitleScreen() {
 		if(titleScreenState == 0) {
 			g2.setColor(new Color(25, 25, 185));
 			g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
@@ -271,7 +276,7 @@ public class UI {
 		
 	}
 	
-	public void drawPauseScreen() {
+	private void drawPauseScreen() {
 		
 		g2.setFont(arial_80B);
 		text = "Paused";
@@ -282,7 +287,7 @@ public class UI {
 		g2.drawString(text, x, y);
 	}
 	
-	public void drawDialogueScreen() {
+	private void drawDialogueScreen() {
 		// Make a dialogue window
 		int x = gp.tileSize*2, y = gp.tileSize/2;
 		int width = gp.screenWidth - (gp.tileSize*4), height = gp.tileSize*4;
@@ -300,7 +305,7 @@ public class UI {
 		
 	}
 	
-	public void drawCharacterScreen() {
+	private void drawCharacterScreen() {
 		final int frameX = gp.tileSize/2;
 		final int frameY = (int)(gp.tileSize*1.5);
 		final int frameWidth = gp.tileSize*5;
@@ -457,6 +462,22 @@ public class UI {
 	public int getItemIndex() {
 		int itemIndex = slotCol + (slotRow*5);
 		return itemIndex;
+	}
+	
+	private void drawDeathScreen() {
+		int frameWidth = gp.tileSize*7;
+		int frameHeight = gp.tileSize*3;
+		int frameX = gp.screenWidth/2 - gp.tileSize*3;
+		int frameY = gp.screenHeight/2;
+		drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+		
+		g2.setBackground(Color.black);
+		g2.setFont(baskerville);
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 42F));
+		text = "You have died";
+		int textX = getXforCenteredText(text) + 20;
+		int textY = (int) (frameY + gp.tileSize*1.7);
+		g2.drawString(text, textX , textY);
 	}
 	
 	public void drawSubWindow(int x, int y, int width, int height) {

@@ -53,7 +53,8 @@ public class GamePanel extends JPanel implements Runnable {
 		PLAYSTATE, 
 		PAUSESTATE,
 		DIALOGUESTATE,
-		CHARACTERSTATE
+		CHARACTERSTATE,
+		DEADSTATE;
 	}
 	public GameState gameState = GameState.TITLESTATE;
 	public GameState gameStatePrev;
@@ -73,7 +74,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public Player player = new Player(this, keyH);
 	public Entity obj[] = new SuperObject[20];
 	public Entity npc[] = new Entity[10];
-	public Entity monster[] = new Entity[20];
+	public Entity monster[]= new Entity[20];
 	ArrayList<Entity> entityList = new ArrayList<>();
 	
 			
@@ -86,7 +87,6 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	public void setupGame() {
-		
 		aSetter.setObject();
 		aSetter.setNPC();
 		aSetter.setMonster();
@@ -183,6 +183,8 @@ public class GamePanel extends JPanel implements Runnable {
 			break;
 		case CHARACTERSTATE:
 			break;
+		case DEADSTATE:
+			break;
 		default:
 			break;
 		}
@@ -258,6 +260,7 @@ public class GamePanel extends JPanel implements Runnable {
 			break;
 			*/
 		case CHARACTERSTATE:
+		case DEADSTATE:
 		case PLAYSTATE:
 			// Tile
 			tileM.draw(g2);
@@ -331,12 +334,10 @@ public class GamePanel extends JPanel implements Runnable {
 				System.out.println("Draw Time: " + passed);
 			}
 			break;
+		
 		default:
 			break;
 		}
-		
-		
-		
 		g2.dispose();
 	}
 	

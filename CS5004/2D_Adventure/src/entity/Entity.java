@@ -133,7 +133,7 @@ public abstract class Entity implements EntityInt {
 				if(damage < 0) {
 					damage = 0;
 				}
-				gp.player.life -= damage;
+				gp.player.setLife(gp.player.getLife() - damage);
 				gp.player.invincible = true;
 			}
 		}
@@ -339,6 +339,10 @@ public abstract class Entity implements EntityInt {
 	}
 
 	public void setLife(int life) {
+		if(life <= 0) {
+			life = 0;
+			setAlive(false);
+		}
 		this.life = life;
 	}
 
