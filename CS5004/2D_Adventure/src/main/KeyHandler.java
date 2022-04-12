@@ -74,13 +74,15 @@ public class KeyHandler implements KeyListener {
 					switch(gp.ui.commandNum) {
 					case 0:
 						// TODO add fighter stats
-						gp.gameState = GameState.PLAYSTATE;
-						break;
+						
+						//gp.player = new Player(gp, this);
+						//break;
 					case 1:
 						// TODO add sorcerer stats
-						break;
+						//break;
 					case 2:
 						// TODO add rogue stats
+						gp.gameState = GameState.PLAYSTATE;
 						break;
 					case 3:
 						gp.ui.titleScreenState = 0;
@@ -175,6 +177,13 @@ public class KeyHandler implements KeyListener {
 			}
 			if(code == KeyEvent.VK_ENTER) {	
 				gp.player.equipItem();
+			}
+			break;
+		case DEADSTATE:
+			if(code == KeyEvent.VK_ENTER) {	
+				
+				gp.gameThread.stop();
+				System.exit(0);
 			}
 			break;
 		default:

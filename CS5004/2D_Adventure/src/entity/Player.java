@@ -131,7 +131,9 @@ public class Player extends Entity{
 	}
 	
 	public void update() {
-		
+		if(!isAlive()) {
+			gp.gameState = GameState.DEADSTATE;
+		}
 		if(attacking) {
 			attacking();
 		} else if(keyH.upPressed == true || keyH.downPressed == true || keyH.ltPressed == true || keyH.rtPressed == true || keyH.enterPressed) {
@@ -477,7 +479,7 @@ public class Player extends Entity{
 				if(damage < 0) {
 					damage = 0;
 				}
-				life -= damage;
+				setLife(getLife() - damage);
 				invincible = true;
 				gp.playSE(6);
 			}
