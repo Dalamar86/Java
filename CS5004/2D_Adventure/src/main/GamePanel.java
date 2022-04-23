@@ -72,10 +72,10 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	// Entity and objects
 	public Player player = new Player(this, keyH);
-	public Entity obj[] = new SuperObject[20];
-	public Entity npc[] = new Entity[10];
-	public Entity monster[]= new Entity[20];
-	ArrayList<Entity> entityList = new ArrayList<>();
+	public GameObject obj[] = new SuperObject[20];
+	public GameObject npc[] = new GameObject[10];
+	public GameObject monster[]= new GameObject[20];
+	ArrayList<GameObject> entityList = new ArrayList<>();
 	
 			
 	public GamePanel () {
@@ -283,17 +283,17 @@ public class GamePanel extends JPanel implements Runnable {
 			}
 			
 			// Monsters
-			for(Entity m: monster) {
+			for(GameObject m: monster) {
 				if(m != null) {
 					entityList.add(m);
 				}
 			}
 			
 			// Sorting
-			Collections.sort(entityList, new Comparator<Entity>() {
+			Collections.sort(entityList, new Comparator<GameObject>() {
 
 				@Override
-				public int compare(Entity o1, Entity o2) {
+				public int compare(GameObject o1, GameObject o2) {
 					
 					int result = Integer.compare(o1.worldY, o2.worldY);
 					return result;
@@ -301,7 +301,7 @@ public class GamePanel extends JPanel implements Runnable {
 			});
 			
 			// Draw entities
-			for(Entity e: entityList) {
+			for(GameObject e: entityList) {
 				e.draw(g2);
 			}
 			

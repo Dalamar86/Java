@@ -6,7 +6,7 @@ import javax.imageio.ImageIO;
 import main.*;
 import entity.*;
 
-public abstract class SuperObject extends Entity {
+public abstract class SuperObject extends GameObject {
 
 	
 	

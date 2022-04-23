@@ -16,22 +16,12 @@ import main.*;
  * @author Robert Wilson
  *
  */
-public abstract class Entity implements EntityInt {
+public abstract class GameObject implements GameObjectInt {
 	
 	//Setup
 	protected GamePanel gp;
 	
-	// Enums
-	public enum EntityType{
-		CONSUMABLE,
-		KEY,
-		MONSTER,
-		NPC,
-		PLAYER,
-		SHIELD,
-		WEAPON		
-	}
-	private EntityType type;
+	private ObjectType type;
 	
 	// State
 	public int worldX, worldY;
@@ -56,8 +46,8 @@ public abstract class Entity implements EntityInt {
 	protected int exp;
 	protected int nextLevelExp;
 	private int coin;
-	public Entity currentWeapon;
-	public Entity currentShield;
+	public GameObject currentWeapon;
+	public GameObject currentShield;
 	
 	// Shared stats
 	protected int maxLife;
@@ -89,7 +79,7 @@ public abstract class Entity implements EntityInt {
 	public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
 	
 	
-	public Entity(GamePanel gp) {
+	public GameObject(GamePanel gp) {
 		this.gp = gp;
 	}
 	
@@ -100,7 +90,7 @@ public abstract class Entity implements EntityInt {
 		if(dialogues[dialogueIndex] == null) {
 			dialogueIndex = 0;
 		}
-		gp.ui.currentDialogue = dialogues[dialogueIndex];
+		gp.ui.setCurrentDialogue(dialogues[dialogueIndex]);
 		dialogueIndex++;
 		
 		switch(gp.player.direction) {
@@ -113,7 +103,7 @@ public abstract class Entity implements EntityInt {
 		}
 	}
 	
-	public void use(Entity entity) {}
+	public void use(GameObject gameObject) {}
 	
 	public void update() {
 		setAction();
@@ -125,7 +115,7 @@ public abstract class Entity implements EntityInt {
 		gp.cChecker.checkEntity(this, gp.monster);
 		boolean contactPlayer = gp.cChecker.checkPlayer(this);
 		
-		if(this.getType() == EntityType.MONSTER && contactPlayer == true) {
+		if(this.getType() == ObjectType.MONSTER && contactPlayer == true) {
 			if(!gp.player.invincible) {
 				gp.playSE(6);
 				
@@ -229,7 +219,7 @@ public abstract class Entity implements EntityInt {
 			}
 			
 			// Monster HP Bar
-			if(getType() == EntityType.MONSTER) {
+			if(getType() == ObjectType.MONSTER) {
 				if(life < maxLife && life >= 0) {
 					double oneScale = (double)gp.tileSize/maxLife;
 					double hpBarValue = oneScale*life;
@@ -342,6 +332,8 @@ public abstract class Entity implements EntityInt {
 		if(life <= 0) {
 			life = 0;
 			setAlive(false);
+		} else if(life > getMaxLife()) {
+			life = getMaxLife();
 		}
 		this.life = life;
 	}
@@ -434,11 +426,11 @@ public abstract class Entity implements EntityInt {
 		this.description = description;
 	}
 
-	public EntityType getType() {
+	public ObjectType getType() {
 		return type;
 	}
 
-	protected void setType(EntityType type) {
+	protected void setType(ObjectType type) {
 		this.type = type;
 	}
 }

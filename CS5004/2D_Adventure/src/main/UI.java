@@ -29,7 +29,7 @@ public class UI {
 	ArrayList<Integer> messageCounter = new ArrayList<>();
 	
 	// Dialogue text
-	public String currentDialogue = "";
+	private String currentDialogue = "";
 	private String text;
 	
 	// Title screen
@@ -65,7 +65,7 @@ public class UI {
 		}
 		
 		// Create overlay objects
-		Entity heart = new OBJ_Heart(gp);
+		GameObject heart = new OBJ_Heart(gp);
 		heart_full = heart.image1;
 		heart_half = heart.image2;
 		heart_blank = heart.image3;
@@ -411,7 +411,7 @@ public class UI {
 		int slotSize = gp.tileSize + 3;
 		
 		// Draw player inventory
-		for(Entity obj: gp.player.getInventory()) {
+		for(GameObject obj: gp.player.getInventory()) {
 			if(obj == gp.player.currentWeapon || obj == gp.player.currentShield) {
 				g2.setColor(new Color(240, 190, 90));
 				g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
@@ -497,5 +497,9 @@ public class UI {
 	
 	public int getXforRightJustifiedText(String text, int rightJust) {
 		return rightJust - (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
+	}
+	
+	public void setCurrentDialogue(String dialogue) {
+		this.currentDialogue = dialogue;
 	}
 }

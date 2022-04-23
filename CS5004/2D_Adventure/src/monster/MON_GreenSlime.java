@@ -4,13 +4,14 @@ import java.util.Random;
 
 import entity.*;
 import main.GamePanel;
+import main.ObjectType;
 
-public class MON_GreenSlime extends Entity {
+public class MON_GreenSlime extends SuperMonster {
 
 	public MON_GreenSlime(GamePanel gp) {
 		super(gp);
 		
-		setType(EntityType.MONSTER);
+		setType(ObjectType.MONSTER);
 		name = "Green Slime";
 		speed = 1;
 		maxLife = 4;
@@ -42,7 +43,7 @@ public class MON_GreenSlime extends Entity {
 	}
 	
 	public void setAction() {
-actionTimeCounter ++;
+		actionTimeCounter ++;
 		
 		if(actionTimeCounter == 120) {
 			Random rand = new Random();

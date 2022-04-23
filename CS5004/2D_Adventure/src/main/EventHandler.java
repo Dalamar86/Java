@@ -85,7 +85,7 @@ public class EventHandler {
 	
 	public void teleport(GameState gameState) {
 		gp.gameState = gameState;
-		gp.ui.currentDialogue = "Teleport!";
+		gp.ui.setCurrentDialogue("Teleport!");
 		gp.player.worldX = gp.tileSize * 37;
 		gp.player.worldY = gp.tileSize * 10;
 	}
@@ -93,7 +93,7 @@ public class EventHandler {
 	public void damagePit(int col, int row, GameState gameState) {
 		gp.gameState = gameState;
 		gp.playSE(6);
-		gp.ui.currentDialogue = "you fall into a pit!";
+		gp.ui.setCurrentDialogue("you fall into a pit!");
 		gp.player.setLife(gp.player.getLife() - 1);
 		//eventRect[col][row].eventFinished = true;
 		canTriggerEvent = false;
@@ -105,7 +105,7 @@ public class EventHandler {
 			gp.gameState = gameState;
 			gp.player.setAttackCanceled(true);
 			gp.playSE(2);
-			gp.ui.currentDialogue = "You drink the water.\nYour life has been recovered!";
+			gp.ui.setCurrentDialogue("You drink the water.\nYour life has been recovered!");
 			gp.player.setLife(gp.player.getMaxLife());
 			//eventRect[col][row].eventFinished = true;
 			gp.aSetter.setMonster();

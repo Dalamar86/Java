@@ -4,13 +4,14 @@ import java.util.Random;
 
 import entity.*;
 import main.GamePanel;
+import main.ObjectType;
 
-public class NPC_OldMan extends Entity {
+public class NPC_OldMan extends GameObject {
 
 	public NPC_OldMan(GamePanel gp) {
 		super(gp);
 		
-		setType(EntityType.NPC);
+		setType(ObjectType.NPC);
 		direction = "down";
 		speed = 1;
 		

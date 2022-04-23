@@ -3,7 +3,7 @@ package entity;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-public interface EntityInt {
+public interface GameObjectInt {
 
 	
 	public void draw(Graphics2D g2);

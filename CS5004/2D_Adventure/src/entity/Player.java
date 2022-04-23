@@ -16,7 +16,7 @@ import object.*;
  * @author Robert Wilson
  *
  */
-public class Player extends Entity{
+public class Player extends GameObject{
 	
 	KeyHandler keyH;
 	
@@ -25,7 +25,7 @@ public class Player extends Entity{
 	private int hasKey = 0;
 	private int standCounter = 0;
 	private boolean attackCanceled = false;
-	private ArrayList<Entity> inventory = new ArrayList<>();
+	private ArrayList<GameObject> inventory = new ArrayList<>();
 	private final int inventorySize = 20;
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
@@ -55,7 +55,7 @@ public class Player extends Entity{
 		worldX = gp.tileSize * 23;
 		worldY = gp.tileSize * 21;
 		
-		setType(EntityType.PLAYER);
+		setType(ObjectType.PLAYER);
 		speed = 4;
 		speeddiag = speed - 1;
 		direction = "down";
@@ -525,7 +525,7 @@ public class Player extends Entity{
 			defense = getDefense();
 			gp.playSE(9);
 			gp.gameState = GameState.DIALOGUESTATE;
-			gp.ui.currentDialogue = "You are now level " + level + "\nYou feel stronger!";
+			gp.ui.setCurrentDialogue("You are now level " + level + "\nYou feel stronger!");
 		}
 	}
 	
@@ -533,17 +533,17 @@ public class Player extends Entity{
 		int itemIndex = gp.ui.getItemIndex();
 		
 		if(itemIndex < inventory.size()) {
-			Entity selectedItem = inventory.get(itemIndex);
-			if(selectedItem.getType() == EntityType.WEAPON) {
+			GameObject selectedItem = inventory.get(itemIndex);
+			if(selectedItem.getType() == ObjectType.WEAPON) {
 				currentWeapon = selectedItem;
 				attack = getAttack();
 				getPlayerAttackImage();
 			}
-			if(selectedItem.getType() == EntityType.SHIELD) {
+			if(selectedItem.getType() == ObjectType.SHIELD) {
 				currentShield = selectedItem;
 				defense = getDefense();
 			}
-			if(selectedItem.getType() == EntityType.CONSUMABLE) {
+			if(selectedItem.getType() == ObjectType.CONSUMABLE) {
 				selectedItem.use(this);
 				inventory.remove(itemIndex);
 			}
@@ -656,18 +656,18 @@ public class Player extends Entity{
 		this.attackCanceled = attackCanceled;
 	}
 
-	public ArrayList<Entity> getInventory() {
+	public ArrayList<GameObject> getInventory() {
 		return inventory;
 	}
 
-	public void setInventory(ArrayList<Entity> inventory) {
+	public void setInventory(ArrayList<GameObject> inventory) {
 		this.inventory = inventory;
 	}
 
 	private void useKey() {
 		int i;
 		for(i = 0; i < inventory.size(); i++) {
-			if(inventory.get(i).getType() == EntityType.KEY) {
+			if(inventory.get(i).getType() == ObjectType.KEY) {
 				inventory.remove(i);
 				break;
 			}
