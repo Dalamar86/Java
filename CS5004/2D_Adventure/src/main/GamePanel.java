@@ -76,6 +76,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public GameObject npc[] = new GameObject[10];
 	public GameObject monster[]= new GameObject[20];
 	ArrayList<GameObject> entityList = new ArrayList<>();
+	private Comparator<GameObject> ee;
 	
 			
 	public GamePanel () {
@@ -92,6 +93,15 @@ public class GamePanel extends JPanel implements Runnable {
 		aSetter.setMonster();
 		playMusic(0);
 		gameState = GameState.TITLESTATE;
+		ee = new Comparator<GameObject>() {
+
+			@Override
+			public int compare(GameObject o1, GameObject o2) {
+				
+				int result = Integer.compare(o1.worldY, o2.worldY);
+				return result;
+			}
+		};
 	}
 	
 	public void startGameThread() {
@@ -289,16 +299,12 @@ public class GamePanel extends JPanel implements Runnable {
 				}
 			}
 			
+			entityList.sort(ee);
+			
 			// Sorting
-			Collections.sort(entityList, new Comparator<GameObject>() {
-
-				@Override
-				public int compare(GameObject o1, GameObject o2) {
-					
-					int result = Integer.compare(o1.worldY, o2.worldY);
-					return result;
-				}
-			});
+			entityList.sort((GameObject o1, GameObject o2)-> o1.worldY - o2.worldY);
+			
+			//Collections.sort(entityList, );
 			
 			// Draw entities
 			for(GameObject e: entityList) {
