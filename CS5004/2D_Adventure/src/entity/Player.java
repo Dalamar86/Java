@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import main.*;
-import main.GamePanel.GameState;
 import object.*;
 
 /**
@@ -58,7 +57,7 @@ public class Player extends GameObject{
 		setType(ObjectType.PLAYER);
 		speed = 4;
 		speeddiag = speed - 1;
-		direction = "down";
+		setDirection("down");
 		
 		// Player status
 		setLevel(1);
@@ -131,8 +130,9 @@ public class Player extends GameObject{
 	}
 	
 	public void update() {
-		if(!isAlive()) {
-			gp.gameState = GameState.DEADSTATE;
+		if(isDying()) {
+			setAlive(false);
+			gp.setGameState(GameState.DEADSTATE);
 		}
 		if(attacking) {
 			attacking();
@@ -140,35 +140,35 @@ public class Player extends GameObject{
 			
 			if(keyH.upPressed == true) {
 				if(keyH.ltPressed) {
-					direction = "uplt";
+					setDirection("uplt");
 				} else if (keyH.rtPressed) {
-					direction = "uprt";
+					setDirection("uprt");
 				} else {
-					direction = "up";
+					setDirection("up");
 				}
 			} else if(keyH.downPressed == true) {
 				if(keyH.ltPressed) {
-					direction = "downlt";
+					setDirection("downlt");
 				} else if (keyH.rtPressed) {
-					direction = "downrt";
+					setDirection("downrt");
 				} else {
-					direction = "down";
+					setDirection("down");
 				}
 			} else if(keyH.ltPressed == true) {
 				if(keyH.upPressed) {
-					direction = "uplt";
+					setDirection("uplt");
 				} else if (keyH.downPressed) {
-					direction = "downlt";
+					setDirection("downlt");
 				} else {
-					direction = "left";
+					setDirection("left");
 				}
 			} else if(keyH.rtPressed == true) {
 				if(keyH.upPressed) {
-					direction = "uprt";
+					setDirection("uprt");
 				} else if (keyH.downPressed) {
-					direction = "downrt";
+					setDirection("downrt");
 				} else {
-					direction = "right";
+					setDirection("right");
 				}
 			}  
 			if(keyH.enterPressed) {
@@ -189,7 +189,11 @@ public class Player extends GameObject{
 
 			// Check monster collision
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
-			contactMonster(monsterIndex);
+			if(monsterIndex != 999) {
+				GameObject monster = gp.monster[monsterIndex];
+				takeDamage(monster.attack());
+			}
+			
 			
 			// Check events
 			gp.eHandler.checkEvent();
@@ -198,7 +202,7 @@ public class Player extends GameObject{
 			// if collision is False, Player can move
 			if(collisionOn == false) {
 	
-				switch(direction) {
+				switch(getDirection()) {
 				case "up":
 					worldY -= speed;
 					break;
@@ -229,8 +233,8 @@ public class Player extends GameObject{
 					break;
 				}
 				
-			} else if(collisionOn == true && direction == "uplt") {
-				direction = "left";
+			} else if(collisionOn == true && getDirection() == "uplt") {
+				setDirection("left");
 				collisionOn = false;
 				gp.cChecker.checkTile(this);
 				gp.cChecker.checkObject(this, true);
@@ -239,7 +243,7 @@ public class Player extends GameObject{
 				if(collisionOn == false) {
 					worldX -= speed;
 				} else {				
-					direction = "up";
+					setDirection("up");
 					collisionOn = false;
 					gp.cChecker.checkTile(this);
 					gp.cChecker.checkObject(this, true);
@@ -249,8 +253,8 @@ public class Player extends GameObject{
 						worldY -= speed;
 					}
 				}
-			} else if(collisionOn == true && direction == "uprt") {
-				direction = "right";
+			} else if(collisionOn == true && getDirection() == "uprt") {
+				setDirection("right");
 				collisionOn = false;
 				gp.cChecker.checkTile(this);
 				gp.cChecker.checkObject(this, true);
@@ -259,7 +263,7 @@ public class Player extends GameObject{
 				if(collisionOn == false) {
 					worldX += speed;
 				} else {				
-					direction = "up";
+					setDirection("up");
 					collisionOn = false;
 					gp.cChecker.checkTile(this);
 					gp.cChecker.checkObject(this, true);
@@ -269,8 +273,8 @@ public class Player extends GameObject{
 						worldY -= speed;
 					}
 				}
-			} else if(collisionOn == true && direction == "downlt") {
-				direction = "left";
+			} else if(collisionOn == true && getDirection() == "downlt") {
+				setDirection("left");
 				collisionOn = false;
 				gp.cChecker.checkTile(this);
 				gp.cChecker.checkObject(this, true);
@@ -279,7 +283,7 @@ public class Player extends GameObject{
 				if(collisionOn == false) {
 					worldX -= speed;
 				} else {
-					direction = "down";
+					setDirection("down");
 					collisionOn = false;
 					gp.cChecker.checkTile(this);
 					gp.cChecker.checkObject(this, true);
@@ -289,8 +293,8 @@ public class Player extends GameObject{
 						worldY += speed;
 					}
 				}
-			} else if(collisionOn == true && direction == "downrt") {
-				direction = "right";
+			} else if(collisionOn == true && getDirection() == "downrt") {
+				setDirection("right");
 				collisionOn = false;
 				gp.cChecker.checkTile(this);
 				gp.cChecker.checkObject(this, true);
@@ -299,7 +303,7 @@ public class Player extends GameObject{
 				if(collisionOn == false) {
 					worldX += speed;
 				} else {
-					direction = "down";
+					setDirection("down");
 					collisionOn = false;
 					gp.cChecker.checkTile(this);
 					gp.cChecker.checkObject(this, true);
@@ -318,7 +322,7 @@ public class Player extends GameObject{
 			}
 			
 			attackCanceled = false;
-			gp.keyH.enterPressed = false;
+			//gp.keyH.enterPressed = false;
 			
 			spriteCounter++;
 			if(spriteCounter > 12) {
@@ -363,7 +367,7 @@ public class Player extends GameObject{
 			int solidAreaHeight = solidArea.height;
 			
 			// Adjust player's worldX/Y for the attackArea
-			switch(direction) {
+			switch(getDirection()) {
 			case "up": worldY -= attackArea.height; break;
 			case "down": worldY += attackArea.height; break;
 			case "left": worldX -= attackArea.width; break;
@@ -377,12 +381,16 @@ public class Player extends GameObject{
 			
 			// Check collision of sword and monster
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
+			if(monsterIndex != 999) {
+				GameObject monster = gp.monster[monsterIndex];
+				damageMonster(monster);
+			}
 			
 			worldX = currentWorldX;
 			worldY = currentWorldY;
 			solidArea.width = solidAreaWidth;
 			solidArea.height = solidAreaHeight;
-			damageMonster(monsterIndex);
+			
 			
 		} else {
 			spriteNum = 1;
@@ -472,44 +480,25 @@ public class Player extends GameObject{
 		}
 	}
 	
-	public void contactMonster(int index) {
-		if(index != 999) {
-			if(!invincible ) {
-				int damage = gp.monster[index].attack - defense;
-				if(damage < 0) {
-					damage = 0;
-				}
-				setLife(getLife() - damage);
-				invincible = true;
-				gp.playSE(6);
+	@Override
+	public int takeDamage(int damage) {
+		if(!invincible) {
+			damage -= defense;
+			if(damage < 0) {
+				damage = 0;
 			}
+			setLife(getLife() - damage);
+			invincible = true;
+			gp.playSE(6);
 		}
+		return 0;
 	}
 	
-	public void damageMonster(int index) {
-		if(index != 999) {
-			if(!gp.monster[index].invincible) {
-				int damage = attack - gp.monster[index].defense;
-				if(damage < 0) {
-					damage = 0;
-				}
-				
-				gp.monster[index].life -= damage;
-				gp.ui.addMessage(damage + " damage!");
-				
-				gp.monster[index].invincible = true;
-				gp.monster[index].damageReaction();
-				
-				if(gp.monster[index].life <= 0) {
-					gp.monster[index].setDying(true);
-					gp.ui.addMessage("Killed the " + gp.monster[index].name + "!");
-					exp += gp.monster[index].exp;
-					checkLevelUp();
-					gp.playSE(8);
-				} else {
-					gp.playSE(5);
-				}
-			}
+	public void damageMonster(GameObject monster) {
+		int exp = monster.takeDamage(attack);
+		if(exp != 0 ) {
+			this.exp += exp;
+			checkLevelUp();
 		}
 	}
 	
@@ -524,7 +513,7 @@ public class Player extends GameObject{
 			attack = getAttack();
 			defense = getDefense();
 			gp.playSE(9);
-			gp.gameState = GameState.DIALOGUESTATE;
+			gp.setGameState(GameState.DIALOGUESTATE);
 			gp.ui.setCurrentDialogue("You are now level " + level + "\nYou feel stronger!");
 		}
 	}
@@ -571,7 +560,7 @@ public class Player extends GameObject{
 			y = gp.screenHeight - (gp.worldHeight - worldY);
 		}
 		
-		switch(direction) {
+		switch(getDirection()) {
 		case "up":
 			if(!attacking) {
 				if(spriteNum == 1) {image = up1;} 

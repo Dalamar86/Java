@@ -1,0 +1,10 @@
+package main;
+
+public enum GameState {
+	TITLESTATE,
+	PLAYSTATE, 
+	PAUSESTATE,
+	DIALOGUESTATE,
+	CHARACTERSTATE,
+	DEADSTATE;
+}

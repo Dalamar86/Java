@@ -48,6 +48,7 @@ public class GamePanel extends JPanel implements Runnable {
 	int FPS = 60;
 	
 	// Game State
+	/*
 	public enum GameState {
 		TITLESTATE,
 		PLAYSTATE, 
@@ -55,7 +56,7 @@ public class GamePanel extends JPanel implements Runnable {
 		DIALOGUESTATE,
 		CHARACTERSTATE,
 		DEADSTATE;
-	}
+	}*/
 	public GameState gameState = GameState.TITLESTATE;
 	public GameState gameStatePrev;
 	
@@ -361,5 +362,9 @@ public class GamePanel extends JPanel implements Runnable {
 	public void playSE(int index) {
 		se.setFile(index);
 		se.play();
+	}
+	
+	public void setGameState(GameState gameState) {
+		this.gameState = gameState;
 	}
 }

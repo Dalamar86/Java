@@ -20,7 +20,6 @@ public abstract class SuperObject extends GameObject {
 	public SuperObject(GamePanel gp, String name) {
 		super(gp);
 		this.name = name;
-		//this.gp = gp;
 		addImage(name);
 	}
 	

@@ -2,7 +2,6 @@ package main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import main.GamePanel.GameState;
 
 /**
  * This class controls our keyboard input.
@@ -205,9 +204,8 @@ public class KeyHandler implements KeyListener {
 		}  if(code == KeyEvent.VK_D) {
 			rtPressed = false;
 		}  if(code == KeyEvent.VK_ENTER) {
-			//enterPressed = false;
+			enterPressed = false;
 		}
-		
 	}
 
 }

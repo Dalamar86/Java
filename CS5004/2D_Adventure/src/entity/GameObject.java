@@ -25,7 +25,7 @@ public abstract class GameObject implements GameObjectInt {
 	
 	// State
 	public int worldX, worldY;
-	public String direction = "";
+	private String direction = "";
 	public int spriteNum = 1;
 	public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
 	public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
@@ -84,8 +84,15 @@ public abstract class GameObject implements GameObjectInt {
 	}
 	
 	public void setAction() {}
+	@Override
 	public void damageReaction() {}
-	
+	@Override
+	public int takeDamage(int damage) {return 0;}
+	@Override
+	public int attack() {return 0;}
+	@Override
+	public void use(GameObject gameObject) {}
+	@Override
 	public void speak() {
 		if(dialogues[dialogueIndex] == null) {
 			dialogueIndex = 0;
@@ -93,17 +100,17 @@ public abstract class GameObject implements GameObjectInt {
 		gp.ui.setCurrentDialogue(dialogues[dialogueIndex]);
 		dialogueIndex++;
 		
-		switch(gp.player.direction) {
-		case "up": direction = "down"; break;
-		case "down": direction = "up"; break;
+		switch(gp.player.getDirection()) {
+		case "up": setDirection("down"); break;
+		case "down": setDirection("up"); break;
 		case "uplt": case "downlt":
-		case "left": direction = "right"; break;
+		case "left": setDirection("right"); break;
 		case "uprt": case "downrt":
-		case "right": direction = "left"; break;
+		case "right": setDirection("left"); break;
 		}
 	}
 	
-	public void use(GameObject gameObject) {}
+	
 	
 	public void update() {
 		setAction();
@@ -116,22 +123,13 @@ public abstract class GameObject implements GameObjectInt {
 		boolean contactPlayer = gp.cChecker.checkPlayer(this);
 		
 		if(this.getType() == ObjectType.MONSTER && contactPlayer == true) {
-			if(!gp.player.invincible) {
-				gp.playSE(6);
-				
-				int damage = attack - gp.player.defense;
-				if(damage < 0) {
-					damage = 0;
-				}
-				gp.player.setLife(gp.player.getLife() - damage);
-				gp.player.invincible = true;
-			}
+			gp.player.takeDamage(attack);
 		}
 		
 		// if collision is false, player can move
 		if(collisionOn == false) {
 			
-			switch(direction) {
+			switch(getDirection()) {
 			case "up":		worldY -= speed; break;
 			case "down":	worldY += speed; break;
 			case "left":	worldX -= speed; break;
@@ -168,7 +166,7 @@ public abstract class GameObject implements GameObjectInt {
 		   worldY + gp.tileSize > gp.player.worldY - gp.player.screenY && 
 		   worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
 			
-			switch(direction) {
+			switch(getDirection()) {
 			case "up":
 				if(spriteNum == 1) {
 					image = up1;
@@ -331,7 +329,7 @@ public abstract class GameObject implements GameObjectInt {
 	public void setLife(int life) {
 		if(life <= 0) {
 			life = 0;
-			setAlive(false);
+			setDying(true);
 		} else if(life > getMaxLife()) {
 			life = getMaxLife();
 		}
@@ -432,5 +430,13 @@ public abstract class GameObject implements GameObjectInt {
 
 	protected void setType(ObjectType type) {
 		this.type = type;
+	}
+
+	public String getDirection() {
+		return direction;
+	}
+
+	public void setDirection(String direction) {
+		this.direction = direction;
 	}
 }

@@ -12,7 +12,7 @@ public class NPC_OldMan extends GameObject {
 		super(gp);
 		
 		setType(ObjectType.NPC);
-		direction = "down";
+		setDirection("down");
 		speed = 1;
 		
 		getImage();
@@ -45,13 +45,13 @@ public class NPC_OldMan extends GameObject {
 			int i = rand.nextInt(100) + 1;
 			
 			if(i <= 25) {
-				direction = "up";
+				setDirection("up");
 			} else if(i <= 50) {
-				direction = "down";
+				setDirection("down");
 			} else if(i <= 75) {
-				direction = "left";
+				setDirection("left");
 			} else if(i > 75) {
-				direction = "right";
+				setDirection("right");
 			}
 			actionTimeCounter = 0;
 		}	
@@ -60,5 +60,9 @@ public class NPC_OldMan extends GameObject {
 	public void speak() {
 		super.speak();
 		// leaves room for customization
+	}
+	
+	public int takeDamage(int damage) {
+		return 0;
 	}
 }

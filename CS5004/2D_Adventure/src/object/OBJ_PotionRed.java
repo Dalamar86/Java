@@ -1,7 +1,7 @@
 package object;
 
 import main.GamePanel;
-import main.GamePanel.GameState;
+import main.GameState;
 import main.ObjectType;
 import entity.*;
 

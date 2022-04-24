@@ -1,7 +1,5 @@
 package main;
 
-import main.GamePanel.GameState;
-
 public class EventHandler {
 
 	GamePanel gp;
@@ -66,7 +64,7 @@ public class EventHandler {
 		eventRect[col][row].y += row*gp.tileSize;
 		
 		if(gp.player.solidArea.intersects(eventRect[col][row]) && eventRect[col][row].eventFinished == false) {
-			if(gp.player.direction.contentEquals(reqDirection) || reqDirection.contentEquals("any")) {
+			if(gp.player.getDirection().contentEquals(reqDirection) || reqDirection.contentEquals("any")) {
 				hit = true;System.out.println("You made it here");
 				
 				previousEventX = gp.player.worldX;

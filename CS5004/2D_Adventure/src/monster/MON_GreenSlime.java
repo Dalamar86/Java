@@ -2,7 +2,6 @@ package monster;
 
 import java.util.Random;
 
-import entity.*;
 import main.GamePanel;
 import main.ObjectType;
 
@@ -50,13 +49,13 @@ public class MON_GreenSlime extends SuperMonster {
 			int i = rand.nextInt(100) + 1;
 			
 			if(i <= 25) {
-				direction = "up";
+				setDirection("up");
 			} else if(i <= 50) {
-				direction = "down";
+				setDirection("down");
 			} else if(i <= 75) {
-				direction = "left";
+				setDirection("left");
 			} else if(i > 75) {
-				direction = "right";
+				setDirection("right");
 			}
 			actionTimeCounter = 0;
 		}	
@@ -66,6 +65,6 @@ public class MON_GreenSlime extends SuperMonster {
 	public void damageReaction() {
 		
 		actionTimeCounter = 0;
-		direction = gp.player.direction;
+		setDirection(gp.player.getDirection());
 	}
 }
