@@ -8,8 +8,10 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import components.AssetSetter;
 import entity.*;
 import gameobject.GameObject;
 import tile.*;
@@ -44,10 +46,11 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int worldWidth = tileSize * maxWorldCol;
 	public final int worldHeight = tileSize * maxWorldRow;
 	
-	
+	private JFrame window;
 	int FPS = 60;
 	private GameState gameState = GameState.TITLESTATE;
 	private GameState gameStatePrev;
+	private Area area = Area.MAIN;
 	
 	
 	public TileManager tileM = new TileManager(this);
@@ -69,7 +72,8 @@ public class GamePanel extends JPanel implements Runnable {
 	public Comparator<GameObject> ee;
 	
 			
-	public GamePanel () {
+	public GamePanel (JFrame window) {
+		this.setWindow(window);
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
 		this.setDoubleBuffered(true);
@@ -78,20 +82,42 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	public void setupGame() {
-		aSetter.setObject();
-		aSetter.setNPC();
-		aSetter.setMonster();
-		playMusic(0);
+		area = Area.MAIN;
 		gameState = GameState.TITLESTATE;
+		Area.mainSetup(this);
+		addAssets();
+		playMusic(0);
+		
+		// Comparator for entities
 		ee = new Comparator<GameObject>() {
-
 			@Override
 			public int compare(GameObject o1, GameObject o2) {
 				
-				int result = Integer.compare(o1.worldY, o2.worldY);
+				int result = Integer.compare(o1.getWorldY(), o2.getWorldY());
 				return result;
 			}
 		};
+	}
+
+	public void loadArea() {
+		aSetter.reset();
+		switch(area) {
+		case MAIN:
+			Area.mainSetup(this);
+			break;
+		case BOTTOM:
+			break;
+		case LEFT:
+			break;
+		case RIGHT:
+			break;
+		case TEMPLE:
+			break;
+		case TOP:
+			break;
+		default:
+			break;
+		}
 	}
 	
 	public void startGameThread() {
@@ -296,9 +322,7 @@ public class GamePanel extends JPanel implements Runnable {
 			entityList.sort(ee);
 			
 			// Sorting
-			entityList.sort((GameObject o1, GameObject o2)-> o1.worldY - o2.worldY);
-			
-			//Collections.sort(entityList, );
+			entityList.sort((GameObject o1, GameObject o2)-> o1.getWorldY() - o2.getWorldY());
 			
 			// Draw entities
 			for(GameObject e: entityList) {
@@ -322,13 +346,13 @@ public class GamePanel extends JPanel implements Runnable {
 				int y = 400;
 				int lineHeight = 20;
 				
-				g2.drawString("WorldX: " + player.worldX, x, y);
+				g2.drawString("WorldX: " + player.getWorldX(), x, y);
 				y += lineHeight;
-				g2.drawString("WorldY: " + player.worldY, x, y);
+				g2.drawString("WorldY: " + player.getWorldY(), x, y);
 				y += lineHeight;
-				g2.drawString("Col: " + (player.worldX + player.solidArea.x)/tileSize, x, y);
+				g2.drawString("Col: " + (player.getWorldX() + player.getSolidArea().x)/tileSize, x, y);
 				y += lineHeight;
-				g2.drawString("Row: " + (player.worldY + player.solidArea.y)/tileSize, x, y);
+				g2.drawString("Row: " + (player.getWorldY() + player.getSolidArea().y)/tileSize, x, y);
 				y += lineHeight;
 				g2.drawString("Draw Time: " + passed, x, y);
 				System.out.println("Draw Time: " + passed);
@@ -341,8 +365,31 @@ public class GamePanel extends JPanel implements Runnable {
 		g2.dispose();
 	}
 	
-	public void playMusic(int index) {
+	//#####################################################################
+	// 								Helper Methods
+	//#####################################################################
+	
+	private void addAssets() {
+		for(int index = 0; index < aSetter.getObj().size(); index++) {
+			obj[index] = aSetter.getObj().get(index);
+		}
 		
+		for(int index = 0; index < aSetter.getNpc().size(); index++) {
+			npc[index] = aSetter.getNpc().get(index);
+		}
+		
+		for(int index = 0; index < aSetter.getMonster().size(); index++) {
+			monster[index] = aSetter.getMonster().get(index);
+		}
+	}
+	
+	public void addAssetMonster() {		
+		for(int index = 0; index < aSetter.getMonster().size(); index++) {
+			monster[index] = aSetter.getMonster().get(index);
+		}
+	}
+	
+	public void playMusic(int index) {
 		music.setFile(index);
 		music.play();
 		music.loop();
@@ -378,5 +425,13 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public GameState getPrevSate() {
 		return gameStatePrev;
+	}
+
+	public JFrame getWindow() {
+		return window;
+	}
+
+	public void setWindow(JFrame window) {
+		this.window = window;
 	}
 }

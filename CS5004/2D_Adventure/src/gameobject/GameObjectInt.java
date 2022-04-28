@@ -1,6 +1,7 @@
 package gameobject;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import main.ObjectType;
@@ -136,4 +137,28 @@ public interface GameObjectInt {
 	boolean isCollision();
 
 	boolean setCollision(boolean collision);
+
+	int getWorldX();
+
+	void setWorldX(int worldX);
+
+	int getWorldY();
+
+	void setWorldY(int worldY);
+
+	Rectangle getSolidArea();
+
+	void setSolidArea(Rectangle solidArea);
+
+	int getSolidAreaDefaultX();
+
+	void setSolidAreaDefaultX(int solidAreaDefaultX);
+
+	int getSolidAreaDefaultY();
+
+	void setSolidAreaDefaultY(int solidAreaDefaultY);
+
+	Rectangle getAttackArea();
+
+	void setAttackArea(Rectangle attackArea);
 }

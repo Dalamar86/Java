@@ -24,10 +24,13 @@ public abstract class GameObject implements GameObjectInt {
 	private ObjectType type;
 	
 	// State
-	public int worldX, worldY;
-	public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
-	public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
-	public int solidAreaDefaultX, solidAreaDefaultY;
+	private int worldX;
+	private int worldY;
+	private Rectangle attackArea = new Rectangle(0, 0, 0, 0);
+	private Rectangle solidArea = new Rectangle(0, 0, 48, 48);
+	private int solidAreaDefaultX;
+
+	private int solidAreaDefaultY;
 	
 	private String direction = "";
 	protected int spriteNum = 1;
@@ -140,10 +143,10 @@ public abstract class GameObject implements GameObjectInt {
 		if(isCollisionOn() == false) {
 			
 			switch(getDirection()) {
-			case "up":		worldY -= getSpeed(); break;
-			case "down":	worldY += getSpeed(); break;
-			case "left":	worldX -= getSpeed(); break;
-			case "right":	worldX += getSpeed(); break;
+			case "up":		setWorldY(getWorldY() - getSpeed()); break;
+			case "down":	setWorldY(getWorldY() + getSpeed()); break;
+			case "left":	setWorldX(getWorldX() - getSpeed()); break;
+			case "right":	setWorldX(getWorldX() + getSpeed()); break;
 			}
 		}
 		
@@ -168,13 +171,13 @@ public abstract class GameObject implements GameObjectInt {
 	
 	public void draw(Graphics2D g2) {
 		BufferedImage image = null;
-		int screenX = worldX - gp.player.worldX + gp.player.screenX;
-		int screenY = worldY - gp.player.worldY + gp.player.screenY;
+		int screenX = getWorldX() - gp.player.getWorldX() + gp.player.screenX;
+		int screenY = getWorldY() - gp.player.getWorldY() + gp.player.screenY;
 		
-		if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
-		   worldX - gp.tileSize < gp.player.worldX + gp.player.screenX && 
-		   worldY + gp.tileSize > gp.player.worldY - gp.player.screenY && 
-		   worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
+		if(getWorldX() + gp.tileSize > gp.player.getWorldX() - gp.player.screenX &&
+		   getWorldX() - gp.tileSize < gp.player.getWorldX() + gp.player.screenX && 
+		   getWorldY() + gp.tileSize > gp.player.getWorldY() - gp.player.screenY && 
+		   getWorldY() - gp.tileSize < gp.player.getWorldY() + gp.player.screenY) {
 			
 			switch(getDirection()) {
 			case "up":
@@ -260,13 +263,13 @@ public abstract class GameObject implements GameObjectInt {
 	}
 	
 	public void draw(Graphics2D g2, GamePanel gp) {
-		int screenX = worldX - gp.player.worldX + gp.player.screenX;
-		int screenY = worldY - gp.player.worldY + gp.player.screenY;
+		int screenX = getWorldX() - gp.player.getWorldX() + gp.player.screenX;
+		int screenY = getWorldY() - gp.player.getWorldY() + gp.player.screenY;
 		
-		if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
-		   worldX - gp.tileSize < gp.player.worldX + gp.player.screenX && 
-		   worldY + gp.tileSize > gp.player.worldY - gp.player.screenY && 
-		   worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
+		if(getWorldX() + gp.tileSize > gp.player.getWorldX() - gp.player.screenX &&
+		   getWorldX() - gp.tileSize < gp.player.getWorldX() + gp.player.screenX && 
+		   getWorldY() + gp.tileSize > gp.player.getWorldY() - gp.player.screenY && 
+		   getWorldY() - gp.tileSize < gp.player.getWorldY() + gp.player.screenY) {
 			g2.drawImage(getImage1(), screenX, screenY, gp.tileSize, gp.tileSize, null);
 		}
 	}
@@ -609,5 +612,65 @@ public abstract class GameObject implements GameObjectInt {
 	public boolean setCollision(boolean collision) {
 		this.collision = collision;
 		return collision;
+	}
+
+	@Override
+	public int getWorldX() {
+		return worldX;
+	}
+
+	@Override
+	public void setWorldX(int worldX) {
+		this.worldX = worldX;
+	}
+
+	@Override
+	public int getWorldY() {
+		return worldY;
+	}
+
+	@Override
+	public void setWorldY(int worldY) {
+		this.worldY = worldY;
+	}
+
+	@Override
+	public Rectangle getSolidArea() {
+		return solidArea;
+	}
+
+	@Override
+	public void setSolidArea(Rectangle solidArea) {
+		this.solidArea = solidArea;
+	}
+
+	@Override
+	public int getSolidAreaDefaultX() {
+		return solidAreaDefaultX;
+	}
+
+	@Override
+	public void setSolidAreaDefaultX(int solidAreaDefaultX) {
+		this.solidAreaDefaultX = solidAreaDefaultX;
+	}
+
+	@Override
+	public int getSolidAreaDefaultY() {
+		return solidAreaDefaultY;
+	}
+
+	@Override
+	public void setSolidAreaDefaultY(int solidAreaDefaultY) {
+		this.solidAreaDefaultY = solidAreaDefaultY;
+	}
+
+	@Override
+	public Rectangle getAttackArea() {
+		return attackArea;
+	}
+
+	@Override
+	public void setAttackArea(Rectangle attackArea) {
+		this.attackArea = attackArea;
 	}
 }

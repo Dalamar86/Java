@@ -36,13 +36,13 @@ public class Player extends GameObject{
 		screenX = gp.screenWidth/2 - (gp.tileSize/2);
 		screenY = gp.screenHeight/2 - (gp.tileSize/2);
 		
-		solidArea = new Rectangle();
-		solidArea.x = gp.tileSize/6;
-		solidArea.y = gp.tileSize/3;
-		solidAreaDefaultX = solidArea.x;
-		solidAreaDefaultY = solidArea.y;
-		solidArea.width = (int) (gp.tileSize/1.5);
-		solidArea.height = (int) (gp.tileSize/1.5);
+		setSolidArea(new Rectangle());
+		getSolidArea().x = gp.tileSize/6;
+		getSolidArea().y = gp.tileSize/3;
+		setSolidAreaDefaultX(getSolidArea().x);
+		setSolidAreaDefaultY(getSolidArea().y);
+		getSolidArea().width = (int) (gp.tileSize/1.5);
+		getSolidArea().height = (int) (gp.tileSize/1.5);
 		
 		setDefaultValues();
 		getImage();
@@ -56,8 +56,8 @@ public class Player extends GameObject{
 	
 	public void setDefaultValues() {
 		
-		worldX = gp.tileSize * 23;
-		worldY = gp.tileSize * 21;
+		setWorldX(gp.tileSize * 23);
+		setWorldY(gp.tileSize * 21);
 		
 		setType(ObjectType.PLAYER);
 		setSpeed(4);
@@ -92,7 +92,7 @@ public class Player extends GameObject{
 	}
 	
 	public int getAttack() {
-		attackArea = getCurrentWeapon().attackArea;
+		setAttackArea(getCurrentWeapon().getAttackArea());
 		return attack = getStrength() * getCurrentWeapon().getAttackValue();
 	}
 	
@@ -213,32 +213,32 @@ public class Player extends GameObject{
 	
 				switch(getDirection()) {
 				case "up":
-					worldY -= getSpeed();
+					setWorldY(getWorldY() - getSpeed());
 					break;
 				case "uplt":
-					worldY -= getSpeeddiag();
-					worldX -= getSpeeddiag();
+					setWorldY(getWorldY() - getSpeeddiag());
+					setWorldX(getWorldX() - getSpeeddiag());
 					break;
 				case "uprt":
-					worldY -= getSpeeddiag();
-					worldX += getSpeeddiag();
+					setWorldY(getWorldY() - getSpeeddiag());
+					setWorldX(getWorldX() + getSpeeddiag());
 					break;
 				case "down":
-					worldY += getSpeed();
+					setWorldY(getWorldY() + getSpeed());
 					break;
 				case "downlt":
-					worldY += getSpeeddiag();
-					worldX -= getSpeeddiag();
+					setWorldY(getWorldY() + getSpeeddiag());
+					setWorldX(getWorldX() - getSpeeddiag());
 					break;
 				case "downrt":
-					worldY += getSpeeddiag();
-					worldX += getSpeeddiag();
+					setWorldY(getWorldY() + getSpeeddiag());
+					setWorldX(getWorldX() + getSpeeddiag());
 					break;
 				case "left":
-					worldX -= getSpeed();
+					setWorldX(getWorldX() - getSpeed());
 					break;
 				case "right":
-					worldX += getSpeed();
+					setWorldX(getWorldX() + getSpeed());
 					break;
 				}
 				
@@ -250,7 +250,7 @@ public class Player extends GameObject{
 				gp.cChecker.checkEntity(this, gp.npc);
 				gp.cChecker.checkEntity(this, gp.monster);
 				if(isCollisionOn() == false) {
-					worldX -= getSpeed();
+					setWorldX(getWorldX() - getSpeed());
 				} else {				
 					setDirection("up");
 					setCollisionOn(false);
@@ -259,7 +259,7 @@ public class Player extends GameObject{
 					gp.cChecker.checkEntity(this, gp.npc);
 					gp.cChecker.checkEntity(this, gp.monster);
 					if(isCollisionOn() == false) {
-						worldY -= getSpeed();
+						setWorldY(getWorldY() - getSpeed());
 					}
 				}
 			} else if(isCollisionOn() == true && getDirection() == "uprt") {
@@ -270,7 +270,7 @@ public class Player extends GameObject{
 				gp.cChecker.checkEntity(this, gp.npc);
 				gp.cChecker.checkEntity(this, gp.monster);
 				if(isCollisionOn() == false) {
-					worldX += getSpeed();
+					setWorldX(getWorldX() + getSpeed());
 				} else {				
 					setDirection("up");
 					setCollisionOn(false);
@@ -279,7 +279,7 @@ public class Player extends GameObject{
 					gp.cChecker.checkEntity(this, gp.npc);
 					gp.cChecker.checkEntity(this, gp.monster);
 					if(isCollisionOn() == false) {
-						worldY -= getSpeed();
+						setWorldY(getWorldY() - getSpeed());
 					}
 				}
 			} else if(isCollisionOn() == true && getDirection() == "downlt") {
@@ -290,7 +290,7 @@ public class Player extends GameObject{
 				gp.cChecker.checkEntity(this, gp.npc);
 				gp.cChecker.checkEntity(this, gp.monster);
 				if(isCollisionOn() == false) {
-					worldX -= getSpeed();
+					setWorldX(getWorldX() - getSpeed());
 				} else {
 					setDirection("down");
 					setCollisionOn(false);
@@ -299,7 +299,7 @@ public class Player extends GameObject{
 					gp.cChecker.checkEntity(this, gp.npc);
 					gp.cChecker.checkEntity(this, gp.monster);
 					if(isCollisionOn() == false) {
-						worldY += getSpeed();
+						setWorldY(getWorldY() + getSpeed());
 					}
 				}
 			} else if(isCollisionOn() == true && getDirection() == "downrt") {
@@ -310,7 +310,7 @@ public class Player extends GameObject{
 				gp.cChecker.checkEntity(this, gp.npc);
 				gp.cChecker.checkEntity(this, gp.monster);
 				if(isCollisionOn() == false) {
-					worldX += getSpeed();
+					setWorldX(getWorldX() + getSpeed());
 				} else {
 					setDirection("down");
 					setCollisionOn(false);
@@ -319,7 +319,7 @@ public class Player extends GameObject{
 					gp.cChecker.checkEntity(this, gp.npc);
 					gp.cChecker.checkEntity(this, gp.monster);
 					if(isCollisionOn() == false) {
-						worldY += getSpeed();
+						setWorldY(getWorldY() + getSpeed());
 					}
 				}
 			}
@@ -372,14 +372,14 @@ public class Player extends GameObject{
 		int rightOffset = gp.screenWidth - screenX;
 		int bottomOffset = gp.screenHeight - screenY;
 		
-		if(screenX > worldX) {
-			x = worldX;
-		} if(screenY > worldY) {
-			y = worldY;
-		} if(rightOffset > gp.worldWidth -worldX) {
-			x = gp.screenWidth - (gp.worldWidth - worldX);
-		} if(bottomOffset > gp.worldHeight - worldY) {
-			y = gp.screenHeight - (gp.worldHeight - worldY);
+		if(screenX > getWorldX()) {
+			x = getWorldX();
+		} if(screenY > getWorldY()) {
+			y = getWorldY();
+		} if(rightOffset > gp.worldWidth -getWorldX()) {
+			x = gp.screenWidth - (gp.worldWidth - getWorldX());
+		} if(bottomOffset > gp.worldHeight - getWorldY()) {
+			y = gp.screenHeight - (gp.worldHeight - getWorldY());
 		}
 		
 		switch(getDirection()) {
@@ -472,23 +472,23 @@ public class Player extends GameObject{
 			spriteNum = 2;
 			
 			// save current worldX, worldY, solidArea
-			int currentWorldX = worldX;
-			int currentWorldY = worldY;
-			int solidAreaWidth = solidArea.width;
-			int solidAreaHeight = solidArea.height;
+			int currentWorldX = getWorldX();
+			int currentWorldY = getWorldY();
+			int solidAreaWidth = getSolidArea().width;
+			int solidAreaHeight = getSolidArea().height;
 			
 			// Adjust player's worldX/Y for the attackArea
 			switch(getDirection()) {
-			case "up": worldY -= attackArea.height; break;
-			case "down": worldY += attackArea.height; break;
-			case "left": worldX -= attackArea.width; break;
-			case "right": worldX += attackArea.width; break;
+			case "up": setWorldY(getWorldY() - getAttackArea().height); break;
+			case "down": setWorldY(getWorldY() + getAttackArea().height); break;
+			case "left": setWorldX(getWorldX() - getAttackArea().width); break;
+			case "right": setWorldX(getWorldX() + getAttackArea().width); break;
 			}
 			
 			
 			// Attack area becomes solid area
-			solidArea.width = attackArea.width;
-			solidArea.height = attackArea.height;
+			getSolidArea().width = getAttackArea().width;
+			getSolidArea().height = getAttackArea().height;
 			
 			// Check collision of sword and monster
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
@@ -497,10 +497,10 @@ public class Player extends GameObject{
 				damageMonster(monster);
 			}
 			
-			worldX = currentWorldX;
-			worldY = currentWorldY;
-			solidArea.width = solidAreaWidth;
-			solidArea.height = solidAreaHeight;
+			setWorldX(currentWorldX);
+			setWorldY(currentWorldY);
+			getSolidArea().width = solidAreaWidth;
+			getSolidArea().height = solidAreaHeight;
 			
 			
 		} else {

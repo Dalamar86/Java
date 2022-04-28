@@ -141,31 +141,31 @@ public class TileManager {
 			
 			int worldX = worldCol * gp.tileSize;
 			int worldY = worldRow * gp.tileSize;
-			int screenX = worldX - gp.player.worldX + gp.player.screenX;
-			int screenY = worldY - gp.player.worldY + gp.player.screenY;
+			int screenX = worldX - gp.player.getWorldX() + gp.player.screenX;
+			int screenY = worldY - gp.player.getWorldY() + gp.player.screenY;
 			
 			// Stop camera from moving out of bounds
 			int rightOffset = gp.screenWidth - gp.player.screenX;
 			int bottomOffset = gp.screenHeight - gp.player.screenY;
-			if(gp.player.screenX > gp.player.worldX) {
+			if(gp.player.screenX > gp.player.getWorldX()) {
 				screenX = worldX;
-			} if(gp.player.screenY > gp.player.worldY) {
+			} if(gp.player.screenY > gp.player.getWorldY()) {
 				screenY = worldY;
-			} if(rightOffset > gp.worldWidth -gp.player.worldX) {
+			} if(rightOffset > gp.worldWidth -gp.player.getWorldX()) {
 				screenX = gp.screenWidth - (gp.worldWidth - worldX);
-			} if(bottomOffset > gp.worldHeight - gp.player.worldY) {
+			} if(bottomOffset > gp.worldHeight - gp.player.getWorldY()) {
 				screenY = gp.screenHeight - (gp.worldHeight - worldY);
 			}
 			
-			if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
-			   worldX - gp.tileSize < gp.player.worldX + gp.player.screenX && 
-			   worldY + gp.tileSize > gp.player.worldY - gp.player.screenY && 
-			   worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
+			if(worldX + gp.tileSize > gp.player.getWorldX() - gp.player.screenX &&
+			   worldX - gp.tileSize < gp.player.getWorldX() + gp.player.screenX && 
+			   worldY + gp.tileSize > gp.player.getWorldY() - gp.player.screenY && 
+			   worldY - gp.tileSize < gp.player.getWorldY() + gp.player.screenY) {
 				g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
-			} else if(gp.player.screenX > gp.player.worldX ||
-					  gp.player.screenY > gp.player.worldY ||
-					  rightOffset > gp.worldWidth -gp.player.worldX ||
-					  bottomOffset > gp.worldHeight - gp.player.worldY) {
+			} else if(gp.player.screenX > gp.player.getWorldX() ||
+					  gp.player.screenY > gp.player.getWorldY() ||
+					  rightOffset > gp.worldWidth -gp.player.getWorldX() ||
+					  bottomOffset > gp.worldHeight - gp.player.getWorldY()) {
 				g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 			}
 			

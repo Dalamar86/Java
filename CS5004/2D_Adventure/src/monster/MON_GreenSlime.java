@@ -19,12 +19,12 @@ public class MON_GreenSlime extends SuperMonster {
 		defense = 0;
 		exp = 2;
 		
-		solidArea.x = 3;
-		solidArea.y = 18;
-		solidArea.width = 42;
-		solidArea.height = 30;
-		solidAreaDefaultX = solidArea.x;
-		solidAreaDefaultY = solidArea.y;
+		getSolidArea().x = 3;
+		getSolidArea().y = 18;
+		getSolidArea().width = 42;
+		getSolidArea().height = 30;
+		setSolidAreaDefaultX(getSolidArea().x);
+		setSolidAreaDefaultY(getSolidArea().y);
 		
 		getImage();
 	}
