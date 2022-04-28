@@ -2,7 +2,7 @@ package npc;
 
 import java.util.Random;
 
-import entity.*;
+import gameobject.GameObject;
 import main.GamePanel;
 import main.ObjectType;
 
@@ -13,12 +13,16 @@ public class NPC_OldMan extends GameObject {
 		
 		setType(ObjectType.NPC);
 		setDirection("down");
-		speed = 1;
+		setSpeed(1);
 		
 		getImage();
 		setDialogue();
 	}
 
+	//#####################################################################
+	// 								Setup
+	//#####################################################################
+	
 	public void getImage() {		
 		up1 = setup("/npc/oldman_up_1");
 		up2 = setup("/npc/oldman_up_2");
@@ -29,6 +33,10 @@ public class NPC_OldMan extends GameObject {
 		right1 = setup("/npc/oldman_right_1");
 		right2 = setup("/npc/oldman_right_2");
 	}
+	
+	//#####################################################################
+	// 								Components
+	//#####################################################################
 	
 	public void setDialogue() {
 		dialogues[0] = "Hello, Link";

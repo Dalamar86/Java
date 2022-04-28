@@ -1,4 +1,4 @@
-package main;
+package components;
 
 public class EventHandler {
 
@@ -82,14 +82,14 @@ public class EventHandler {
 	}
 	
 	public void teleport(GameState gameState) {
-		gp.setGameState(gameState);
+		gp.gameState = gameState;
 		gp.ui.setCurrentDialogue("Teleport!");
 		gp.player.worldX = gp.tileSize * 37;
 		gp.player.worldY = gp.tileSize * 10;
 	}
 	
 	public void damagePit(int col, int row, GameState gameState) {
-		gp.setGameState(gameState);
+		gp.gameState = gameState;
 		gp.playSE(6);
 		gp.ui.setCurrentDialogue("you fall into a pit!");
 		gp.player.setLife(gp.player.getLife() - 1);
@@ -99,8 +99,8 @@ public class EventHandler {
 	
 	public void healingPool(int col, int row, GameState gameState) {
 		
-		if(gp.keyH.isEnterPressed() == true) {
-			gp.setGameState(gameState);
+		if(gp.keyH.enterPressed == true) {
+			gp.gameState = gameState;
 			gp.player.setAttackCanceled(true);
 			gp.playSE(2);
 			gp.ui.setCurrentDialogue("You drink the water.\nYour life has been recovered!");

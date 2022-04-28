@@ -1,13 +1,17 @@
 package monster;
 
-import entity.GameObject;
+import gameobject.GameObject;
 import main.GamePanel;
 
-public class SuperMonster extends GameObject {
+public abstract class SuperMonster extends GameObject {
 
 	public SuperMonster(GamePanel gp) {
 		super(gp);
 	}
+	
+	//#####################################################################
+	// 								Components
+	//#####################################################################
 	
 	@Override
 	public int takeDamage(int damage) {
@@ -24,7 +28,7 @@ public class SuperMonster extends GameObject {
 			damageReaction();
 			
 			if(life <= 0) {
-				gp.ui.addMessage("Killed the " + name + "!");
+				gp.ui.addMessage("Killed the " + getName() + "!");
 				gp.playSE(8);
 				return exp;
 			} else {
@@ -34,6 +38,7 @@ public class SuperMonster extends GameObject {
 		return 0;
 	}
 	
+	@Override
 	public int attack() {
 		return attack;
 	}

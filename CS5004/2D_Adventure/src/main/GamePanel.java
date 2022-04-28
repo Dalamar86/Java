@@ -6,12 +6,12 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 import javax.swing.JPanel;
 
 import entity.*;
+import gameobject.GameObject;
 import tile.*;
 import object.*;
 
@@ -44,24 +44,13 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int worldWidth = tileSize * maxWorldCol;
 	public final int worldHeight = tileSize * maxWorldRow;
 	
-	// FPS
+	
 	int FPS = 60;
+	private GameState gameState = GameState.TITLESTATE;
+	private GameState gameStatePrev;
 	
-	// Game State
-	/*
-	public enum GameState {
-		TITLESTATE,
-		PLAYSTATE, 
-		PAUSESTATE,
-		DIALOGUESTATE,
-		CHARACTERSTATE,
-		DEADSTATE;
-	}*/
-	public GameState gameState = GameState.TITLESTATE;
-	public GameState gameStatePrev;
 	
-	// System
-	TileManager tileM = new TileManager(this);
+	public TileManager tileM = new TileManager(this);
 	public KeyHandler keyH = new KeyHandler(this);
 	Sound music = new Sound();
 	Sound se = new Sound();
@@ -76,8 +65,8 @@ public class GamePanel extends JPanel implements Runnable {
 	public GameObject obj[] = new SuperObject[20];
 	public GameObject npc[] = new GameObject[10];
 	public GameObject monster[]= new GameObject[20];
-	ArrayList<GameObject> entityList = new ArrayList<>();
-	private Comparator<GameObject> ee;
+	public ArrayList<GameObject> entityList = new ArrayList<>();
+	public Comparator<GameObject> ee;
 	
 			
 	public GamePanel () {
@@ -108,6 +97,10 @@ public class GamePanel extends JPanel implements Runnable {
 	public void startGameThread() {
 		gameThread = new Thread(this);
 		gameThread.start();
+	}
+	
+	public void endGameThread() {
+		gameThread.stop();
 	}
 	
 	@Override
@@ -209,7 +202,7 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		// Debug
 		long drawStart = 0;
-		if(keyH.showDebugText) {
+		if(keyH.isShowDebugText()) {
 			drawStart = System.nanoTime();
 		}
 		
@@ -318,7 +311,7 @@ public class GamePanel extends JPanel implements Runnable {
 			ui.draw(g2);
 			
 			// Debug
-			if(keyH.showDebugText) {
+			if(keyH.isShowDebugText()) {
 				long drawEnd = System.nanoTime();
 				long passed = drawEnd - drawStart;
 				
@@ -364,7 +357,26 @@ public class GamePanel extends JPanel implements Runnable {
 		se.play();
 	}
 	
+	
+	//#####################################################################
+	// 							Getters and Setters
+	//#####################################################################
+	
+	
 	public void setGameState(GameState gameState) {
 		this.gameState = gameState;
+	}
+
+	public GameState getGameState() {
+		return gameState;
+	}
+
+	public void setPrevState() {
+		this.gameStatePrev = gameState;
+		
+	}
+
+	public GameState getPrevSate() {
+		return gameStatePrev;
 	}
 }

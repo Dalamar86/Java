@@ -1,4 +1,4 @@
-package entity;
+package gameobject;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -25,29 +25,30 @@ public abstract class GameObject implements GameObjectInt {
 	
 	// State
 	public int worldX, worldY;
-	private String direction = "";
-	public int spriteNum = 1;
 	public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
 	public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
 	public int solidAreaDefaultX, solidAreaDefaultY;
-	public boolean collisionOn = false;
-	public boolean invincible = false;
-	boolean attacking = false;
+	
+	private String direction = "";
+	protected int spriteNum = 1;
+	private boolean collisionOn = false;
+	protected boolean invincible = false;
+	protected boolean attacking = false;
 	private boolean alive = true;
 	private boolean dying = false;
 	
 	// NPC specific
 	protected String dialogues[] = new String[20];
-	int dialogueIndex = 0;
+	protected int dialogueIndex = 0;
 	
 	// Character status
 	protected int level;
-	public int speeddiag;
+	private int speeddiag;
 	protected int exp;
 	protected int nextLevelExp;
 	private int coin;
-	public GameObject currentWeapon;
-	public GameObject currentShield;
+	private GameObject currentWeapon;
+	private GameObject currentShield;
 	
 	// Shared stats
 	protected int maxLife;
@@ -58,21 +59,23 @@ public abstract class GameObject implements GameObjectInt {
 	protected int attack;
 	protected int attackBonus;
 	protected int defense;
-	public int speed;
+	private int speed;
 	
 	// Object stats
-	public BufferedImage image1, image2, image3;
-	public String name;
-	public boolean collision = false;
-	protected int attackValue;
-	protected int defenseValue;
+	private BufferedImage image1;
+	private BufferedImage image2;
+	private BufferedImage image3;
+	private String name;
+	private boolean collision = false;
+	private int attackValue;
+	private int defenseValue;
 	private String description = "";
 	
 	// Counters
-	public int spriteCounter = 0;
+	protected int spriteCounter = 0;
 	protected int actionTimeCounter = 0;
-	public int invincibleCounter = 0;
-	int dyingCounter = 0;
+	protected int invincibleCounter = 0;
+	protected int dyingCounter = 0;
 	
 	// Describes an image with an accessible buffer of image data.
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
@@ -83,39 +86,46 @@ public abstract class GameObject implements GameObjectInt {
 		this.gp = gp;
 	}
 	
-	public void setAction() {}
-	@Override
-	public void damageReaction() {}
-	@Override
-	public int takeDamage(int damage) {return 0;}
-	@Override
-	public int attack() {return 0;}
-	@Override
-	public void use(GameObject gameObject) {}
-	@Override
-	public void speak() {
-		if(dialogues[dialogueIndex] == null) {
-			dialogueIndex = 0;
-		}
-		gp.ui.setCurrentDialogue(dialogues[dialogueIndex]);
-		dialogueIndex++;
+	//#####################################################################
+	// 									Setup
+	//#####################################################################
+	
+	public BufferedImage setup(String imagePath) {
+		UtilityTool uTool = new UtilityTool();
+		BufferedImage image = null;
 		
-		switch(gp.player.getDirection()) {
-		case "up": setDirection("down"); break;
-		case "down": setDirection("up"); break;
-		case "uplt": case "downlt":
-		case "left": setDirection("right"); break;
-		case "uprt": case "downrt":
-		case "right": setDirection("left"); break;
+		try {
+			image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
+			image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+			
+		} catch(IOException e) {
+			e.printStackTrace();
 		}
+		return image;
 	}
 	
+	public BufferedImage setup(String imagePath, int width, int height) {
+		UtilityTool uTool = new UtilityTool();
+		BufferedImage image = null;
+		
+		try {
+			image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
+			image = uTool.scaleImage(image, width, height);
+			
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return image;
+	}
 	
+	//#####################################################################
+	// 							Update and Draw
+	//#####################################################################
 	
 	public void update() {
 		setAction();
 		
-		collisionOn = false;
+		setCollisionOn(false);
 		gp.cChecker.checkTile(this);
 		gp.cChecker.checkObject(this, false);
 		gp.cChecker.checkEntity(this, gp.npc);
@@ -127,13 +137,13 @@ public abstract class GameObject implements GameObjectInt {
 		}
 		
 		// if collision is false, player can move
-		if(collisionOn == false) {
+		if(isCollisionOn() == false) {
 			
 			switch(getDirection()) {
-			case "up":		worldY -= speed; break;
-			case "down":	worldY += speed; break;
-			case "left":	worldX -= speed; break;
-			case "right":	worldX += speed; break;
+			case "up":		worldY -= getSpeed(); break;
+			case "down":	worldY += getSpeed(); break;
+			case "left":	worldX -= getSpeed(); break;
+			case "right":	worldX += getSpeed(); break;
 			}
 		}
 		
@@ -212,7 +222,7 @@ public abstract class GameObject implements GameObjectInt {
 				}
 				break;
 			default:
-				image = image1;
+				image = getImage1();
 				break;	
 			}
 			
@@ -257,7 +267,7 @@ public abstract class GameObject implements GameObjectInt {
 		   worldX - gp.tileSize < gp.player.worldX + gp.player.screenX && 
 		   worldY + gp.tileSize > gp.player.worldY - gp.player.screenY && 
 		   worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
-			g2.drawImage(image1, screenX, screenY, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(getImage1(), screenX, screenY, gp.tileSize, gp.tileSize, null);
 		}
 	}
 	
@@ -286,34 +296,47 @@ public abstract class GameObject implements GameObjectInt {
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));
 	}
 	
-	public BufferedImage setup(String imagePath) {
-		UtilityTool uTool = new UtilityTool();
-		BufferedImage image = null;
-		
-		try {
-			image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
-			image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-			
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-		return image;
-	}
+	//#####################################################################
+	// 								Components
+	//#####################################################################
 	
-	public BufferedImage setup(String imagePath, int width, int height) {
-		UtilityTool uTool = new UtilityTool();
-		BufferedImage image = null;
-		
-		try {
-			image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
-			image = uTool.scaleImage(image, width, height);
-			
-		} catch(IOException e) {
-			e.printStackTrace();
+	public void setAction() {}
+	
+	@Override
+	public void damageReaction() {}
+	
+	@Override
+	public int takeDamage(int damage) {return 0;}
+	
+	@Override
+	public int attack() {return 0;}
+	
+	@Override
+	public void use(GameObject gameObject) {}
+	
+	@Override
+	public void speak() {
+		if(dialogues[dialogueIndex] == null) {
+			dialogueIndex = 0;
 		}
-		return image;
-	}
-
+		gp.ui.setCurrentDialogue(dialogues[dialogueIndex]);
+		dialogueIndex++;
+		
+		switch(gp.player.getDirection()) {
+		case "up": setDirection("down"); break;
+		case "down": setDirection("up"); break;
+		case "uplt": case "downlt":
+		case "left": setDirection("right"); break;
+		case "uprt": case "downrt":
+		case "right": setDirection("left"); break;
+		}
+	}	
+	
+	//#####################################################################
+	// 							Getters and Setters
+	//#####################################################################
+	
+	@Override
 	public int getMaxLife() {
 		return maxLife;
 	}
@@ -322,10 +345,12 @@ public abstract class GameObject implements GameObjectInt {
 		this.maxLife = maxLife;
 	}
 
+	@Override
 	public int getLife() {
 		return life;
 	}
 
+	@Override
 	public void setLife(int life) {
 		if(life <= 0) {
 			life = 0;
@@ -336,94 +361,117 @@ public abstract class GameObject implements GameObjectInt {
 		this.life = life;
 	}
 
+	@Override
 	public boolean isAlive() {
 		return alive;
 	}
 
+	@Override
 	public void setAlive(boolean alive) {
 		this.alive = alive;
 	}
 
+	@Override
 	public boolean isDying() {
 		return dying;
 	}
 
+	@Override
 	public void setDying(boolean dying) {
 		this.dying = dying;
 	}
 
+	@Override
 	public int getLevel() {
 		return level;
 	}
 
+	@Override
 	public void setLevel(int level) {
 		this.level = level;
 	}
 
+	@Override
 	public int getStrength() {
 		return strength;
 	}
 
+	@Override
 	public void setStrength(int strength) {
 		this.strength = strength;
 	}
 
+	@Override
 	public int getDexterity() {
 		return dexterity;
 	}
 
+	@Override
 	public void setDexterity(int dexterity) {
 		this.dexterity = dexterity;
 	}
 
+	@Override
 	public int getAttack() {
 		return attack;
 	}
 
+	@Override
 	public void setAttack(int attack) {
 		this.attack = attack;
 	}
 
+	@Override
 	public int getDefense() {
 		return defense;
 	}
 
+	@Override
 	public void setDefense(int defense) {
 		this.defense = defense;
 	}
 
+	@Override
 	public int getExp() {
 		return exp;
 	}
 
+	@Override
 	public void setExp(int exp) {
 		this.exp = exp;
 	}
 
+	@Override
 	public int getNextLevelExp() {
 		return nextLevelExp;
 	}
 
+	@Override
 	public void setNextLevelExp(int nextLevelExp) {
 		this.nextLevelExp = nextLevelExp;
 	}
 
+	@Override
 	public int getCoin() {
 		return coin;
 	}
 
+	@Override
 	public void setCoin(int coin) {
 		this.coin = coin;
 	}
 
+	@Override
 	public String getDescription() {
 		return description;
 	}
 
+	@Override
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	@Override
 	public ObjectType getType() {
 		return type;
 	}
@@ -432,11 +480,134 @@ public abstract class GameObject implements GameObjectInt {
 		this.type = type;
 	}
 
+	@Override
 	public String getDirection() {
 		return direction;
 	}
 
+	@Override
 	public void setDirection(String direction) {
 		this.direction = direction;
+	}
+
+	@Override
+	public int getAttackValue() {
+		return attackValue;
+	}
+
+	@Override
+	public void setAttackValue(int attackValue) {
+		this.attackValue = attackValue;
+	}
+
+	@Override
+	public int getDefenseValue() {
+		return defenseValue;
+	}
+
+	@Override
+	public void setDefenseValue(int defenseValue) {
+		this.defenseValue = defenseValue;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public BufferedImage getImage1() {
+		return image1;
+	}
+
+	@Override
+	public void setImage1(BufferedImage image1) {
+		this.image1 = image1;
+	}
+
+	@Override
+	public BufferedImage getImage2() {
+		return image2;
+	}
+
+	@Override
+	public void setImage2(BufferedImage image2) {
+		this.image2 = image2;
+	}
+
+	@Override
+	public BufferedImage getImage3() {
+		return image3;
+	}
+
+	@Override
+	public void setImage3(BufferedImage image3) {
+		this.image3 = image3;
+	}
+
+	@Override
+	public GameObject getCurrentWeapon() {
+		return currentWeapon;
+	}
+
+	@Override
+	public void setCurrentWeapon(GameObject currentWeapon) {
+		this.currentWeapon = currentWeapon;
+	}
+
+	@Override
+	public GameObject getCurrentShield() {
+		return currentShield;
+	}
+
+	@Override
+	public void setCurrentShield(GameObject currentShield) {
+		this.currentShield = currentShield;
+	}
+
+	@Override
+	public int getSpeed() {
+		return speed;
+	}
+
+	@Override
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
+
+	@Override
+	public int getSpeeddiag() {
+		return speeddiag;
+	}
+
+	@Override
+	public void setSpeeddiag(int speeddiag) {
+		this.speeddiag = speeddiag;
+	}
+
+	@Override
+	public boolean isCollisionOn() {
+		return collisionOn;
+	}
+
+	@Override
+	public void setCollisionOn(boolean collisionOn) {
+		this.collisionOn = collisionOn;
+	}
+
+	@Override
+	public boolean isCollision() {
+		return collision;
+	}
+
+	@Override
+	public boolean setCollision(boolean collision) {
+		this.collision = collision;
+		return collision;
 	}
 }

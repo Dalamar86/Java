@@ -8,7 +8,7 @@ public class OBJ_Shield_Wooden extends SuperObject {
 	public OBJ_Shield_Wooden(GamePanel gp) {
 		super(gp, "shield_wood");
 		setType(ObjectType.SHIELD);
-		this.defenseValue = 1;
-		this.setDescription("[" + name + "]\nA piece of bark pulled from a tree \nnear your house.");
+		this.setDefenseValue(1);
+		this.setDescription("[" + getName() + "]\nA piece of bark pulled from a tree \nnear your house.");
 	}
 }

@@ -11,8 +11,8 @@ public class MON_GreenSlime extends SuperMonster {
 		super(gp);
 		
 		setType(ObjectType.MONSTER);
-		name = "Green Slime";
-		speed = 1;
+		setName("Green Slime");
+		setSpeed(1);
 		maxLife = 4;
 		life = maxLife;
 		attack = 3;
@@ -29,6 +29,10 @@ public class MON_GreenSlime extends SuperMonster {
 		getImage();
 	}
 
+	//#####################################################################
+	// 								Setup
+	//#####################################################################
+	
 	public void getImage() {
 		
 		up1 = setup("/monster/greenslime_down_1");
@@ -40,6 +44,10 @@ public class MON_GreenSlime extends SuperMonster {
 		right1 = setup("/monster/greenslime_down_1");
 		right2 = setup("/monster/greenslime_down_2");
 	}
+	
+	//#####################################################################
+	// 								Components
+	//#####################################################################
 	
 	public void setAction() {
 		actionTimeCounter ++;

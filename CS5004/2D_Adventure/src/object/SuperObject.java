@@ -4,7 +4,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import main.*;
-import entity.*;
+import gameobject.GameObject;
 
 public abstract class SuperObject extends GameObject {
 
@@ -19,14 +19,18 @@ public abstract class SuperObject extends GameObject {
 	
 	public SuperObject(GamePanel gp, String name) {
 		super(gp);
-		this.name = name;
+		this.setName(name);
 		addImage(name);
 	}
 	
+	//#####################################################################
+	// 								Setup
+	//#####################################################################
+	
 	public void addImage(String name) {
 		try {
-			image1 = ImageIO.read(getClass().getResourceAsStream("/objects/" + name + ".png"));
-			image1 = uTool.scaleImage(image1, gp.tileSize, gp.tileSize);
+			setImage1(ImageIO.read(getClass().getResourceAsStream("/objects/" + name + ".png")));
+			setImage1(uTool.scaleImage(getImage1(), gp.tileSize, gp.tileSize));
 			
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -34,10 +38,10 @@ public abstract class SuperObject extends GameObject {
 	}
 	public void addImage(String name2, String name3) {
 		try {
-			image2 = ImageIO.read(getClass().getResourceAsStream("/objects/" + name2 + ".png"));
-			image3 = ImageIO.read(getClass().getResourceAsStream("/objects/" + name3 + ".png"));
-			image2 = uTool.scaleImage(image2, gp.tileSize, gp.tileSize);
-			image3 = uTool.scaleImage(image3, gp.tileSize, gp.tileSize);
+			setImage2(ImageIO.read(getClass().getResourceAsStream("/objects/" + name2 + ".png")));
+			setImage3(ImageIO.read(getClass().getResourceAsStream("/objects/" + name3 + ".png")));
+			setImage2(uTool.scaleImage(getImage2(), gp.tileSize, gp.tileSize));
+			setImage3(uTool.scaleImage(getImage3(), gp.tileSize, gp.tileSize));
 			
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -45,12 +49,12 @@ public abstract class SuperObject extends GameObject {
 	}
 	public void addImage(String name1, String name2, String name3) {
 		try {
-			image1 = ImageIO.read(getClass().getResourceAsStream("/objects/" + name1 + ".png"));
-			image2 = ImageIO.read(getClass().getResourceAsStream("/objects/" + name2 + ".png"));
-			image3 = ImageIO.read(getClass().getResourceAsStream("/objects/" + name3 + ".png"));
-			image1 = uTool.scaleImage(image1, gp.tileSize, gp.tileSize);
-			image2 = uTool.scaleImage(image2, gp.tileSize, gp.tileSize);
-			image3 = uTool.scaleImage(image3, gp.tileSize, gp.tileSize);
+			setImage1(ImageIO.read(getClass().getResourceAsStream("/objects/" + name1 + ".png")));
+			setImage2(ImageIO.read(getClass().getResourceAsStream("/objects/" + name2 + ".png")));
+			setImage3(ImageIO.read(getClass().getResourceAsStream("/objects/" + name3 + ".png")));
+			setImage1(uTool.scaleImage(getImage1(), gp.tileSize, gp.tileSize));
+			setImage2(uTool.scaleImage(getImage2(), gp.tileSize, gp.tileSize));
+			setImage3(uTool.scaleImage(getImage3(), gp.tileSize, gp.tileSize));
 			
 		} catch(IOException e) {
 			e.printStackTrace();

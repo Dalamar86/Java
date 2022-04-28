@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import gameobject.GameObject;
 import main.*;
 import object.*;
 
@@ -49,14 +50,18 @@ public class Player extends GameObject{
 		setItems();
 	}
 	
+	//#####################################################################
+	// 									Setup
+	//#####################################################################
+	
 	public void setDefaultValues() {
 		
 		worldX = gp.tileSize * 23;
 		worldY = gp.tileSize * 21;
 		
 		setType(ObjectType.PLAYER);
-		speed = 4;
-		speeddiag = speed - 1;
+		setSpeed(4);
+		setSpeeddiag(getSpeed() - 1);
 		setDirection("down");
 		
 		// Player status
@@ -68,15 +73,15 @@ public class Player extends GameObject{
 		setExp(0);
 		setNextLevelExp(5);
 		setCoin(0);
-		currentWeapon = new OBJ_Sword_Normal(gp);
-		currentShield = new OBJ_Shield_Wooden(gp);
+		setCurrentWeapon(new OBJ_Sword_Normal(gp));
+		setCurrentShield(new OBJ_Shield_Wooden(gp));
 		setAttack(getAttack());
 		setDefense(getDefense());
 	}
 	
 	private void setItems() {
-		getInventory().add(currentWeapon);
-		getInventory().add(currentShield);
+		getInventory().add(getCurrentWeapon());
+		getInventory().add(getCurrentShield());
 		getInventory().add(new OBJ_Key(gp));
 		hasKey++;
 		getInventory().add(new OBJ_PotionRed(gp));
@@ -87,12 +92,12 @@ public class Player extends GameObject{
 	}
 	
 	public int getAttack() {
-		attackArea = currentWeapon.attackArea;
-		return attack = getStrength() * currentWeapon.attackValue;
+		attackArea = getCurrentWeapon().attackArea;
+		return attack = getStrength() * getCurrentWeapon().getAttackValue();
 	}
 	
 	public int getDefense() { 
-		return defense = getDexterity() * currentShield.defenseValue;
+		return defense = getDexterity() * getCurrentShield().getDefenseValue();
 	}
 	
 	public void getImage() {		
@@ -107,7 +112,7 @@ public class Player extends GameObject{
 	}
 	
 	public void getPlayerAttackImage() {
-		if(currentWeapon.name == "sword_normal") {
+		if(getCurrentWeapon().getName() == "sword_normal") {
 			attackUp1 = setup("/player/boy_attack_up_1", 		gp.tileSize,   gp.tileSize*2);
 			attackUp2 = setup("/player/boy_attack_up_2", 		gp.tileSize,   gp.tileSize*2);
 			attackDown1 = setup("/player/boy_attack_down_1",	gp.tileSize,   gp.tileSize*2);
@@ -116,7 +121,7 @@ public class Player extends GameObject{
 			attackLeft2 = setup("/player/boy_attack_left_2", 	gp.tileSize*2, gp.tileSize);
 			attackRight1 = setup("/player/boy_attack_right_1",	gp.tileSize*2, gp.tileSize);
 			attackRight2 = setup("/player/boy_attack_right_2", 	gp.tileSize*2, gp.tileSize);
-		} else if(currentWeapon.name == "Axe") {
+		} else if(getCurrentWeapon().getName() == "Axe") {
 			attackUp1 = setup("/player/boy_axe_up_1", 		gp.tileSize,   gp.tileSize*2);
 			attackUp2 = setup("/player/boy_axe_up_2", 		gp.tileSize,   gp.tileSize*2);
 			attackDown1 = setup("/player/boy_axe_down_1",	gp.tileSize,   gp.tileSize*2);
@@ -129,6 +134,10 @@ public class Player extends GameObject{
 		
 	}
 	
+	//#####################################################################
+	// 							Update and Draw
+	//#####################################################################
+	
 	public void update() {
 		if(isDying()) {
 			setAlive(false);
@@ -136,47 +145,47 @@ public class Player extends GameObject{
 		}
 		if(attacking) {
 			attacking();
-		} else if(keyH.upPressed == true || keyH.downPressed == true || keyH.ltPressed == true || keyH.rtPressed == true || keyH.enterPressed) {
+		} else if(keyH.isUpPressed() == true || keyH.isDownPressed() == true || keyH.isLtPressed() == true || keyH.isRtPressed() == true || keyH.isEnterPressed()) {
 			
-			if(keyH.upPressed == true) {
-				if(keyH.ltPressed) {
+			if(keyH.isUpPressed() == true) {
+				if(keyH.isLtPressed()) {
 					setDirection("uplt");
-				} else if (keyH.rtPressed) {
+				} else if (keyH.isRtPressed()) {
 					setDirection("uprt");
 				} else {
 					setDirection("up");
 				}
-			} else if(keyH.downPressed == true) {
-				if(keyH.ltPressed) {
+			} else if(keyH.isDownPressed() == true) {
+				if(keyH.isLtPressed()) {
 					setDirection("downlt");
-				} else if (keyH.rtPressed) {
+				} else if (keyH.isRtPressed()) {
 					setDirection("downrt");
 				} else {
 					setDirection("down");
 				}
-			} else if(keyH.ltPressed == true) {
-				if(keyH.upPressed) {
+			} else if(keyH.isLtPressed() == true) {
+				if(keyH.isUpPressed()) {
 					setDirection("uplt");
-				} else if (keyH.downPressed) {
+				} else if (keyH.isDownPressed()) {
 					setDirection("downlt");
 				} else {
 					setDirection("left");
 				}
-			} else if(keyH.rtPressed == true) {
-				if(keyH.upPressed) {
+			} else if(keyH.isRtPressed() == true) {
+				if(keyH.isUpPressed()) {
 					setDirection("uprt");
-				} else if (keyH.downPressed) {
+				} else if (keyH.isDownPressed()) {
 					setDirection("downrt");
 				} else {
 					setDirection("right");
 				}
 			}  
-			if(keyH.enterPressed) {
+			if(keyH.isEnterPressed()) {
 				attacking = true;
 			}
 			
 			// Check tile collision
-			collisionOn = false;
+			setCollisionOn(false);
 			gp.cChecker.checkTile(this);
 			
 			// Check object collision
@@ -200,122 +209,122 @@ public class Player extends GameObject{
 			
 			
 			// if collision is False, Player can move
-			if(collisionOn == false) {
+			if(isCollisionOn() == false) {
 	
 				switch(getDirection()) {
 				case "up":
-					worldY -= speed;
+					worldY -= getSpeed();
 					break;
 				case "uplt":
-					worldY -= speeddiag;
-					worldX -= speeddiag;
+					worldY -= getSpeeddiag();
+					worldX -= getSpeeddiag();
 					break;
 				case "uprt":
-					worldY -= speeddiag;
-					worldX += speeddiag;
+					worldY -= getSpeeddiag();
+					worldX += getSpeeddiag();
 					break;
 				case "down":
-					worldY += speed;
+					worldY += getSpeed();
 					break;
 				case "downlt":
-					worldY += speeddiag;
-					worldX -= speeddiag;
+					worldY += getSpeeddiag();
+					worldX -= getSpeeddiag();
 					break;
 				case "downrt":
-					worldY += speeddiag;
-					worldX += speeddiag;
+					worldY += getSpeeddiag();
+					worldX += getSpeeddiag();
 					break;
 				case "left":
-					worldX -= speed;
+					worldX -= getSpeed();
 					break;
 				case "right":
-					worldX += speed;
+					worldX += getSpeed();
 					break;
 				}
 				
-			} else if(collisionOn == true && getDirection() == "uplt") {
+			} else if(isCollisionOn() == true && getDirection() == "uplt") {
 				setDirection("left");
-				collisionOn = false;
+				setCollisionOn(false);
 				gp.cChecker.checkTile(this);
 				gp.cChecker.checkObject(this, true);
 				gp.cChecker.checkEntity(this, gp.npc);
 				gp.cChecker.checkEntity(this, gp.monster);
-				if(collisionOn == false) {
-					worldX -= speed;
+				if(isCollisionOn() == false) {
+					worldX -= getSpeed();
 				} else {				
 					setDirection("up");
-					collisionOn = false;
+					setCollisionOn(false);
 					gp.cChecker.checkTile(this);
 					gp.cChecker.checkObject(this, true);
 					gp.cChecker.checkEntity(this, gp.npc);
 					gp.cChecker.checkEntity(this, gp.monster);
-					if(collisionOn == false) {
-						worldY -= speed;
+					if(isCollisionOn() == false) {
+						worldY -= getSpeed();
 					}
 				}
-			} else if(collisionOn == true && getDirection() == "uprt") {
+			} else if(isCollisionOn() == true && getDirection() == "uprt") {
 				setDirection("right");
-				collisionOn = false;
+				setCollisionOn(false);
 				gp.cChecker.checkTile(this);
 				gp.cChecker.checkObject(this, true);
 				gp.cChecker.checkEntity(this, gp.npc);
 				gp.cChecker.checkEntity(this, gp.monster);
-				if(collisionOn == false) {
-					worldX += speed;
+				if(isCollisionOn() == false) {
+					worldX += getSpeed();
 				} else {				
 					setDirection("up");
-					collisionOn = false;
+					setCollisionOn(false);
 					gp.cChecker.checkTile(this);
 					gp.cChecker.checkObject(this, true);
 					gp.cChecker.checkEntity(this, gp.npc);
 					gp.cChecker.checkEntity(this, gp.monster);
-					if(collisionOn == false) {
-						worldY -= speed;
+					if(isCollisionOn() == false) {
+						worldY -= getSpeed();
 					}
 				}
-			} else if(collisionOn == true && getDirection() == "downlt") {
+			} else if(isCollisionOn() == true && getDirection() == "downlt") {
 				setDirection("left");
-				collisionOn = false;
+				setCollisionOn(false);
 				gp.cChecker.checkTile(this);
 				gp.cChecker.checkObject(this, true);
 				gp.cChecker.checkEntity(this, gp.npc);
 				gp.cChecker.checkEntity(this, gp.monster);
-				if(collisionOn == false) {
-					worldX -= speed;
+				if(isCollisionOn() == false) {
+					worldX -= getSpeed();
 				} else {
 					setDirection("down");
-					collisionOn = false;
+					setCollisionOn(false);
 					gp.cChecker.checkTile(this);
 					gp.cChecker.checkObject(this, true);
 					gp.cChecker.checkEntity(this, gp.npc);
 					gp.cChecker.checkEntity(this, gp.monster);
-					if(collisionOn == false) {
-						worldY += speed;
+					if(isCollisionOn() == false) {
+						worldY += getSpeed();
 					}
 				}
-			} else if(collisionOn == true && getDirection() == "downrt") {
+			} else if(isCollisionOn() == true && getDirection() == "downrt") {
 				setDirection("right");
-				collisionOn = false;
+				setCollisionOn(false);
 				gp.cChecker.checkTile(this);
 				gp.cChecker.checkObject(this, true);
 				gp.cChecker.checkEntity(this, gp.npc);
 				gp.cChecker.checkEntity(this, gp.monster);
-				if(collisionOn == false) {
-					worldX += speed;
+				if(isCollisionOn() == false) {
+					worldX += getSpeed();
 				} else {
 					setDirection("down");
-					collisionOn = false;
+					setCollisionOn(false);
 					gp.cChecker.checkTile(this);
 					gp.cChecker.checkObject(this, true);
 					gp.cChecker.checkEntity(this, gp.npc);
 					gp.cChecker.checkEntity(this, gp.monster);
-					if(collisionOn == false) {
-						worldY += speed;
+					if(isCollisionOn() == false) {
+						worldY += getSpeed();
 					}
 				}
 			}
 			
-			if(keyH.enterPressed && !attackCanceled) {
+			if(keyH.isEnterPressed() && !attackCanceled) {
 				gp.playSE(7);
 				attacking = true;
 				spriteCounter = 0;
@@ -349,193 +358,6 @@ public class Player extends GameObject{
 					invincibleCounter = 0;
 				}
 			}		
-		}
-	}
-	
-	public void attacking() {
-		spriteCounter++;
-		
-		if(spriteCounter <= 5) {
-			spriteNum = 1;
-		} else if(spriteCounter > 5 && spriteCounter <= 25) {
-			spriteNum = 2;
-			
-			// save current worldX, worldY, solidArea
-			int currentWorldX = worldX;
-			int currentWorldY = worldY;
-			int solidAreaWidth = solidArea.width;
-			int solidAreaHeight = solidArea.height;
-			
-			// Adjust player's worldX/Y for the attackArea
-			switch(getDirection()) {
-			case "up": worldY -= attackArea.height; break;
-			case "down": worldY += attackArea.height; break;
-			case "left": worldX -= attackArea.width; break;
-			case "right": worldX += attackArea.width; break;
-			}
-			
-			
-			// Attack area becomes solid area
-			solidArea.width = attackArea.width;
-			solidArea.height = attackArea.height;
-			
-			// Check collision of sword and monster
-			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
-			if(monsterIndex != 999) {
-				GameObject monster = gp.monster[monsterIndex];
-				damageMonster(monster);
-			}
-			
-			worldX = currentWorldX;
-			worldY = currentWorldY;
-			solidArea.width = solidAreaWidth;
-			solidArea.height = solidAreaHeight;
-			
-			
-		} else {
-			spriteNum = 1;
-			spriteCounter = 0;
-			attacking = false;
-		}
-	}
-	
-	public void pickUpObject(int index) {
-		if(index != 999) {
-			if(inventory.size() != inventorySize) {
-				
-				String objectName = gp.obj[index].name;
-				String text = "";
-				if(objectName != "Door" && objectName != "Chest") {
-					inventory.add(gp.obj[index]);
-				}
-				
-				boolean doorUnlocked = false;
-				
-				switch(objectName) {
-				case "Key":
-					gp.playSE(1);
-					setHasKey(getHasKey() + 1);
-					text = "You got a key!";
-					break;
-				case "Door":
-					if(getHasKey() > 0) {
-						gp.playSE(3);
-						setHasKey(getHasKey() - 1);
-						text = "Door Unlocked!";
-						doorUnlocked = true;
-						useKey();
-					} else {
-						text = "Door Locked!";
-					}
-					break;
-				case "Boots":
-					gp.playSE(2);
-					speed += 2;
-					text = "Speed boost";
-					break;
-				case "Chest":
-					gp.ui.levelFinished = true;
-					gp.stopMusic();
-					gp.playSE(4);
-					break;
-				case "Shield_blue":
-					gp.playSE(2);
-					text = "Beat up blue shield";
-					break;
-				case "shield_wood":
-					gp.playSE(2);
-					text = "Bark from a nearby tree";
-					break;
-				case "Axe":
-					gp.playSE(2);
-					text = "Wood cutting axe";
-					break;
-				case "Sword_normal":
-					gp.playSE(2);
-					text = "Rusty sword";
-					break;
-				case "Potion_red":
-					gp.playSE(2);
-					text = "mysterious liquid";
-					break;
-				}
-				if(objectName == "Door") {
-					if(doorUnlocked) {
-						gp.obj[index] = null;
-					}
-				} else {
-					gp.obj[index] = null;
-				}
-				
-				gp.ui.addMessage(text);
-			}
-		}
-	}
-	
-	public void interactNPC(int index) {
-		if(index != 999) {
-			attackCanceled = true;
-			gp.gameState = GameState.DIALOGUESTATE;
-			gp.npc[index].speak();
-		}
-	}
-	
-	@Override
-	public int takeDamage(int damage) {
-		if(!invincible) {
-			damage -= defense;
-			if(damage < 0) {
-				damage = 0;
-			}
-			setLife(getLife() - damage);
-			invincible = true;
-			gp.playSE(6);
-		}
-		return 0;
-	}
-	
-	public void damageMonster(GameObject monster) {
-		int exp = monster.takeDamage(attack);
-		if(exp != 0 ) {
-			this.exp += exp;
-			checkLevelUp();
-		}
-	}
-	
-	public void checkLevelUp() {
-		if(exp >= nextLevelExp ) {
-			level++;
-			nextLevelExp *= 2;
-			maxLife += 2;
-			setLife(getMaxLife());
-			setStrength(getStrength() + 1);
-			setDexterity(getDexterity() +1);
-			attack = getAttack();
-			defense = getDefense();
-			gp.playSE(9);
-			gp.setGameState(GameState.DIALOGUESTATE);
-			gp.ui.setCurrentDialogue("You are now level " + level + "\nYou feel stronger!");
-		}
-	}
-	
-	public void equipItem() {
-		int itemIndex = gp.ui.getItemIndex();
-		
-		if(itemIndex < inventory.size()) {
-			GameObject selectedItem = inventory.get(itemIndex);
-			if(selectedItem.getType() == ObjectType.WEAPON) {
-				currentWeapon = selectedItem;
-				attack = getAttack();
-				getPlayerAttackImage();
-			}
-			if(selectedItem.getType() == ObjectType.SHIELD) {
-				currentShield = selectedItem;
-				defense = getDefense();
-			}
-			if(selectedItem.getType() == ObjectType.CONSUMABLE) {
-				selectedItem.use(this);
-				inventory.remove(itemIndex);
-			}
 		}
 	}
 	
@@ -636,7 +458,218 @@ public class Player extends GameObject{
 		// Reset alpha
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));
 	}
-
+	
+	//#####################################################################
+	// 								Components
+	//#####################################################################
+	
+	public void attacking() {
+		spriteCounter++;
+		
+		if(spriteCounter <= 5) {
+			spriteNum = 1;
+		} else if(spriteCounter > 5 && spriteCounter <= 25) {
+			spriteNum = 2;
+			
+			// save current worldX, worldY, solidArea
+			int currentWorldX = worldX;
+			int currentWorldY = worldY;
+			int solidAreaWidth = solidArea.width;
+			int solidAreaHeight = solidArea.height;
+			
+			// Adjust player's worldX/Y for the attackArea
+			switch(getDirection()) {
+			case "up": worldY -= attackArea.height; break;
+			case "down": worldY += attackArea.height; break;
+			case "left": worldX -= attackArea.width; break;
+			case "right": worldX += attackArea.width; break;
+			}
+			
+			
+			// Attack area becomes solid area
+			solidArea.width = attackArea.width;
+			solidArea.height = attackArea.height;
+			
+			// Check collision of sword and monster
+			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
+			if(monsterIndex != 999) {
+				GameObject monster = gp.monster[monsterIndex];
+				damageMonster(monster);
+			}
+			
+			worldX = currentWorldX;
+			worldY = currentWorldY;
+			solidArea.width = solidAreaWidth;
+			solidArea.height = solidAreaHeight;
+			
+			
+		} else {
+			spriteNum = 1;
+			spriteCounter = 0;
+			attacking = false;
+		}
+	}
+	
+	public void pickUpObject(int index) {
+		if(index != 999) {
+			if(inventory.size() != inventorySize) {
+				
+				String objectName = gp.obj[index].getName();
+				String text = "";
+				if(objectName != "Door" && objectName != "Chest") {
+					inventory.add(gp.obj[index]);
+				}
+				
+				boolean doorUnlocked = false;
+				
+				switch(objectName) {
+				case "Key":
+					gp.playSE(1);
+					setHasKey(getHasKey() + 1);
+					text = "You got a key!";
+					break;
+				case "Door":
+					if(getHasKey() > 0) {
+						gp.playSE(3);
+						setHasKey(getHasKey() - 1);
+						text = "Door Unlocked!";
+						doorUnlocked = true;
+						useKey();
+					} else {
+						text = "Door Locked!";
+					}
+					break;
+				case "Boots":
+					gp.playSE(2);
+					setSpeed(getSpeed() + 2);
+					text = "Speed boost";
+					break;
+				case "Chest":
+					gp.ui.levelFinished = true;
+					gp.stopMusic();
+					gp.playSE(4);
+					break;
+				case "Shield_blue":
+					gp.playSE(2);
+					text = "Beat up blue shield";
+					break;
+				case "shield_wood":
+					gp.playSE(2);
+					text = "Bark from a nearby tree";
+					break;
+				case "Axe":
+					gp.playSE(2);
+					text = "Wood cutting axe";
+					break;
+				case "Sword_normal":
+					gp.playSE(2);
+					text = "Rusty sword";
+					break;
+				case "Potion_red":
+					gp.playSE(2);
+					text = "mysterious liquid";
+					break;
+				}
+				if(objectName == "Door") {
+					if(doorUnlocked) {
+						gp.obj[index] = null;
+					}
+				} else {
+					gp.obj[index] = null;
+				}
+				
+				gp.ui.addMessage(text);
+			}
+		}
+	}
+	
+	public void interactNPC(int index) {
+		if(index != 999) {
+			attackCanceled = true;
+			gp.setGameState(GameState.DIALOGUESTATE);
+			gp.npc[index].speak();
+		}
+	}
+	
+	@Override
+	public int takeDamage(int damage) {
+		if(!invincible) {
+			damage -= defense;
+			if(damage < 0) {
+				damage = 0;
+			}
+			setLife(getLife() - damage);
+			invincible = true;
+			gp.playSE(6);
+		}
+		return 0;
+	}
+	
+	@Override 
+	public void damageReaction() {
+		// TODO apply animation
+		// TODO move character back
+	}
+	
+	public void damageMonster(GameObject monster) {
+		int exp = monster.takeDamage(attack);
+		if(exp != 0 ) {
+			this.exp += exp;
+			checkLevelUp();
+		}
+	}
+	
+	public void checkLevelUp() {
+		if(exp >= nextLevelExp ) {
+			level++;
+			nextLevelExp *= 2;
+			maxLife += 2;
+			setLife(getMaxLife());
+			setStrength(getStrength() + 1);
+			setDexterity(getDexterity() +1);
+			attack = getAttack();
+			defense = getDefense();
+			gp.playSE(9);
+			gp.setGameState(GameState.DIALOGUESTATE);
+			gp.ui.setCurrentDialogue("You are now level " + level + "\nYou feel stronger!");
+		}
+	}
+	
+	public void equipItem() {
+		int itemIndex = gp.ui.getItemIndex();
+		
+		if(itemIndex < inventory.size()) {
+			GameObject selectedItem = inventory.get(itemIndex);
+			if(selectedItem.getType() == ObjectType.WEAPON) {
+				setCurrentWeapon(selectedItem);
+				attack = getAttack();
+				getPlayerAttackImage();
+			}
+			if(selectedItem.getType() == ObjectType.SHIELD) {
+				setCurrentShield(selectedItem);
+				defense = getDefense();
+			}
+			if(selectedItem.getType() == ObjectType.CONSUMABLE) {
+				selectedItem.use(this);
+				inventory.remove(itemIndex);
+			}
+		}
+	}
+	
+	private void useKey() {
+		int i;
+		for(i = 0; i < inventory.size(); i++) {
+			if(inventory.get(i).getType() == ObjectType.KEY) {
+				inventory.remove(i);
+				break;
+			}
+		}
+	}
+	
+	//#####################################################################
+	// 							Getters and Setters
+	//#####################################################################
+	
 	public boolean isAttackCanceled() {
 		return attackCanceled;
 	}
@@ -651,16 +684,6 @@ public class Player extends GameObject{
 
 	public void setInventory(ArrayList<GameObject> inventory) {
 		this.inventory = inventory;
-	}
-
-	private void useKey() {
-		int i;
-		for(i = 0; i < inventory.size(); i++) {
-			if(inventory.get(i).getType() == ObjectType.KEY) {
-				inventory.remove(i);
-				break;
-			}
-		}
 	}
 	
 	public int getHasKey() {

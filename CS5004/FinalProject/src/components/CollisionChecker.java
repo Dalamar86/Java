@@ -1,6 +1,7 @@
-package main;
+package components;
 
-import gameobject.GameObject;
+import main.GamePanel;
+import models.*;
 
 public class CollisionChecker {
 
@@ -10,7 +11,7 @@ public class CollisionChecker {
 		this.gp = gp;
 	}
 	
-	public void checkTile(GameObject gameObject) {
+	public void checkTile(GameObjectModel gameObject) {
 		
 		int entityLeftWorldX = gameObject.worldX + gameObject.solidArea.x;
 		int entityRightWorldX = gameObject.worldX + gameObject.solidArea.x + gameObject.solidArea.width;
@@ -27,79 +28,79 @@ public class CollisionChecker {
 		
 		switch(gameObject.getDirection()) {
 		case "up":
-			entityTopRow = (entityTopWorldY - gameObject.getSpeed())/gp.tileSize;
+			entityTopRow = (entityTopWorldY - gameObject.speed)/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true) {
-				gameObject.setCollisionOn(true);
+				gameObject.collisionOn = true;
 			}
 			break;
 		case "uplt":
-			entityTopRow = (entityTopWorldY - gameObject.getSpeed())/gp.tileSize;
+			entityTopRow = (entityTopWorldY - gameObject.speed)/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
-			entityLeftCol = (entityLeftWorldX - gameObject.getSpeed())/gp.tileSize;
+			entityLeftCol = (entityLeftWorldX - gameObject.speed)/gp.tileSize;
 			tileNum3 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
 			tileNum4 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true || gp.tileM.tile[tileNum3].collision == true || gp.tileM.tile[tileNum4].collision == true) {
-				gameObject.setCollisionOn(true);
+				gameObject.collisionOn = true;
 			}
 			break;
 		case "uprt":
-			entityTopRow = (entityTopWorldY - gameObject.getSpeed())/gp.tileSize;
+			entityTopRow = (entityTopWorldY - gameObject.speed)/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
-			entityRightCol = (entityRightWorldX + gameObject.getSpeed())/gp.tileSize;
+			entityRightCol = (entityRightWorldX + gameObject.speed)/gp.tileSize;
 			tileNum3 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
 			tileNum4 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true || gp.tileM.tile[tileNum3].collision == true || gp.tileM.tile[tileNum4].collision == true) {
-				gameObject.setCollisionOn(true);
+				gameObject.collisionOn = true;
 			}
 			break;
 		case "down":
-			entityBottomRow = (entityBottomWorldY + gameObject.getSpeed())/gp.tileSize;
+			entityBottomRow = (entityBottomWorldY + gameObject.speed)/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true) {
-				gameObject.setCollisionOn(true);
+				gameObject.collisionOn = true;
 			}
 			break;
 		case "downlt":
-			entityBottomRow = (entityBottomWorldY + gameObject.getSpeed())/gp.tileSize;
+			entityBottomRow = (entityBottomWorldY + gameObject.speed)/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
-			entityLeftCol = (entityLeftWorldX - gameObject.getSpeed())/gp.tileSize;
+			entityLeftCol = (entityLeftWorldX - gameObject.speed)/gp.tileSize;
 			tileNum3 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
 			tileNum4 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true || gp.tileM.tile[tileNum3].collision == true || gp.tileM.tile[tileNum4].collision == true) {
-				gameObject.setCollisionOn(true);
+				gameObject.collisionOn = true;
 			}
 			break;
 		case "downrt":
-			entityBottomRow = (entityBottomWorldY + gameObject.getSpeed())/gp.tileSize;
+			entityBottomRow = (entityBottomWorldY + gameObject.speed)/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
-			entityRightCol = (entityRightWorldX + gameObject.getSpeed())/gp.tileSize;
+			entityRightCol = (entityRightWorldX + gameObject.speed)/gp.tileSize;
 			tileNum3 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
 			tileNum4 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true || gp.tileM.tile[tileNum3].collision == true || gp.tileM.tile[tileNum4].collision == true) {
-				gameObject.setCollisionOn(true);
+				gameObject.collisionOn = true;
 			}
 			break;
 		case "left":
-			entityLeftCol = (entityLeftWorldX - gameObject.getSpeed())/gp.tileSize;
+			entityLeftCol = (entityLeftWorldX - gameObject.speed)/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
 			tileNum2 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true) {
-				gameObject.setCollisionOn(true);
+				gameObject.collisionOn = true;
 			}
 			break;
 		case "right":
-			entityRightCol = (entityRightWorldX + gameObject.getSpeed())/gp.tileSize;
+			entityRightCol = (entityRightWorldX + gameObject.speed)/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true) {
-				gameObject.setCollisionOn(true);
+				gameObject.collisionOn = true;
 			}
 			break;
 		}
@@ -119,30 +120,30 @@ public class CollisionChecker {
 				gp.obj[i].solidArea.y = gp.obj[i].worldY + gp.obj[i].solidArea.y;
 				
 				switch(gameObject.getDirection()) {
-				case "up": gameObject.solidArea.y -= gameObject.getSpeed(); break;
+				case "up": gameObject.solidArea.y -= gameObject.speed; break;
 				case "uplt":
-					gameObject.solidArea.x -= gameObject.getSpeeddiag();
-					gameObject.solidArea.y -= gameObject.getSpeeddiag();
+					gameObject.solidArea.x -= gameObject.speeddiag;
+					gameObject.solidArea.y -= gameObject.speeddiag;
 					break;
 				case "uprt":
-					gameObject.solidArea.x += gameObject.getSpeeddiag();
-					gameObject.solidArea.y -= gameObject.getSpeeddiag();
+					gameObject.solidArea.x += gameObject.speeddiag;
+					gameObject.solidArea.y -= gameObject.speeddiag;
 					break;
-				case "down": gameObject.solidArea.y += gameObject.getSpeed(); break;
+				case "down": gameObject.solidArea.y += gameObject.speed; break;
 				case "downlt":
-					gameObject.solidArea.x -= gameObject.getSpeeddiag();
-					gameObject.solidArea.y += gameObject.getSpeeddiag();
+					gameObject.solidArea.x -= gameObject.speeddiag;
+					gameObject.solidArea.y += gameObject.speeddiag;
 					break;
 				case "downrt":
-					gameObject.solidArea.x += gameObject.getSpeeddiag();
-					gameObject.solidArea.y += gameObject.getSpeeddiag();
+					gameObject.solidArea.x += gameObject.speeddiag;
+					gameObject.solidArea.y += gameObject.speeddiag;
 					break;
-				case "left": gameObject.solidArea.x -= gameObject.getSpeed(); break;
-				case "right": gameObject.solidArea.x += gameObject.getSpeed(); break;
+				case "left": gameObject.solidArea.x -= gameObject.speed; break;
+				case "right": gameObject.solidArea.x += gameObject.speed; break;
 				}
 				if(gameObject.solidArea.intersects(gp.obj[i].solidArea)) {
-					if(gp.obj[i].setCollision(true)) {
-						gameObject.setCollisionOn(true);
+					if(gp.obj[i].collision = true) {
+						gameObject.collisionOn = true;
 					}
 					if(player) {
 						index = i;
@@ -174,30 +175,30 @@ public class CollisionChecker {
 				target[i].solidArea.y = target[i].worldY + target[i].solidArea.y;
 				
 				switch(gameObject.getDirection()) {
-				case "up": gameObject.solidArea.y -= gameObject.getSpeed(); break;
+				case "up": gameObject.solidArea.y -= gameObject.speed; break;
 				case "uplt":
-					gameObject.solidArea.x -= gameObject.getSpeeddiag();
-					gameObject.solidArea.y -= gameObject.getSpeeddiag();
+					gameObject.solidArea.x -= gameObject.speeddiag;
+					gameObject.solidArea.y -= gameObject.speeddiag;
 					break;
 				case "uprt":
-					gameObject.solidArea.x += gameObject.getSpeeddiag();
-					gameObject.solidArea.y -= gameObject.getSpeeddiag();
+					gameObject.solidArea.x += gameObject.speeddiag;
+					gameObject.solidArea.y -= gameObject.speeddiag;
 					break;
-				case "down": gameObject.solidArea.y += gameObject.getSpeed();	break;
+				case "down": gameObject.solidArea.y += gameObject.speed;	break;
 				case "downlt":
-					gameObject.solidArea.x -= gameObject.getSpeeddiag();
-					gameObject.solidArea.y += gameObject.getSpeeddiag();
+					gameObject.solidArea.x -= gameObject.speeddiag;
+					gameObject.solidArea.y += gameObject.speeddiag;
 					break;
 				case "downrt":
-					gameObject.solidArea.x += gameObject.getSpeeddiag();
-					gameObject.solidArea.y += gameObject.getSpeeddiag();
+					gameObject.solidArea.x += gameObject.speeddiag;
+					gameObject.solidArea.y += gameObject.speeddiag;
 					break;
-				case "left": gameObject.solidArea.x -= gameObject.getSpeed(); break;
-				case "right": gameObject.solidArea.x += gameObject.getSpeed(); break;
+				case "left": gameObject.solidArea.x -= gameObject.speed; break;
+				case "right": gameObject.solidArea.x += gameObject.speed; break;
 				}
 				if(gameObject.solidArea.intersects(target[i].solidArea)) {
 					if(target[i] != gameObject) {
-						gameObject.setCollisionOn(true);
+						gameObject.collisionOn = true;
 						index = i;
 					}
 					
@@ -226,29 +227,29 @@ public class CollisionChecker {
 		gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
 		
 		switch(gameObject.getDirection()) {
-		case "up": gameObject.solidArea.y -= gameObject.getSpeed(); break;
+		case "up": gameObject.solidArea.y -= gameObject.speed; break;
 		case "uplt":
-			gameObject.solidArea.x -= gameObject.getSpeeddiag();
-			gameObject.solidArea.y -= gameObject.getSpeeddiag();
+			gameObject.solidArea.x -= gameObject.speeddiag;
+			gameObject.solidArea.y -= gameObject.speeddiag;
 			break;
 		case "uprt":
-			gameObject.solidArea.x += gameObject.getSpeeddiag();
-			gameObject.solidArea.y -= gameObject.getSpeeddiag();
+			gameObject.solidArea.x += gameObject.speeddiag;
+			gameObject.solidArea.y -= gameObject.speeddiag;
 			break;
-		case "down": gameObject.solidArea.y += gameObject.getSpeed(); break;
+		case "down": gameObject.solidArea.y += gameObject.speed; break;
 		case "downlt": 
-			gameObject.solidArea.x -= gameObject.getSpeeddiag(); 
-			gameObject.solidArea.y += gameObject.getSpeeddiag();
+			gameObject.solidArea.x -= gameObject.speeddiag; 
+			gameObject.solidArea.y += gameObject.speeddiag;
 			break;
 		case "downrt":
-			gameObject.solidArea.x += gameObject.getSpeeddiag();
-			gameObject.solidArea.y += gameObject.getSpeeddiag();
+			gameObject.solidArea.x += gameObject.speeddiag;
+			gameObject.solidArea.y += gameObject.speeddiag;
 			break;
-		case "left": gameObject.solidArea.x -= gameObject.getSpeed(); break;
-		case "right": gameObject.solidArea.x += gameObject.getSpeed();	break;
+		case "left": gameObject.solidArea.x -= gameObject.speed; break;
+		case "right": gameObject.solidArea.x += gameObject.speed;	break;
 		}
 		if(gameObject.solidArea.intersects(gp.player.solidArea)) {
-			gameObject.setCollisionOn(true);
+			gameObject.collisionOn = true;
 			contactPlayer = true;
 		}
 		

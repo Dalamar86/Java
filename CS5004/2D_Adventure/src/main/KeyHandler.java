@@ -11,10 +11,10 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
 
 	GamePanel gp;
-	public boolean upPressed, downPressed, ltPressed, rtPressed, enterPressed;
+	private boolean upPressed, downPressed, ltPressed, rtPressed, enterPressed;
 	
 	// Debug
-	boolean showDebugText = false;
+	private boolean showDebugText = false;
 	
 	public KeyHandler(GamePanel gp) {
 		this.gp = gp;
@@ -29,48 +29,49 @@ public class KeyHandler implements KeyListener {
 		
 		int code = e.getKeyCode();
 		
-		if(showDebugText) {
+		if(isShowDebugText()) {
 			if(code == KeyEvent.VK_R ) {
 				gp.tileM.loadMap("/maps/worldV2.txt");
 			}
 		}
 		
-		switch(gp.gameState) {
+		switch(gp.getGameState()) {
 		case TITLESTATE:
-			if(gp.ui.titleScreenState == 0) {
+			if(gp.ui.getTitleScreenState() == 0) {
 				if(code == KeyEvent.VK_W ||  code == KeyEvent.VK_KP_UP) {
-					gp.ui.commandNum--;
-					if(gp.ui.commandNum < 0) {
-						gp.ui.commandNum = 2;
+					gp.ui.setCommandNum(gp.ui.getCommandNum() - 1);
+					if(gp.ui.getCommandNum() < 0) {
+						gp.ui.setCommandNum(2);
 					}
 				} else if (code == KeyEvent.VK_S || code == KeyEvent.VK_KP_DOWN) {
-					gp.ui.commandNum++;
-					gp.ui.commandNum%=3;
+					gp.ui.setCommandNum(gp.ui.getCommandNum() + 1);
+					gp.ui.setCommandNum(gp.ui.getCommandNum() % 3);
 				} else if(code == KeyEvent.VK_ENTER) {
-					switch(gp.ui.commandNum) {
+					switch(gp.ui.getCommandNum()) {
 					case 0:
-						gp.ui.titleScreenState = 1;
+						gp.ui.setTitleScreenState(1);
 						break;
 					case 1:
 						// TODO add Load method
-						gp.gameState = GameState.PLAYSTATE;
+						gp.setGameState(GameState.PLAYSTATE);
 						break;
 					case 2:
+						gp.endGameThread();
 						System.exit(0);
 						break;
 					}
 				}
-			} else if(gp.ui.titleScreenState == 1) {
+			} else if(gp.ui.getTitleScreenState() == 1) {
 				if(code == KeyEvent.VK_W ||  code == KeyEvent.VK_KP_UP) {
-					gp.ui.commandNum--;
-					if(gp.ui.commandNum < 0) {
-						gp.ui.commandNum = 3;
+					gp.ui.setCommandNum(gp.ui.getCommandNum() - 1);
+					if(gp.ui.getCommandNum() < 0) {
+						gp.ui.setCommandNum(3);
 					}
 				} else if (code == KeyEvent.VK_S || code == KeyEvent.VK_KP_DOWN) {
-					gp.ui.commandNum++;
-					gp.ui.commandNum%=4;
+					gp.ui.setCommandNum(gp.ui.getCommandNum() + 1);
+					gp.ui.setCommandNum(gp.ui.getCommandNum() % 4);
 				} else if(code == KeyEvent.VK_ENTER) {
-					switch(gp.ui.commandNum) {
+					switch(gp.ui.getCommandNum()) {
 					case 0:
 						// TODO add fighter stats
 						
@@ -81,11 +82,11 @@ public class KeyHandler implements KeyListener {
 						//break;
 					case 2:
 						// TODO add rogue stats
-						gp.gameState = GameState.PLAYSTATE;
+						gp.setGameState(GameState.PLAYSTATE);
 						break;
 					case 3:
-						gp.ui.titleScreenState = 0;
-						gp.ui.commandNum = 0;
+						gp.ui.setTitleScreenState(0);
+						gp.ui.setCommandNum(0);
 						break;
 					}
 				}
@@ -94,84 +95,66 @@ public class KeyHandler implements KeyListener {
 		
 		case PLAYSTATE:
 			if(code == KeyEvent.VK_W) {
-				upPressed = true;
+				setUpPressed(true);
 			} else if(code == KeyEvent.VK_S) {
-				downPressed = true;
+				setDownPressed(true);
 			} else if(code == KeyEvent.VK_A) {
-				ltPressed = true;
+				setLtPressed(true);
 			} else if(code == KeyEvent.VK_D) {
-				rtPressed = true;
+				setRtPressed(true);
 			} else if (code == KeyEvent.VK_C) {
-				gp.gameState = GameState.CHARACTERSTATE;
+				gp.setGameState(GameState.CHARACTERSTATE);
 			} else if(code == KeyEvent.VK_T) {
-				if(showDebugText) {
-					showDebugText = false;
+				if(isShowDebugText()) {
+					setShowDebugText(false);
 				} else {
-					showDebugText = true;
+					setShowDebugText(true);
 				}
 			} else if(code == KeyEvent.VK_ESCAPE) {
-				System.out.println("Pressed Escape");
-				System.out.println("In Play Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-				gp.gameStatePrev = gp.gameState;
-				System.out.println("In Play After: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-				gp.gameState = GameState.PAUSESTATE;
-				System.out.println("In Play End: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+				gp.setPrevState();
+				gp.setGameState(GameState.PAUSESTATE);
 				
 			} else if(code == KeyEvent.VK_ENTER) {
-				enterPressed = true;
+				setEnterPressed(true);
 			}
 			break;
 			
 		case PAUSESTATE:
 			if(code == KeyEvent.VK_ESCAPE) {
-				System.out.println("Pressed Escape");
-				System.out.println("In Pause Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-				gp.gameState = gp.gameStatePrev;
-				System.out.println("In Pause After: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+				gp.setGameState(gp.getPrevSate());
 			}
 			break;
 			
 		case DIALOGUESTATE:
 			if(code == KeyEvent.VK_ENTER) {
-				System.out.println("Pressed Enter");
-				System.out.println("gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-				gp.gameState = GameState.PLAYSTATE;
-				System.out.println("gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+				gp.setGameState(GameState.PLAYSTATE);
 			} else if(code == KeyEvent.VK_ESCAPE) {
-				System.out.println("Pressed Escape");
-				System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-				gp.gameStatePrev = gp.gameState;
-				System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-				gp.gameState = GameState.PAUSESTATE;
-				System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+				gp.setPrevState();
+				gp.setGameState(GameState.PAUSESTATE);
 			}
 			break;
 		case CHARACTERSTATE:
 			if (code == KeyEvent.VK_C) {
-				gp.gameState = GameState.PLAYSTATE;
+				gp.setGameState(GameState.PLAYSTATE);
 			} else if(code == KeyEvent.VK_ESCAPE) {
-				System.out.println("Pressed Escape");
-				System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-				gp.gameStatePrev = gp.gameState;
-				System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
-				gp.gameState = GameState.PAUSESTATE;
-				System.out.println("In Dial Before: gameState: " + gp.gameState + "\tPrev: " + gp.gameStatePrev);
+				gp.setPrevState();
+				gp.setGameState(GameState.PAUSESTATE);
 			}
 			if(code == KeyEvent.VK_W) { 
-				if(gp.ui.slotRow != 0) {
-					gp.ui.slotRow--; gp.playSE(10);} 
+				if(gp.ui.getSlotRow() != 0) {
+					gp.ui.setSlotRow(gp.ui.getSlotRow() - 1); gp.playSE(10);} 
 				}
 			if(code == KeyEvent.VK_S) {	
-				if(gp.ui.slotRow != gp.ui.slotRowMax-1) {
-					gp.ui.slotRow++; gp.playSE(10);} 
+				if(gp.ui.getSlotRow() != gp.ui.getSlotRowMax()-1) {
+					gp.ui.setSlotRow(gp.ui.getSlotRow() + 1); gp.playSE(10);} 
 				}
 			if(code == KeyEvent.VK_A) {	
-				if(gp.ui.slotCol != 0) {
-					gp.ui.slotCol--; gp.playSE(10);} 
+				if(gp.ui.getSlotCol() != 0) {
+					gp.ui.setSlotCol(gp.ui.getSlotCol() - 1); gp.playSE(10);} 
 				}
 			if(code == KeyEvent.VK_D) {	
-				if(gp.ui.slotCol != gp.ui.slotColMax-1) {
-					gp.ui.slotCol++; gp.playSE(10);
+				if(gp.ui.getSlotCol() != gp.ui.getSlotColMax()-1) {
+					gp.ui.setSlotCol(gp.ui.getSlotCol() + 1); gp.playSE(10);
 				}
 			}
 			if(code == KeyEvent.VK_ENTER) {	
@@ -180,8 +163,7 @@ public class KeyHandler implements KeyListener {
 			break;
 		case DEADSTATE:
 			if(code == KeyEvent.VK_ENTER) {	
-				
-				gp.gameThread.stop();
+				gp.endGameThread();
 				System.exit(0);
 			}
 			break;
@@ -196,16 +178,64 @@ public class KeyHandler implements KeyListener {
 		int code = e.getKeyCode();
 		
 		if(code == KeyEvent.VK_W) {
-			upPressed = false;
+			setUpPressed(false);
 		}  if(code == KeyEvent.VK_S) {
-			downPressed = false;
+			setDownPressed(false);
 		}  if(code == KeyEvent.VK_A) {
-			ltPressed = false;
+			setLtPressed(false);
 		}  if(code == KeyEvent.VK_D) {
-			rtPressed = false;
+			setRtPressed(false);
 		}  if(code == KeyEvent.VK_ENTER) {
-			enterPressed = false;
+			setEnterPressed(false);
 		}
+	}
+
+	public boolean isEnterPressed() {
+		return enterPressed;
+	}
+
+	public void setEnterPressed(boolean enterPressed) {
+		this.enterPressed = enterPressed;
+	}
+
+	public boolean isUpPressed() {
+		return upPressed;
+	}
+
+	public void setUpPressed(boolean upPressed) {
+		this.upPressed = upPressed;
+	}
+
+	public boolean isDownPressed() {
+		return downPressed;
+	}
+
+	public void setDownPressed(boolean downPressed) {
+		this.downPressed = downPressed;
+	}
+
+	public boolean isLtPressed() {
+		return ltPressed;
+	}
+
+	public void setLtPressed(boolean ltPressed) {
+		this.ltPressed = ltPressed;
+	}
+
+	public boolean isRtPressed() {
+		return rtPressed;
+	}
+
+	public void setRtPressed(boolean rtPressed) {
+		this.rtPressed = rtPressed;
+	}
+
+	public boolean isShowDebugText() {
+		return showDebugText;
+	}
+
+	public void setShowDebugText(boolean showDebugText) {
+		this.showDebugText = showDebugText;
 	}
 
 }

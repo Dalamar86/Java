@@ -1,4 +1,4 @@
-package main;
+package components;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -10,9 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import object.*;
-import entity.*;
-import gameobject.GameObject;
+import main.*;
 
 public class UI {
 
@@ -37,17 +35,17 @@ public class UI {
 	private String text;
 	
 	// Title screen
-	private int commandNum = 0;
+	int commandNum = 0;
 	
 	// End game
 	public boolean levelFinished = false;
-	private int titleScreenState = 0;
+	int titleScreenState = 0;
 	
 	// Inventory
-	private int slotColMax = 5;
-	private int slotRowMax = 4;
-	private int slotCol = 0;
-	private int slotRow = 0;
+	public int slotColMax = 5;
+	public int slotRowMax = 4;
+	public int slotCol = 0;
+	public int slotRow = 0;
 	
 	
 	public UI(GamePanel gp) {
@@ -69,10 +67,10 @@ public class UI {
 		}
 		
 		// Create overlay objects
-		GameObject heart = new OBJ_Heart(gp);
-		heart_full = heart.getImage1();
-		heart_half = heart.getImage2();
-		heart_blank = heart.getImage3();
+		GameObjectModel heart = new OBJ_Heart(gp);
+		heart_full = heart.image1;
+		heart_half = heart.image2;
+		heart_blank = heart.image3;
 		
 		/*
 		// Create character screen items
@@ -94,7 +92,7 @@ public class UI {
 		g2.setFont(arial_40);
 		g2.setColor(Color.white);
 		
-		switch(gp.getGameState()) {
+		switch(gp.gameState) {
 		case PLAYSTATE:
 			drawHUD();
 			drawMessage();
@@ -158,7 +156,7 @@ public class UI {
 		y = gp.tileSize/2;
 		i = 0;
 		String text = " x " + gp.player.getHasKey();
-		g2.drawImage(new OBJ_Key(gp).getImage1(), x, y, null);
+		g2.drawImage(new OBJ_Key(gp).image1, x, y, null);
 		x += gp.tileSize;
 		y = (int) (gp.tileSize*1.5);
 		g2.setFont(arial_40);
@@ -192,7 +190,7 @@ public class UI {
 	}
 	
 	private void drawTitleScreen() {
-		if(getTitleScreenState() == 0) {
+		if(titleScreenState == 0) {
 			g2.setColor(new Color(25, 25, 185));
 			g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 			
@@ -218,24 +216,24 @@ public class UI {
 			text = "New Game";
 			x = getXforCenteredText(text); y += gp.tileSize*4;
 			g2.drawString(text, x, y);
-			if(getCommandNum() == 0) {
+			if(commandNum == 0) {
 				g2.drawString(">", x-gp.tileSize, y);
 			}
 			
 			text = "Load Game";
 			x = getXforCenteredText(text); y += gp.tileSize*1;
 			g2.drawString(text, x, y);
-			if(getCommandNum() == 1) {
+			if(commandNum == 1) {
 				g2.drawString(">", x-gp.tileSize, y);
 			}
 			
 			text = "Quit";
 			x = getXforCenteredText(text); y += gp.tileSize*1;
 			g2.drawString(text, x, y);
-			if(getCommandNum() == 2) {
+			if(commandNum == 2) {
 				g2.drawString(">", x-gp.tileSize, y);
 			}
-		} else if (getTitleScreenState() == 1) {
+		} else if (titleScreenState == 1) {
 			// Class selection screen
 			g2.setColor(Color.white);
 			g2.setFont(g2.getFont().deriveFont(42F));
@@ -249,7 +247,7 @@ public class UI {
 			x = getXforCenteredText(text);
 			y += gp.tileSize*3;
 			g2.drawString(text,  x,  y);
-			if(getCommandNum() == 0) {
+			if(commandNum == 0) {
 				g2.drawString(">", x-gp.tileSize, y);
 			}
 			
@@ -257,7 +255,7 @@ public class UI {
 			x = getXforCenteredText(text);
 			y += gp.tileSize;
 			g2.drawString(text,  x,  y);
-			if(getCommandNum() == 1) {
+			if(commandNum == 1) {
 				g2.drawString(">", x-gp.tileSize, y);
 			}
 			
@@ -265,7 +263,7 @@ public class UI {
 			x = getXforCenteredText(text);
 			y += gp.tileSize;
 			g2.drawString(text,  x,  y);
-			if(getCommandNum() == 2) {
+			if(commandNum == 2) {
 				g2.drawString(">", x-gp.tileSize, y);
 			}
 			
@@ -273,7 +271,7 @@ public class UI {
 			x = getXforCenteredText(text);
 			y += gp.tileSize*2;
 			g2.drawString(text,  x,  y);
-			if(getCommandNum() == 3) {
+			if(commandNum == 3) {
 				g2.drawString(">", x-gp.tileSize, y);
 			}
 		}
@@ -391,9 +389,9 @@ public class UI {
 		g2.drawString(value, textX, textY);
 		textY += lineHeight;
 		
-		g2.drawImage(gp.player.getCurrentWeapon().getImage1(), rightJust-gp.tileSize, textY-15, null);
+		g2.drawImage(gp.player.currentWeapon.image1, rightJust-gp.tileSize, textY-15, null);
 		textY += gp.tileSize;
-		g2.drawImage(gp.player.getCurrentShield().getImage1(), rightJust-gp.tileSize, textY-4, null);
+		g2.drawImage(gp.player.currentShield.image1, rightJust-gp.tileSize, textY-4, null);
 	}
 	
 	private void drawInventory() {
@@ -416,21 +414,21 @@ public class UI {
 		
 		// Draw player inventory
 		for(GameObject obj: gp.player.getInventory()) {
-			if(obj == gp.player.getCurrentWeapon() || obj == gp.player.getCurrentShield()) {
+			if(obj == gp.player.currentWeapon || obj == gp.player.currentShield) {
 				g2.setColor(new Color(240, 190, 90));
 				g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
 			}
-			g2.drawImage(obj.getImage1(), slotX, slotY, null);
+			g2.drawImage(obj.image1, slotX, slotY, null);
 			slotX += slotSize;
-			if(slotX >= slotXstart + (slotSize*getSlotColMax())) {
+			if(slotX >= slotXstart + (slotSize*slotColMax)) {
 				slotX = slotXstart;
 				slotY += slotSize;
 			}
 		}
 		
 		// cursor
-		int cursorX = slotXstart + (slotSize * getSlotCol());
-		int cursorY = slotYstart + (slotSize * getSlotRow());
+		int cursorX = slotXstart + (slotSize * slotCol);
+		int cursorY = slotYstart + (slotSize * slotRow);
 		int cursorWidth = gp.tileSize;
 		int cursorHeight = gp.tileSize;
 		
@@ -464,7 +462,7 @@ public class UI {
 	}
 	
 	public int getItemIndex() {
-		int itemIndex = getSlotCol() + (getSlotRow()*5);
+		int itemIndex = slotCol + (slotRow*5);
 		return itemIndex;
 	}
 	
@@ -505,53 +503,5 @@ public class UI {
 	
 	public void setCurrentDialogue(String dialogue) {
 		this.currentDialogue = dialogue;
-	}
-
-	public int getSlotRow() {
-		return slotRow;
-	}
-
-	public void setSlotRow(int slotRow) {
-		this.slotRow = slotRow;
-	}
-
-	public int getSlotRowMax() {
-		return slotRowMax;
-	}
-
-	public void setSlotRowMax(int slotRowMax) {
-		this.slotRowMax = slotRowMax;
-	}
-
-	public int getSlotCol() {
-		return slotCol;
-	}
-
-	public void setSlotCol(int slotCol) {
-		this.slotCol = slotCol;
-	}
-
-	public int getSlotColMax() {
-		return slotColMax;
-	}
-
-	public void setSlotColMax(int slotColMax) {
-		this.slotColMax = slotColMax;
-	}
-
-	public int getCommandNum() {
-		return commandNum;
-	}
-
-	public void setCommandNum(int commandNum) {
-		this.commandNum = commandNum;
-	}
-
-	public int getTitleScreenState() {
-		return titleScreenState;
-	}
-
-	public void setTitleScreenState(int titleScreenState) {
-		this.titleScreenState = titleScreenState;
 	}
 }
