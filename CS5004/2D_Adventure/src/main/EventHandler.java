@@ -106,7 +106,7 @@ public class EventHandler {
 			gp.ui.setCurrentDialogue("You drink the water.\nYour life has been recovered!");
 			gp.player.setLife(gp.player.getMaxLife());
 			//eventRect[col][row].eventFinished = true;
-			Area.resetMainMonster(gp);
+			Area.resetDebugMonster(gp);
 			gp.addAssetMonster();
 		}
 	}

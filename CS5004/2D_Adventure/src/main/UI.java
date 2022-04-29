@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import object.*;
-import entity.*;
 import gameobject.GameObject;
 
 public class UI {
@@ -25,7 +24,7 @@ public class UI {
 	Font baskerville;
 	
 	// Player overlay
-	BufferedImage heart_full, heart_half, heart_blank; //, sword, shield;
+	private BufferedImage heart_full, heart_half, heart_blank; //, sword, shield;
 	
 	// Pop ups
 	public boolean messageOn = false;
@@ -40,7 +39,6 @@ public class UI {
 	private int commandNum = 0;
 	
 	// End game
-	public boolean levelFinished = false;
 	private int titleScreenState = 0;
 	
 	// Inventory

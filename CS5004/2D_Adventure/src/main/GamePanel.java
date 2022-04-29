@@ -11,7 +11,6 @@ import java.util.Comparator;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import components.AssetSetter;
 import entity.*;
 import gameobject.GameObject;
 import tile.*;
@@ -82,9 +81,9 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	public void setupGame() {
-		area = Area.MAIN;
+		area = Area.DEBUG;
 		gameState = GameState.TITLESTATE;
-		Area.mainSetup(this);
+		Area.debugSetup(this);
 		addAssets();
 		playMusic(0);
 		
@@ -102,8 +101,11 @@ public class GamePanel extends JPanel implements Runnable {
 	public void loadArea() {
 		aSetter.reset();
 		switch(area) {
+		case DEBUG:
+			Area.debugSetup(this);
+			break;
 		case MAIN:
-			Area.mainSetup(this);
+			//Area.mainSetup(this);
 			break;
 		case BOTTOM:
 			break;

@@ -1,9 +1,12 @@
-package components;
+package main;
 
 import gameobject.GameObject;
-import main.GamePanel;
 
 import java.util.ArrayList;
+
+import components.MonsterTest;
+import components.NPCTest;
+import components.ObjectTest;
 
 public class AssetSetter {
 

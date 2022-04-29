@@ -545,7 +545,6 @@ public class Player extends GameObject{
 					text = "Speed boost";
 					break;
 				case "Chest":
-					gp.ui.levelFinished = true;
 					gp.stopMusic();
 					gp.playSE(4);
 					break;

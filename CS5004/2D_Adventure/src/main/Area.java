@@ -8,6 +8,7 @@ import monster.*;
 import npc.*;
 
 public enum Area {
+	DEBUG,
 	MAIN,
 	LEFT,
 	RIGHT,
@@ -15,7 +16,7 @@ public enum Area {
 	BOTTOM,
 	TEMPLE;
 	
-	public static void mainSetup(GamePanel gp) {
+	public static void debugSetup(GamePanel gp) {
 		
 		// Add Objects
 		gp.aSetter.addItem(new OBJ_Key(gp), 27, 16);
@@ -39,9 +40,10 @@ public enum Area {
 		gp.aSetter.addItem(new MON_GreenSlime(gp), 21, 40);
 		gp.aSetter.addItem(new MON_GreenSlime(gp), 23, 36);
 		gp.aSetter.addItem(new MON_GreenSlime(gp), 37, 10);
+		gp.aSetter.addItem(new MON_GreenSlime_Boss(gp), 11, 32);
 	}
 	
-	public static void resetMainMonster(GamePanel gp) {
+	public static void resetDebugMonster(GamePanel gp) {
 		
 		gp.aSetter.setMonster(new ArrayList<>());
 		// Add Monsters
@@ -49,4 +51,5 @@ public enum Area {
 		gp.aSetter.addItem(new MON_GreenSlime(gp), 23, 36);
 		gp.aSetter.addItem(new MON_GreenSlime(gp), 37, 10);
 	}
+	
 }

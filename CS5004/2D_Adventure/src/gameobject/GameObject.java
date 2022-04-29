@@ -29,7 +29,6 @@ public abstract class GameObject implements GameObjectInt {
 	private Rectangle attackArea = new Rectangle(0, 0, 0, 0);
 	private Rectangle solidArea = new Rectangle(0, 0, 48, 48);
 	private int solidAreaDefaultX;
-
 	private int solidAreaDefaultY;
 	
 	private String direction = "";
@@ -83,6 +82,7 @@ public abstract class GameObject implements GameObjectInt {
 	// Describes an image with an accessible buffer of image data.
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
 	public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
+	protected double scale = 1;
 	
 	
 	public GameObject(GamePanel gp) {
@@ -254,7 +254,7 @@ public abstract class GameObject implements GameObjectInt {
 				dyingAnimation(g2);
 			}
 				
-			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(image, screenX, screenY, (int) (gp.tileSize*scale), (int) (gp.tileSize*scale), null);
 			
 			// Reset alpha
 			changeAlpha(g2, 1f);
