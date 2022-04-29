@@ -4,7 +4,30 @@ import java.awt.Rectangle;
 
 public class EventRect extends Rectangle {
 	
-	int eventRectDefaultX, eventRectDefaultY;
-	boolean eventFinished = false;
+	private int eventRectDefaultX, eventRectDefaultY;
+	private boolean eventFinished = false;
+	
+	//#####################################################################
+	// 							Getters and Setters
+	//#####################################################################
+	
+	public int getEventRectDefaultX() {
+		return eventRectDefaultX;
+	}
+	public void setEventRectDefaultX(int eventRectDefaultX) {
+		this.eventRectDefaultX = eventRectDefaultX;
+	}
+	public int getEventRectDefaultY() {
+		return eventRectDefaultY;
+	}
+	public void setEventRectDefaultY(int eventRectDefaultY) {
+		this.eventRectDefaultY = eventRectDefaultY;
+	}
+	public boolean isEventFinished() {
+		return eventFinished;
+	}
+	public void setEventFinished(boolean eventFinished) {
+		this.eventFinished = eventFinished;
+	}
 
 }

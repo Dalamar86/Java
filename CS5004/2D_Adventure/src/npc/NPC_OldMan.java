@@ -2,22 +2,26 @@ package npc;
 
 import java.util.Random;
 
-import entity.*;
 import main.GamePanel;
+import main.ObjectType;
 
-public class NPC_OldMan extends Entity {
+public class NPC_OldMan extends SuperNPC {
 
 	public NPC_OldMan(GamePanel gp) {
 		super(gp);
 		
-		setType(EntityType.NPC);
-		direction = "down";
-		speed = 1;
+		setType(ObjectType.NPC);
+		setDirection("down");
+		setSpeed(1);
 		
 		getImage();
 		setDialogue();
 	}
 
+	//#####################################################################
+	// 								Setup
+	//#####################################################################
+	
 	public void getImage() {		
 		up1 = setup("/npc/oldman_up_1");
 		up2 = setup("/npc/oldman_up_2");
@@ -28,6 +32,10 @@ public class NPC_OldMan extends Entity {
 		right1 = setup("/npc/oldman_right_1");
 		right2 = setup("/npc/oldman_right_2");
 	}
+	
+	//#####################################################################
+	// 								Components
+	//#####################################################################
 	
 	public void setDialogue() {
 		dialogues[0] = "Hello, Link";
@@ -44,13 +52,13 @@ public class NPC_OldMan extends Entity {
 			int i = rand.nextInt(100) + 1;
 			
 			if(i <= 25) {
-				direction = "up";
+				setDirection("up");
 			} else if(i <= 50) {
-				direction = "down";
+				setDirection("down");
 			} else if(i <= 75) {
-				direction = "left";
+				setDirection("left");
 			} else if(i > 75) {
-				direction = "right";
+				setDirection("right");
 			}
 			actionTimeCounter = 0;
 		}	
@@ -59,5 +67,9 @@ public class NPC_OldMan extends Entity {
 	public void speak() {
 		super.speak();
 		// leaves room for customization
+	}
+	
+	public int takeDamage(int damage) {
+		return 0;
 	}
 }

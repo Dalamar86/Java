@@ -6,12 +6,13 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import entity.*;
+import gameobject.GameObject;
 import tile.*;
 import object.*;
 
@@ -44,23 +45,14 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int worldWidth = tileSize * maxWorldCol;
 	public final int worldHeight = tileSize * maxWorldRow;
 	
-	// FPS
+	private JFrame window;
 	int FPS = 60;
+	private GameState gameState = GameState.TITLESTATE;
+	private GameState gameStatePrev;
+	private Area area = Area.MAIN;
 	
-	// Game State
-	public enum GameState {
-		TITLESTATE,
-		PLAYSTATE, 
-		PAUSESTATE,
-		DIALOGUESTATE,
-		CHARACTERSTATE,
-		DEADSTATE;
-	}
-	public GameState gameState = GameState.TITLESTATE;
-	public GameState gameStatePrev;
 	
-	// System
-	TileManager tileM = new TileManager(this);
+	public TileManager tileM = new TileManager(this);
 	public KeyHandler keyH = new KeyHandler(this);
 	Sound music = new Sound();
 	Sound se = new Sound();
@@ -72,13 +64,15 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	// Entity and objects
 	public Player player = new Player(this, keyH);
-	public Entity obj[] = new SuperObject[20];
-	public Entity npc[] = new Entity[10];
-	public Entity monster[]= new Entity[20];
-	ArrayList<Entity> entityList = new ArrayList<>();
+	public GameObject obj[] = new SuperObject[20];
+	public GameObject npc[] = new GameObject[10];
+	public GameObject monster[]= new GameObject[20];
+	public ArrayList<GameObject> entityList = new ArrayList<>();
+	public Comparator<GameObject> ee;
 	
 			
-	public GamePanel () {
+	public GamePanel (JFrame window) {
+		this.setWindow(window);
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
 		this.setDoubleBuffered(true);
@@ -87,16 +81,54 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	public void setupGame() {
-		aSetter.setObject();
-		aSetter.setNPC();
-		aSetter.setMonster();
-		playMusic(0);
+		area = Area.DEBUG;
 		gameState = GameState.TITLESTATE;
+		Area.debugSetup(this);
+		addAssets();
+		playMusic(0);
+		
+		// Comparator for entities
+		ee = new Comparator<GameObject>() {
+			@Override
+			public int compare(GameObject o1, GameObject o2) {
+				
+				int result = Integer.compare(o1.getWorldY(), o2.getWorldY());
+				return result;
+			}
+		};
+	}
+
+	public void loadArea() {
+		aSetter.reset();
+		switch(area) {
+		case DEBUG:
+			Area.debugSetup(this);
+			break;
+		case MAIN:
+			//Area.mainSetup(this);
+			break;
+		case BOTTOM:
+			break;
+		case LEFT:
+			break;
+		case RIGHT:
+			break;
+		case TEMPLE:
+			break;
+		case TOP:
+			break;
+		default:
+			break;
+		}
 	}
 	
 	public void startGameThread() {
 		gameThread = new Thread(this);
 		gameThread.start();
+	}
+	
+	public void endGameThread() {
+		gameThread.stop();
 	}
 	
 	@Override
@@ -198,7 +230,7 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		// Debug
 		long drawStart = 0;
-		if(keyH.showDebugText) {
+		if(keyH.isShowDebugText()) {
 			drawStart = System.nanoTime();
 		}
 		
@@ -283,25 +315,19 @@ public class GamePanel extends JPanel implements Runnable {
 			}
 			
 			// Monsters
-			for(Entity m: monster) {
+			for(GameObject m: monster) {
 				if(m != null) {
 					entityList.add(m);
 				}
 			}
 			
+			entityList.sort(ee);
+			
 			// Sorting
-			Collections.sort(entityList, new Comparator<Entity>() {
-
-				@Override
-				public int compare(Entity o1, Entity o2) {
-					
-					int result = Integer.compare(o1.worldY, o2.worldY);
-					return result;
-				}
-			});
+			entityList.sort((GameObject o1, GameObject o2)-> o1.getWorldY() - o2.getWorldY());
 			
 			// Draw entities
-			for(Entity e: entityList) {
+			for(GameObject e: entityList) {
 				e.draw(g2);
 			}
 			
@@ -311,7 +337,7 @@ public class GamePanel extends JPanel implements Runnable {
 			ui.draw(g2);
 			
 			// Debug
-			if(keyH.showDebugText) {
+			if(keyH.isShowDebugText()) {
 				long drawEnd = System.nanoTime();
 				long passed = drawEnd - drawStart;
 				
@@ -322,13 +348,13 @@ public class GamePanel extends JPanel implements Runnable {
 				int y = 400;
 				int lineHeight = 20;
 				
-				g2.drawString("WorldX: " + player.worldX, x, y);
+				g2.drawString("WorldX: " + player.getWorldX(), x, y);
 				y += lineHeight;
-				g2.drawString("WorldY: " + player.worldY, x, y);
+				g2.drawString("WorldY: " + player.getWorldY(), x, y);
 				y += lineHeight;
-				g2.drawString("Col: " + (player.worldX + player.solidArea.x)/tileSize, x, y);
+				g2.drawString("Col: " + (player.getWorldX() + player.getSolidArea().x)/tileSize, x, y);
 				y += lineHeight;
-				g2.drawString("Row: " + (player.worldY + player.solidArea.y)/tileSize, x, y);
+				g2.drawString("Row: " + (player.getWorldY() + player.getSolidArea().y)/tileSize, x, y);
 				y += lineHeight;
 				g2.drawString("Draw Time: " + passed, x, y);
 				System.out.println("Draw Time: " + passed);
@@ -341,8 +367,31 @@ public class GamePanel extends JPanel implements Runnable {
 		g2.dispose();
 	}
 	
-	public void playMusic(int index) {
+	//#####################################################################
+	// 								Helper Methods
+	//#####################################################################
+	
+	private void addAssets() {
+		for(int index = 0; index < aSetter.getObj().size(); index++) {
+			obj[index] = aSetter.getObj().get(index);
+		}
 		
+		for(int index = 0; index < aSetter.getNpc().size(); index++) {
+			npc[index] = aSetter.getNpc().get(index);
+		}
+		
+		for(int index = 0; index < aSetter.getMonster().size(); index++) {
+			monster[index] = aSetter.getMonster().get(index);
+		}
+	}
+	
+	public void addAssetMonster() {		
+		for(int index = 0; index < aSetter.getMonster().size(); index++) {
+			monster[index] = aSetter.getMonster().get(index);
+		}
+	}
+	
+	public void playMusic(int index) {
 		music.setFile(index);
 		music.play();
 		music.loop();
@@ -355,5 +404,36 @@ public class GamePanel extends JPanel implements Runnable {
 	public void playSE(int index) {
 		se.setFile(index);
 		se.play();
+	}
+	
+	
+	//#####################################################################
+	// 							Getters and Setters
+	//#####################################################################
+	
+	
+	public void setGameState(GameState gameState) {
+		this.gameState = gameState;
+	}
+
+	public GameState getGameState() {
+		return gameState;
+	}
+
+	public void setPrevState() {
+		this.gameStatePrev = gameState;
+		
+	}
+
+	public GameState getPrevSate() {
+		return gameStatePrev;
+	}
+
+	public JFrame getWindow() {
+		return window;
+	}
+
+	public void setWindow(JFrame window) {
+		this.window = window;
 	}
 }

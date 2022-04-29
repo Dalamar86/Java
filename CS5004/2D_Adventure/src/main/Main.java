@@ -11,7 +11,7 @@ public class Main {
 		window.setResizable(false);
 		window.setTitle("2D RPG");
 		
-		GamePanel gamePanel = new GamePanel();
+		GamePanel gamePanel = new GamePanel(window);
 		window.add(gamePanel);
 		
 		window.pack(); // refresh with gamePanel added

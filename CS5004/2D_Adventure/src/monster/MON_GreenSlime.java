@@ -2,33 +2,37 @@ package monster;
 
 import java.util.Random;
 
-import entity.*;
 import main.GamePanel;
+import main.ObjectType;
 
-public class MON_GreenSlime extends Entity {
+public class MON_GreenSlime extends SuperMonster {
 
 	public MON_GreenSlime(GamePanel gp) {
 		super(gp);
 		
-		setType(EntityType.MONSTER);
-		name = "Green Slime";
-		speed = 1;
+		setType(ObjectType.MONSTER);
+		setName("Green Slime");
+		setSpeed(1);
 		maxLife = 4;
 		life = maxLife;
 		attack = 3;
 		defense = 0;
 		exp = 2;
 		
-		solidArea.x = 3;
-		solidArea.y = 18;
-		solidArea.width = 42;
-		solidArea.height = 30;
-		solidAreaDefaultX = solidArea.x;
-		solidAreaDefaultY = solidArea.y;
+		getSolidArea().x = 3;
+		getSolidArea().y = 18;
+		getSolidArea().width = 42;
+		getSolidArea().height = 30;
+		setSolidAreaDefaultX(getSolidArea().x);
+		setSolidAreaDefaultY(getSolidArea().y);
 		
 		getImage();
 	}
 
+	//#####################################################################
+	// 								Setup
+	//#####################################################################
+	
 	public void getImage() {
 		
 		up1 = setup("/monster/greenslime_down_1");
@@ -41,21 +45,25 @@ public class MON_GreenSlime extends Entity {
 		right2 = setup("/monster/greenslime_down_2");
 	}
 	
+	//#####################################################################
+	// 								Components
+	//#####################################################################
+	
 	public void setAction() {
-actionTimeCounter ++;
+		actionTimeCounter ++;
 		
 		if(actionTimeCounter == 120) {
 			Random rand = new Random();
 			int i = rand.nextInt(100) + 1;
 			
 			if(i <= 25) {
-				direction = "up";
+				setDirection("up");
 			} else if(i <= 50) {
-				direction = "down";
+				setDirection("down");
 			} else if(i <= 75) {
-				direction = "left";
+				setDirection("left");
 			} else if(i > 75) {
-				direction = "right";
+				setDirection("right");
 			}
 			actionTimeCounter = 0;
 		}	
@@ -65,6 +73,6 @@ actionTimeCounter ++;
 	public void damageReaction() {
 		
 		actionTimeCounter = 0;
-		direction = gp.player.direction;
+		setDirection(gp.player.getDirection());
 	}
 }

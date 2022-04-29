@@ -1,77 +1,75 @@
 package main;
 
-import object.*;
-//import entity.*;
-import monster.*;
-import npc.NPC_OldMan;
+import gameobject.GameObject;
+
+import java.util.ArrayList;
+
+import components.MonsterTest;
+import components.NPCTest;
+import components.ObjectTest;
 
 public class AssetSetter {
 
-	GamePanel gp;
+	private GamePanel gp;
+	private ArrayList<GameObject> obj;
+	private ArrayList<GameObject> npc;
+	private ArrayList<GameObject> monster;
 	
 	public AssetSetter (GamePanel gp) {
 		this.gp = gp;
+		this.setObj(new ArrayList<>());
+		this.setNpc(new ArrayList<>());
+		this.setMonster(new ArrayList<>());
 	}
 	
-	public void setObject() {
-		
-		gp.obj[0] = new OBJ_Key(gp);
-		gp.obj[0].worldX = 27 * gp.tileSize;
-		gp.obj[0].worldY = 16 * gp.tileSize;
-		
-		gp.obj[1] = new OBJ_Key(gp);
-		gp.obj[1].worldX = 23 * gp.tileSize;
-		gp.obj[1].worldY = 40 * gp.tileSize;
-		
-		gp.obj[2] = new OBJ_Shield_Blue(gp);
-		gp.obj[2].worldX = 38 * gp.tileSize;
-		gp.obj[2].worldY = 8 * gp.tileSize;
-		
-		gp.obj[3] = new OBJ_Door(gp);
-		gp.obj[3].worldX = 10 * gp.tileSize;
-		gp.obj[3].worldY = 12 * gp.tileSize;
-		
-		gp.obj[4] = new OBJ_Door(gp);
-		gp.obj[4].worldX = 12 * gp.tileSize;
-		gp.obj[4].worldY = 23 * gp.tileSize;
-		
-		gp.obj[5] = new OBJ_Door(gp);
-		gp.obj[5].worldX = 8 * gp.tileSize;
-		gp.obj[5].worldY = 28 * gp.tileSize;
-		
-		gp.obj[6] = new OBJ_Chest(gp);
-		gp.obj[6].worldX = 10 * gp.tileSize;
-		gp.obj[6].worldY = 9 * gp.tileSize;
-		
-		gp.obj[7] = new OBJ_Boots(gp);
-		gp.obj[7].worldX = 37 * gp.tileSize;
-		gp.obj[7].worldY = 42 * gp.tileSize;
-		
+	public void addItem(GameObject gameObject, int x, int y) {
+		int scale = gp.tileSize;
+		gameObject.setWorldX(x*scale);
+		gameObject.setWorldY(y*scale);
+		if(new ObjectTest<GameObject>().test(gameObject)) {
+			getObj().add(gameObject);
+		} else if(new NPCTest<GameObject>().test(gameObject)) {
+			getNpc().add(gameObject);
+		} else if(new MonsterTest<GameObject>().test(gameObject)) {
+			getMonster().add(gameObject);
+		}
 	}
 	
-	public void setNPC() {
-		
-		gp.npc[0] = new NPC_OldMan(gp);
-		gp.npc[0].worldX = gp.tileSize * 21;
-		gp.npc[0].worldY = gp.tileSize * 21;
-		
-		gp.npc[1] = new NPC_OldMan(gp);
-		gp.npc[1].worldX = gp.tileSize * 37;
-		gp.npc[1].worldY = gp.tileSize * 21;
+	//#####################################################################
+	// 								Helpers
+	//#####################################################################
+	
+	public void reset() {
+		setObj(new ArrayList<>());
+		setNpc(new ArrayList<>());
+		setMonster(new ArrayList<>());
 	}
 	
-	public void setMonster() {
-		
-		gp.monster[0] = new MON_GreenSlime(gp);
-		gp.monster[0].worldX = gp.tileSize * 21;
-		gp.monster[0].worldY = gp.tileSize * 40;
-		
-		gp.monster[1] = new MON_GreenSlime(gp);
-		gp.monster[1].worldX = gp.tileSize * 23;
-		gp.monster[1].worldY = gp.tileSize * 36;
-		
-		gp.monster[2] = new MON_GreenSlime(gp);
-		gp.monster[2].worldX = gp.tileSize * 37;
-		gp.monster[2].worldY = gp.tileSize * 10;
+	//#####################################################################
+	// 							Getters and Setters
+	//#####################################################################
+	
+	public ArrayList<GameObject> getObj() {
+		return obj;
+	}
+
+	private void setObj(ArrayList<GameObject> obj) {
+		this.obj = obj;
+	}
+
+	public ArrayList<GameObject> getNpc() {
+		return npc;
+	}
+
+	private void setNpc(ArrayList<GameObject> npc) {
+		this.npc = npc;
+	}
+
+	public ArrayList<GameObject> getMonster() {
+		return monster;
+	}
+
+	public void setMonster(ArrayList<GameObject> monster) {
+		this.monster = monster;
 	}
 }

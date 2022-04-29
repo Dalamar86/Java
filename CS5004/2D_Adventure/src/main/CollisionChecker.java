@@ -1,6 +1,6 @@
 package main;
 
-import entity.Entity;
+import gameobject.GameObject;
 
 public class CollisionChecker {
 
@@ -10,12 +10,12 @@ public class CollisionChecker {
 		this.gp = gp;
 	}
 	
-	public void checkTile(Entity entity) {
+	public void checkTile(GameObject gameObject) {
 		
-		int entityLeftWorldX = entity.worldX + entity.solidArea.x;
-		int entityRightWorldX = entity.worldX + entity.solidArea.x + entity.solidArea.width;
-		int entityTopWorldY = entity.worldY + entity.solidArea.y;
-		int entityBottomWorldY = entity.worldY + entity.solidArea.y + entity.solidArea.height;
+		int entityLeftWorldX = gameObject.getWorldX() + gameObject.getSolidArea().x;
+		int entityRightWorldX = gameObject.getWorldX() + gameObject.getSolidArea().x + gameObject.getSolidArea().width;
+		int entityTopWorldY = gameObject.getWorldY() + gameObject.getSolidArea().y;
+		int entityBottomWorldY = gameObject.getWorldY() + gameObject.getSolidArea().y + gameObject.getSolidArea().height;
 		
 		int entityLeftCol = entityLeftWorldX/gp.tileSize;
 		int entityRightCol = entityRightWorldX/gp.tileSize;
@@ -25,134 +25,134 @@ public class CollisionChecker {
 		int tileNum1, tileNum2, tileNum3, tileNum4;
 		
 		
-		switch(entity.direction) {
+		switch(gameObject.getDirection()) {
 		case "up":
-			entityTopRow = (entityTopWorldY - entity.speed)/gp.tileSize;
+			entityTopRow = (entityTopWorldY - gameObject.getSpeed())/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true) {
-				entity.collisionOn = true;
+				gameObject.setCollisionOn(true);
 			}
 			break;
 		case "uplt":
-			entityTopRow = (entityTopWorldY - entity.speed)/gp.tileSize;
+			entityTopRow = (entityTopWorldY - gameObject.getSpeed())/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
-			entityLeftCol = (entityLeftWorldX - entity.speed)/gp.tileSize;
+			entityLeftCol = (entityLeftWorldX - gameObject.getSpeed())/gp.tileSize;
 			tileNum3 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
 			tileNum4 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true || gp.tileM.tile[tileNum3].collision == true || gp.tileM.tile[tileNum4].collision == true) {
-				entity.collisionOn = true;
+				gameObject.setCollisionOn(true);
 			}
 			break;
 		case "uprt":
-			entityTopRow = (entityTopWorldY - entity.speed)/gp.tileSize;
+			entityTopRow = (entityTopWorldY - gameObject.getSpeed())/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
-			entityRightCol = (entityRightWorldX + entity.speed)/gp.tileSize;
+			entityRightCol = (entityRightWorldX + gameObject.getSpeed())/gp.tileSize;
 			tileNum3 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
 			tileNum4 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true || gp.tileM.tile[tileNum3].collision == true || gp.tileM.tile[tileNum4].collision == true) {
-				entity.collisionOn = true;
+				gameObject.setCollisionOn(true);
 			}
 			break;
 		case "down":
-			entityBottomRow = (entityBottomWorldY + entity.speed)/gp.tileSize;
+			entityBottomRow = (entityBottomWorldY + gameObject.getSpeed())/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true) {
-				entity.collisionOn = true;
+				gameObject.setCollisionOn(true);
 			}
 			break;
 		case "downlt":
-			entityBottomRow = (entityBottomWorldY + entity.speed)/gp.tileSize;
+			entityBottomRow = (entityBottomWorldY + gameObject.getSpeed())/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
-			entityLeftCol = (entityLeftWorldX - entity.speed)/gp.tileSize;
+			entityLeftCol = (entityLeftWorldX - gameObject.getSpeed())/gp.tileSize;
 			tileNum3 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
 			tileNum4 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true || gp.tileM.tile[tileNum3].collision == true || gp.tileM.tile[tileNum4].collision == true) {
-				entity.collisionOn = true;
+				gameObject.setCollisionOn(true);
 			}
 			break;
 		case "downrt":
-			entityBottomRow = (entityBottomWorldY + entity.speed)/gp.tileSize;
+			entityBottomRow = (entityBottomWorldY + gameObject.getSpeed())/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
-			entityRightCol = (entityRightWorldX + entity.speed)/gp.tileSize;
+			entityRightCol = (entityRightWorldX + gameObject.getSpeed())/gp.tileSize;
 			tileNum3 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
 			tileNum4 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true || gp.tileM.tile[tileNum3].collision == true || gp.tileM.tile[tileNum4].collision == true) {
-				entity.collisionOn = true;
+				gameObject.setCollisionOn(true);
 			}
 			break;
 		case "left":
-			entityLeftCol = (entityLeftWorldX - entity.speed)/gp.tileSize;
+			entityLeftCol = (entityLeftWorldX - gameObject.getSpeed())/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
 			tileNum2 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true) {
-				entity.collisionOn = true;
+				gameObject.setCollisionOn(true);
 			}
 			break;
 		case "right":
-			entityRightCol = (entityRightWorldX + entity.speed)/gp.tileSize;
+			entityRightCol = (entityRightWorldX + gameObject.getSpeed())/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
 			if(gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true) {
-				entity.collisionOn = true;
+				gameObject.setCollisionOn(true);
 			}
 			break;
 		}
 	}
 	
-	public int checkObject(Entity entity, boolean player) {
+	public int checkObject(GameObject gameObject, boolean player) {
 		int index = 999;
 		
 		for(int i = 0; i < gp.obj.length; i++) {
 			if(gp.obj[i] != null) {
 				// get entity's solid area position
-				entity.solidArea.x = entity.worldX + entity.solidArea.x;
-				entity.solidArea.y = entity.worldY + entity.solidArea.y;
+				gameObject.getSolidArea().x = gameObject.getWorldX() + gameObject.getSolidArea().x;
+				gameObject.getSolidArea().y = gameObject.getWorldY() + gameObject.getSolidArea().y;
 				
 				// get the object's solid area position
-				gp.obj[i].solidArea.x = gp.obj[i].worldX + gp.obj[i].solidArea.x;
-				gp.obj[i].solidArea.y = gp.obj[i].worldY + gp.obj[i].solidArea.y;
+				gp.obj[i].getSolidArea().x = gp.obj[i].getWorldX() + gp.obj[i].getSolidArea().x;
+				gp.obj[i].getSolidArea().y = gp.obj[i].getWorldY() + gp.obj[i].getSolidArea().y;
 				
-				switch(entity.direction) {
-				case "up": entity.solidArea.y -= entity.speed; break;
+				switch(gameObject.getDirection()) {
+				case "up": gameObject.getSolidArea().y -= gameObject.getSpeed(); break;
 				case "uplt":
-					entity.solidArea.x -= entity.speeddiag;
-					entity.solidArea.y -= entity.speeddiag;
+					gameObject.getSolidArea().x -= gameObject.getSpeeddiag();
+					gameObject.getSolidArea().y -= gameObject.getSpeeddiag();
 					break;
 				case "uprt":
-					entity.solidArea.x += entity.speeddiag;
-					entity.solidArea.y -= entity.speeddiag;
+					gameObject.getSolidArea().x += gameObject.getSpeeddiag();
+					gameObject.getSolidArea().y -= gameObject.getSpeeddiag();
 					break;
-				case "down": entity.solidArea.y += entity.speed; break;
+				case "down": gameObject.getSolidArea().y += gameObject.getSpeed(); break;
 				case "downlt":
-					entity.solidArea.x -= entity.speeddiag;
-					entity.solidArea.y += entity.speeddiag;
+					gameObject.getSolidArea().x -= gameObject.getSpeeddiag();
+					gameObject.getSolidArea().y += gameObject.getSpeeddiag();
 					break;
 				case "downrt":
-					entity.solidArea.x += entity.speeddiag;
-					entity.solidArea.y += entity.speeddiag;
+					gameObject.getSolidArea().x += gameObject.getSpeeddiag();
+					gameObject.getSolidArea().y += gameObject.getSpeeddiag();
 					break;
-				case "left": entity.solidArea.x -= entity.speed; break;
-				case "right": entity.solidArea.x += entity.speed; break;
+				case "left": gameObject.getSolidArea().x -= gameObject.getSpeed(); break;
+				case "right": gameObject.getSolidArea().x += gameObject.getSpeed(); break;
 				}
-				if(entity.solidArea.intersects(gp.obj[i].solidArea)) {
-					if(gp.obj[i].collision = true) {
-						entity.collisionOn = true;
+				if(gameObject.getSolidArea().intersects(gp.obj[i].getSolidArea())) {
+					if(gp.obj[i].setCollision(true)) {
+						gameObject.setCollisionOn(true);
 					}
 					if(player) {
 						index = i;
 					}
 				}
 				
-				entity.solidArea.x = entity.solidAreaDefaultX;
-				entity.solidArea.y = entity.solidAreaDefaultY;
-				gp.obj[i].solidArea.x = gp.obj[i].solidAreaDefaultX;
-				gp.obj[i].solidArea.y = gp.obj[i].solidAreaDefaultY;
+				gameObject.getSolidArea().x = gameObject.getSolidAreaDefaultX();
+				gameObject.getSolidArea().y = gameObject.getSolidAreaDefaultY();
+				gp.obj[i].getSolidArea().x = gp.obj[i].getSolidAreaDefaultX();
+				gp.obj[i].getSolidArea().y = gp.obj[i].getSolidAreaDefaultY();
 			}
 		}
 		
@@ -160,102 +160,102 @@ public class CollisionChecker {
 	}
 	
 	// NPC or Monster collision
-	public int checkEntity(Entity entity, Entity[] target) {
+	public int checkEntity(GameObject gameObject, GameObject[] target) {
 		int index = 999;
 		
 		for(int i = 0; i < target.length; i++) {
 			if(target[i] != null) {
 				// get entity's solid area position
-				entity.solidArea.x = entity.worldX + entity.solidArea.x;
-				entity.solidArea.y = entity.worldY + entity.solidArea.y;
+				gameObject.getSolidArea().x = gameObject.getWorldX() + gameObject.getSolidArea().x;
+				gameObject.getSolidArea().y = gameObject.getWorldY() + gameObject.getSolidArea().y;
 				
 				// get the targets's solid area position
-				target[i].solidArea.x = target[i].worldX + target[i].solidArea.x;
-				target[i].solidArea.y = target[i].worldY + target[i].solidArea.y;
+				target[i].getSolidArea().x = target[i].getWorldX() + target[i].getSolidArea().x;
+				target[i].getSolidArea().y = target[i].getWorldY() + target[i].getSolidArea().y;
 				
-				switch(entity.direction) {
-				case "up": entity.solidArea.y -= entity.speed; break;
+				switch(gameObject.getDirection()) {
+				case "up": gameObject.getSolidArea().y -= gameObject.getSpeed(); break;
 				case "uplt":
-					entity.solidArea.x -= entity.speeddiag;
-					entity.solidArea.y -= entity.speeddiag;
+					gameObject.getSolidArea().x -= gameObject.getSpeeddiag();
+					gameObject.getSolidArea().y -= gameObject.getSpeeddiag();
 					break;
 				case "uprt":
-					entity.solidArea.x += entity.speeddiag;
-					entity.solidArea.y -= entity.speeddiag;
+					gameObject.getSolidArea().x += gameObject.getSpeeddiag();
+					gameObject.getSolidArea().y -= gameObject.getSpeeddiag();
 					break;
-				case "down": entity.solidArea.y += entity.speed;	break;
+				case "down": gameObject.getSolidArea().y += gameObject.getSpeed();	break;
 				case "downlt":
-					entity.solidArea.x -= entity.speeddiag;
-					entity.solidArea.y += entity.speeddiag;
+					gameObject.getSolidArea().x -= gameObject.getSpeeddiag();
+					gameObject.getSolidArea().y += gameObject.getSpeeddiag();
 					break;
 				case "downrt":
-					entity.solidArea.x += entity.speeddiag;
-					entity.solidArea.y += entity.speeddiag;
+					gameObject.getSolidArea().x += gameObject.getSpeeddiag();
+					gameObject.getSolidArea().y += gameObject.getSpeeddiag();
 					break;
-				case "left": entity.solidArea.x -= entity.speed; break;
-				case "right": entity.solidArea.x += entity.speed; break;
+				case "left": gameObject.getSolidArea().x -= gameObject.getSpeed(); break;
+				case "right": gameObject.getSolidArea().x += gameObject.getSpeed(); break;
 				}
-				if(entity.solidArea.intersects(target[i].solidArea)) {
-					if(target[i] != entity) {
-						entity.collisionOn = true;
+				if(gameObject.getSolidArea().intersects(target[i].getSolidArea())) {
+					if(target[i] != gameObject) {
+						gameObject.setCollisionOn(true);
 						index = i;
 					}
 					
 				}
 				
-				entity.solidArea.x = entity.solidAreaDefaultX;
-				entity.solidArea.y = entity.solidAreaDefaultY;
-				target[i].solidArea.x = target[i].solidAreaDefaultX;
-				target[i].solidArea.y = target[i].solidAreaDefaultY;
+				gameObject.getSolidArea().x = gameObject.getSolidAreaDefaultX();
+				gameObject.getSolidArea().y = gameObject.getSolidAreaDefaultY();
+				target[i].getSolidArea().x = target[i].getSolidAreaDefaultX();
+				target[i].getSolidArea().y = target[i].getSolidAreaDefaultY();
 			}
 		}
 		
 		return index;
 	}
 	
-	public boolean checkPlayer(Entity entity) {
+	public boolean checkPlayer(GameObject gameObject) {
 		
 		boolean contactPlayer = false;
 		
 		// get entity's solid area position
-		entity.solidArea.x = entity.worldX + entity.solidArea.x;
-		entity.solidArea.y = entity.worldY + entity.solidArea.y;
+		gameObject.getSolidArea().x = gameObject.getWorldX() + gameObject.getSolidArea().x;
+		gameObject.getSolidArea().y = gameObject.getWorldY() + gameObject.getSolidArea().y;
 		
 		// get the player's solid area position
-		gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
-		gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
+		gp.player.getSolidArea().x = gp.player.getWorldX() + gp.player.getSolidArea().x;
+		gp.player.getSolidArea().y = gp.player.getWorldY() + gp.player.getSolidArea().y;
 		
-		switch(entity.direction) {
-		case "up": entity.solidArea.y -= entity.speed; break;
+		switch(gameObject.getDirection()) {
+		case "up": gameObject.getSolidArea().y -= gameObject.getSpeed(); break;
 		case "uplt":
-			entity.solidArea.x -= entity.speeddiag;
-			entity.solidArea.y -= entity.speeddiag;
+			gameObject.getSolidArea().x -= gameObject.getSpeeddiag();
+			gameObject.getSolidArea().y -= gameObject.getSpeeddiag();
 			break;
 		case "uprt":
-			entity.solidArea.x += entity.speeddiag;
-			entity.solidArea.y -= entity.speeddiag;
+			gameObject.getSolidArea().x += gameObject.getSpeeddiag();
+			gameObject.getSolidArea().y -= gameObject.getSpeeddiag();
 			break;
-		case "down": entity.solidArea.y += entity.speed; break;
+		case "down": gameObject.getSolidArea().y += gameObject.getSpeed(); break;
 		case "downlt": 
-			entity.solidArea.x -= entity.speeddiag; 
-			entity.solidArea.y += entity.speeddiag;
+			gameObject.getSolidArea().x -= gameObject.getSpeeddiag(); 
+			gameObject.getSolidArea().y += gameObject.getSpeeddiag();
 			break;
 		case "downrt":
-			entity.solidArea.x += entity.speeddiag;
-			entity.solidArea.y += entity.speeddiag;
+			gameObject.getSolidArea().x += gameObject.getSpeeddiag();
+			gameObject.getSolidArea().y += gameObject.getSpeeddiag();
 			break;
-		case "left": entity.solidArea.x -= entity.speed; break;
-		case "right": entity.solidArea.x += entity.speed;	break;
+		case "left": gameObject.getSolidArea().x -= gameObject.getSpeed(); break;
+		case "right": gameObject.getSolidArea().x += gameObject.getSpeed();	break;
 		}
-		if(entity.solidArea.intersects(gp.player.solidArea)) {
-			entity.collisionOn = true;
+		if(gameObject.getSolidArea().intersects(gp.player.getSolidArea())) {
+			gameObject.setCollisionOn(true);
 			contactPlayer = true;
 		}
 		
-		entity.solidArea.x = entity.solidAreaDefaultX;
-		entity.solidArea.y = entity.solidAreaDefaultY;
-		gp.player.solidArea.x = gp.player.solidAreaDefaultX;
-		gp.player.solidArea.y = gp.player.solidAreaDefaultY;
+		gameObject.getSolidArea().x = gameObject.getSolidAreaDefaultX();
+		gameObject.getSolidArea().y = gameObject.getSolidAreaDefaultY();
+		gp.player.getSolidArea().x = gp.player.getSolidAreaDefaultX();
+		gp.player.getSolidArea().y = gp.player.getSolidAreaDefaultY();
 		
 		return contactPlayer;
 	}
