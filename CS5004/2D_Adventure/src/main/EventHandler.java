@@ -1,5 +1,9 @@
 package main;
 
+import enums.Area;
+import enums.GameState;
+import gameobject.GameObject;
+
 public class EventHandler {
 
 	GamePanel gp;
@@ -50,7 +54,8 @@ public class EventHandler {
 			if(hit(23, 12, "up") == true) {healingPool(23, 12, GameState.DIALOGUESTATE);}
 			if(hit(25, 16, "left")) {teleport(GameState.DIALOGUESTATE);}
 		}
-		
+		if(hit(12, 24, "down") || hit(8, 28, "down")) {enterBossArea();}
+		if(hit(12, 24, "up") || hit(8, 28, "up")) {leaveBossArea();}
 	}
 	
 	public boolean hit(int col, int row, String reqDirection) {
@@ -64,7 +69,7 @@ public class EventHandler {
 		eventRect[col][row].y += row*gp.tileSize;
 		
 		if(gp.player.getSolidArea().intersects(eventRect[col][row]) && eventRect[col][row].isEventFinished() == false) {
-			if(gp.player.getDirection().contentEquals(reqDirection) || reqDirection.contentEquals("any")) {
+			if(gp.player.getDirection().contains(reqDirection) || reqDirection.contentEquals("any")) {
 				hit = true;System.out.println("You made it here");
 				
 				previousEventX = gp.player.getWorldX();
@@ -98,7 +103,6 @@ public class EventHandler {
 	}
 	
 	public void healingPool(int col, int row, GameState gameState) {
-		
 		if(gp.keyH.isEnterPressed() == true) {
 			gp.setGameState(gameState);
 			gp.player.setAttackCanceled(true);
@@ -106,8 +110,28 @@ public class EventHandler {
 			gp.ui.setCurrentDialogue("You drink the water.\nYour life has been recovered!");
 			gp.player.setLife(gp.player.getMaxLife());
 			//eventRect[col][row].eventFinished = true;
-			Area.resetDebugMonster(gp);
-			gp.addAssetMonster();
+			gp.getArea().resetMonster(gp);
+			gp.resetAssetMonster();
+		}
+	}
+	
+	public void enterBossArea() {
+		for(GameObject m: gp.monster) {
+			if(m != null) {
+				if(m.getName().contains("Boss")) {
+					m.setAttacking(true);
+				}
+			}
+		}
+	}
+	
+	public void leaveBossArea() {
+		for(GameObject m: gp.monster) {
+			if(m != null) {
+				if(m.getName().contains("Boss")) {
+					m.setAttacking(false);
+				}
+			}
 		}
 	}
 }

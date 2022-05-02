@@ -1,11 +1,11 @@
 package object;
 
 import main.GamePanel;
-import main.GameState;
-import main.ObjectType;
+import enums.GameState;
+import enums.ObjectType;
 import gameobject.GameObject;
 
-public class OBJ_PotionRed extends SuperObject {
+public final class OBJ_PotionRed extends SuperObject {
 
 	public OBJ_PotionRed(GamePanel gp) {
 		super(gp, "Potion_red");

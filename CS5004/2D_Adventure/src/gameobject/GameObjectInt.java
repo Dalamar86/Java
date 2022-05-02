@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import main.ObjectType;
+import enums.ObjectType;
 
 public interface GameObjectInt {
 
@@ -29,6 +29,12 @@ public interface GameObjectInt {
 	public int attack();
 	
 	public void use(GameObject gameObject);
+	
+	public void findAide();
+
+	int getDistance(GameObject gameObject);
+
+	String getDirectionTo(GameObject gameObject);
 	
 	//#####################################################################
 	// 							Getters and Setters
@@ -161,4 +167,8 @@ public interface GameObjectInt {
 	Rectangle getAttackArea();
 
 	void setAttackArea(Rectangle attackArea);
+
+	boolean isAttacking();
+
+	void setAttacking(boolean attacking);
 }

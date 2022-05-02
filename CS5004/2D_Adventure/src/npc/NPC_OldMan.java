@@ -2,10 +2,10 @@ package npc;
 
 import java.util.Random;
 
+import enums.ObjectType;
 import main.GamePanel;
-import main.ObjectType;
 
-public class NPC_OldMan extends SuperNPC {
+public final class NPC_OldMan extends SuperNPC {
 
 	public NPC_OldMan(GamePanel gp) {
 		super(gp);

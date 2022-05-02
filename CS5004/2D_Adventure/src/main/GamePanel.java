@@ -12,6 +12,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import entity.*;
+import enums.Area;
+import enums.GameState;
 import gameobject.GameObject;
 import tile.*;
 import object.*;
@@ -81,9 +83,9 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	public void setupGame() {
-		area = Area.DEBUG;
+		setArea(Area.DEBUG);
 		gameState = GameState.TITLESTATE;
-		Area.debugSetup(this);
+		area.setup(this);
 		addAssets();
 		playMusic(0);
 		
@@ -100,9 +102,9 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public void loadArea() {
 		aSetter.reset();
-		switch(area) {
+		switch(getArea()) {
 		case DEBUG:
-			Area.debugSetup(this);
+			area.setup(this);
 			break;
 		case MAIN:
 			//Area.mainSetup(this);
@@ -385,9 +387,20 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 	}
 	
-	public void addAssetMonster() {		
+	public void resetAssetMonster() {
 		for(int index = 0; index < aSetter.getMonster().size(); index++) {
 			monster[index] = aSetter.getMonster().get(index);
+		}
+	}
+	
+	public void addAssetMonster() {
+		int index2 = 0;
+		for(int index = 0; index2 < aSetter.getMonster().size(); index++) {
+			if(monster[index] == null) {
+				monster[index] = aSetter.getMonster().get(index2);
+				index2++;
+				System.out.println("monster added to  gp at index: " + index);
+			}
 		}
 	}
 	
@@ -435,5 +448,13 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public void setWindow(JFrame window) {
 		this.window = window;
+	}
+
+	public Area getArea() {
+		return area;
+	}
+
+	public void setArea(Area area) {
+		this.area = area;
 	}
 }

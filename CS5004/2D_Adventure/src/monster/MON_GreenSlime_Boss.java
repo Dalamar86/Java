@@ -2,16 +2,18 @@ package monster;
 
 import java.util.Random;
 
+import enums.FSM;
+import enums.ObjectType;
+import gameobject.GameObject;
 import main.GamePanel;
-import main.ObjectType;
 
-public class MON_GreenSlime_Boss extends SuperMonster {
-
+public final class MON_GreenSlime_Boss extends SuperMonster {
+	
 	public MON_GreenSlime_Boss(GamePanel gp) {
 		super(gp);
 
 		setType(ObjectType.MONSTER);
-		setName("Green Slime");
+		setName("Green Slime Boss");
 		setSpeed(1);
 		maxLife = 10;
 		life = maxLife;
@@ -48,7 +50,7 @@ public class MON_GreenSlime_Boss extends SuperMonster {
 	}
 	
 	//#####################################################################
-	// 								Components
+	// 								Finite-State Machine
 	//#####################################################################
 	
 	public void setAction() {
@@ -72,9 +74,38 @@ public class MON_GreenSlime_Boss extends SuperMonster {
 	}
 	
 	@Override
+	public int attack() {
+		setDirection(getDirectionTo(gp.player));
+		return 0;
+	}
+	
+	@Override
 	public void damageReaction() {
+		setDirection(getDirectionTo(gp.player));
+		if(getLife() <= (getMaxLife()/2)) {
+			setFsm(FSM.AIDE);
+			getFsm().update(this);
+		}
+	}
+
+	@Override
+	public void findAide() {
+		// TODO fix bug where monster spawns in trees or water
+		int x = (int) (getWorldX()+this.getSolidArea().getMaxX());
+		int y = getWorldY()/gp.tileSize;
 		
-		actionTimeCounter = 0;
-		setDirection(gp.player.getDirection());
+		GameObject monster1 = new MON_GreenSlime(gp);
+		monster1.setWorldX(x);
+		monster1.setWorldY(getWorldY());
+		monster1.setDirection("Right");
+		gp.cChecker.checkTile(monster1);
+		gp.cChecker.checkPlayer(monster1);
+		gp.cChecker.checkEntity(monster1, gp.monster);
+		
+		if(!monster1.isCollisionOn()) {
+			gp.aSetter.addItem(monster1, (x/gp.tileSize)+1, y+1);
+		}
+		
+		gp.addAssetMonster();
 	}
 }

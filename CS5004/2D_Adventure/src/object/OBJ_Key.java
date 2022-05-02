@@ -1,8 +1,9 @@
 package object;
 
+import enums.ObjectType;
 import main.*;
 
-public class OBJ_Key extends SuperObject {
+public final class OBJ_Key extends SuperObject {
 	
 	public OBJ_Key(GamePanel gp) {
 		super(gp, "Key");

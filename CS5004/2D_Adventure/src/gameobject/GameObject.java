@@ -4,11 +4,14 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
+import java.lang.Math;
+
+import enums.ObjectType;
 import main.*;
 
 /**
@@ -35,7 +38,7 @@ public abstract class GameObject implements GameObjectInt {
 	protected int spriteNum = 1;
 	private boolean collisionOn = false;
 	protected boolean invincible = false;
-	protected boolean attacking = false;
+	private boolean attacking = false;
 	private boolean alive = true;
 	private boolean dying = false;
 	
@@ -94,12 +97,12 @@ public abstract class GameObject implements GameObjectInt {
 	//#####################################################################
 	
 	public BufferedImage setup(String imagePath) {
-		UtilityTool uTool = new UtilityTool();
+		//UtilityTool uTool = new UtilityTool();
 		BufferedImage image = null;
 		
 		try {
 			image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
-			image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+			image = scaleImage(image, gp.tileSize, gp.tileSize);
 			
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -108,17 +111,27 @@ public abstract class GameObject implements GameObjectInt {
 	}
 	
 	public BufferedImage setup(String imagePath, int width, int height) {
-		UtilityTool uTool = new UtilityTool();
+		//UtilityTool uTool = new UtilityTool();
 		BufferedImage image = null;
 		
 		try {
 			image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
-			image = uTool.scaleImage(image, width, height);
+			image = scaleImage(image, width, height);
 			
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
 		return image;
+	}
+	
+	public BufferedImage scaleImage(BufferedImage original, int width, int height) {
+		
+		BufferedImage scaledImage = new BufferedImage(width, height, original.getType());
+		Graphics2D g2 = scaledImage.createGraphics();
+		g2.drawImage(original, 0, 0, width, height, null);
+		g2.dispose();
+
+		return scaledImage;
 	}
 	
 	//#####################################################################
@@ -133,11 +146,7 @@ public abstract class GameObject implements GameObjectInt {
 		gp.cChecker.checkObject(this, false);
 		gp.cChecker.checkEntity(this, gp.npc);
 		gp.cChecker.checkEntity(this, gp.monster);
-		boolean contactPlayer = gp.cChecker.checkPlayer(this);
-		
-		if(this.getType() == ObjectType.MONSTER && contactPlayer == true) {
-			gp.player.takeDamage(attack);
-		}
+		gp.cChecker.checkPlayer(this);
 		
 		// if collision is false, player can move
 		if(isCollisionOn() == false) {
@@ -328,13 +337,39 @@ public abstract class GameObject implements GameObjectInt {
 		switch(gp.player.getDirection()) {
 		case "up": setDirection("down"); break;
 		case "down": setDirection("up"); break;
-		case "uplt": case "downlt":
+		case "upleft": case "downleft":
 		case "left": setDirection("right"); break;
-		case "uprt": case "downrt":
+		case "upright": case "downright":
 		case "right": setDirection("left"); break;
 		}
 	}	
 	
+	@Override
+	public void findAide() {};
+	
+	@Override
+	public int getDistance(GameObject gameObject) {
+		return (int) Math.sqrt(Math.abs(gameObject.getWorldX()-worldX) + Math.abs(gameObject.getWorldY()-worldY));
+	}
+	
+	@Override
+	public String getDirectionTo(GameObject gameObject) {
+		double xDir = worldX - gameObject.getWorldX();
+		double yDir = worldY - gameObject.getWorldY();
+		double angle = Math.toDegrees(Math.atan2(yDir, xDir));
+		String direction = "down";
+		
+		if(angle <= -135 || angle >= 135) {
+			direction = "right";
+		} else if(angle < -45  && angle > -135) { 
+			direction = "down";
+		} else if(angle >= -45  && angle <= 45) {
+			direction = "left";
+		} else if(angle > 45  && angle < 135) {
+			direction = "up";
+		} 
+		return direction;
+	}
 	//#####################################################################
 	// 							Getters and Setters
 	//#####################################################################
@@ -672,5 +707,15 @@ public abstract class GameObject implements GameObjectInt {
 	@Override
 	public void setAttackArea(Rectangle attackArea) {
 		this.attackArea = attackArea;
+	}
+
+	@Override
+	public boolean isAttacking() {
+		return attacking;
+	}
+
+	@Override
+	public void setAttacking(boolean attacking) {
+		this.attacking = attacking;
 	}
 }

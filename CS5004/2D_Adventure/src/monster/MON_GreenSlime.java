@@ -2,10 +2,11 @@ package monster;
 
 import java.util.Random;
 
+import enums.FSM;
+import enums.ObjectType;
 import main.GamePanel;
-import main.ObjectType;
 
-public class MON_GreenSlime extends SuperMonster {
+public final class MON_GreenSlime extends SuperMonster {
 
 	public MON_GreenSlime(GamePanel gp) {
 		super(gp);
@@ -71,8 +72,11 @@ public class MON_GreenSlime extends SuperMonster {
 	
 	@Override
 	public void damageReaction() {
-		
-		actionTimeCounter = 0;
-		setDirection(gp.player.getDirection());
+		if(actionTimeCounter == 60) {
+			setDirection(gp.player.getDirection());
+			actionTimeCounter ++;
+		} else {
+			setFsm(FSM.IDLE);
+		}
 	}
 }

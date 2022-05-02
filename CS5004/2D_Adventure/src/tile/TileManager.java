@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 
 import javax.imageio.ImageIO;
 
+import enums.Area;
 import main.*;
 
 public class TileManager {

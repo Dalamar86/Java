@@ -34,7 +34,7 @@ public class CollisionChecker {
 				gameObject.setCollisionOn(true);
 			}
 			break;
-		case "uplt":
+		case "upleft":
 			entityTopRow = (entityTopWorldY - gameObject.getSpeed())/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
@@ -45,7 +45,7 @@ public class CollisionChecker {
 				gameObject.setCollisionOn(true);
 			}
 			break;
-		case "uprt":
+		case "upright":
 			entityTopRow = (entityTopWorldY - gameObject.getSpeed())/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
@@ -64,7 +64,7 @@ public class CollisionChecker {
 				gameObject.setCollisionOn(true);
 			}
 			break;
-		case "downlt":
+		case "downleft":
 			entityBottomRow = (entityBottomWorldY + gameObject.getSpeed())/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
@@ -75,7 +75,7 @@ public class CollisionChecker {
 				gameObject.setCollisionOn(true);
 			}
 			break;
-		case "downrt":
+		case "downright":
 			entityBottomRow = (entityBottomWorldY + gameObject.getSpeed())/gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
@@ -120,20 +120,20 @@ public class CollisionChecker {
 				
 				switch(gameObject.getDirection()) {
 				case "up": gameObject.getSolidArea().y -= gameObject.getSpeed(); break;
-				case "uplt":
+				case "upleft":
 					gameObject.getSolidArea().x -= gameObject.getSpeeddiag();
 					gameObject.getSolidArea().y -= gameObject.getSpeeddiag();
 					break;
-				case "uprt":
+				case "upright":
 					gameObject.getSolidArea().x += gameObject.getSpeeddiag();
 					gameObject.getSolidArea().y -= gameObject.getSpeeddiag();
 					break;
 				case "down": gameObject.getSolidArea().y += gameObject.getSpeed(); break;
-				case "downlt":
+				case "downleft":
 					gameObject.getSolidArea().x -= gameObject.getSpeeddiag();
 					gameObject.getSolidArea().y += gameObject.getSpeeddiag();
 					break;
-				case "downrt":
+				case "downright":
 					gameObject.getSolidArea().x += gameObject.getSpeeddiag();
 					gameObject.getSolidArea().y += gameObject.getSpeeddiag();
 					break;
@@ -175,20 +175,20 @@ public class CollisionChecker {
 				
 				switch(gameObject.getDirection()) {
 				case "up": gameObject.getSolidArea().y -= gameObject.getSpeed(); break;
-				case "uplt":
+				case "upleft":
 					gameObject.getSolidArea().x -= gameObject.getSpeeddiag();
 					gameObject.getSolidArea().y -= gameObject.getSpeeddiag();
 					break;
-				case "uprt":
+				case "upright":
 					gameObject.getSolidArea().x += gameObject.getSpeeddiag();
 					gameObject.getSolidArea().y -= gameObject.getSpeeddiag();
 					break;
 				case "down": gameObject.getSolidArea().y += gameObject.getSpeed();	break;
-				case "downlt":
+				case "downleft":
 					gameObject.getSolidArea().x -= gameObject.getSpeeddiag();
 					gameObject.getSolidArea().y += gameObject.getSpeeddiag();
 					break;
-				case "downrt":
+				case "downright":
 					gameObject.getSolidArea().x += gameObject.getSpeeddiag();
 					gameObject.getSolidArea().y += gameObject.getSpeeddiag();
 					break;
@@ -227,20 +227,20 @@ public class CollisionChecker {
 		
 		switch(gameObject.getDirection()) {
 		case "up": gameObject.getSolidArea().y -= gameObject.getSpeed(); break;
-		case "uplt":
+		case "upleft":
 			gameObject.getSolidArea().x -= gameObject.getSpeeddiag();
 			gameObject.getSolidArea().y -= gameObject.getSpeeddiag();
 			break;
-		case "uprt":
+		case "upright":
 			gameObject.getSolidArea().x += gameObject.getSpeeddiag();
 			gameObject.getSolidArea().y -= gameObject.getSpeeddiag();
 			break;
 		case "down": gameObject.getSolidArea().y += gameObject.getSpeed(); break;
-		case "downlt": 
+		case "downleft": 
 			gameObject.getSolidArea().x -= gameObject.getSpeeddiag(); 
 			gameObject.getSolidArea().y += gameObject.getSpeeddiag();
 			break;
-		case "downrt":
+		case "downright":
 			gameObject.getSolidArea().x += gameObject.getSpeeddiag();
 			gameObject.getSolidArea().y += gameObject.getSpeeddiag();
 			break;

@@ -3,6 +3,8 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import enums.GameState;
+
 /**
  * This class controls our keyboard input.
  * @author Robert Wilson

@@ -32,6 +32,7 @@ public class AssetSetter {
 			getNpc().add(gameObject);
 		} else if(new MonsterTest<GameObject>().test(gameObject)) {
 			getMonster().add(gameObject);
+			System.out.println("monster added");
 		}
 	}
 	

@@ -1,9 +1,9 @@
 package object;
 
+import enums.ObjectType;
 import main.GamePanel;
-import main.ObjectType;
 
-public class OBJ_Sword_Normal extends SuperObject {
+public final class OBJ_Sword_Normal extends SuperObject {
 
 	public OBJ_Sword_Normal(GamePanel gp) {
 		super(gp, "sword_normal");

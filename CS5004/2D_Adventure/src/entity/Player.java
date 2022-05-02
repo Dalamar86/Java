@@ -7,6 +7,8 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import enums.GameState;
+import enums.ObjectType;
 import gameobject.GameObject;
 import main.*;
 import object.*;
@@ -143,45 +145,45 @@ public class Player extends GameObject{
 			setAlive(false);
 			gp.setGameState(GameState.DEADSTATE);
 		}
-		if(attacking) {
+		if(isAttacking()) {
 			attacking();
 		} else if(keyH.isUpPressed() == true || keyH.isDownPressed() == true || keyH.isLtPressed() == true || keyH.isRtPressed() == true || keyH.isEnterPressed()) {
 			
 			if(keyH.isUpPressed() == true) {
 				if(keyH.isLtPressed()) {
-					setDirection("uplt");
+					setDirection("upleft");
 				} else if (keyH.isRtPressed()) {
-					setDirection("uprt");
+					setDirection("upright");
 				} else {
 					setDirection("up");
 				}
 			} else if(keyH.isDownPressed() == true) {
 				if(keyH.isLtPressed()) {
-					setDirection("downlt");
+					setDirection("downleft");
 				} else if (keyH.isRtPressed()) {
-					setDirection("downrt");
+					setDirection("downright");
 				} else {
 					setDirection("down");
 				}
 			} else if(keyH.isLtPressed() == true) {
 				if(keyH.isUpPressed()) {
-					setDirection("uplt");
+					setDirection("upleft");
 				} else if (keyH.isDownPressed()) {
-					setDirection("downlt");
+					setDirection("downleft");
 				} else {
 					setDirection("left");
 				}
 			} else if(keyH.isRtPressed() == true) {
 				if(keyH.isUpPressed()) {
-					setDirection("uprt");
+					setDirection("upright");
 				} else if (keyH.isDownPressed()) {
-					setDirection("downrt");
+					setDirection("downright");
 				} else {
 					setDirection("right");
 				}
 			}  
 			if(keyH.isEnterPressed()) {
-				attacking = true;
+				setAttacking(true);
 			}
 			
 			// Check tile collision
@@ -215,22 +217,22 @@ public class Player extends GameObject{
 				case "up":
 					setWorldY(getWorldY() - getSpeed());
 					break;
-				case "uplt":
+				case "upleft":
 					setWorldY(getWorldY() - getSpeeddiag());
 					setWorldX(getWorldX() - getSpeeddiag());
 					break;
-				case "uprt":
+				case "upright":
 					setWorldY(getWorldY() - getSpeeddiag());
 					setWorldX(getWorldX() + getSpeeddiag());
 					break;
 				case "down":
 					setWorldY(getWorldY() + getSpeed());
 					break;
-				case "downlt":
+				case "downleft":
 					setWorldY(getWorldY() + getSpeeddiag());
 					setWorldX(getWorldX() - getSpeeddiag());
 					break;
-				case "downrt":
+				case "downright":
 					setWorldY(getWorldY() + getSpeeddiag());
 					setWorldX(getWorldX() + getSpeeddiag());
 					break;
@@ -242,7 +244,7 @@ public class Player extends GameObject{
 					break;
 				}
 				
-			} else if(isCollisionOn() == true && getDirection() == "uplt") {
+			} else if(isCollisionOn() == true && getDirection() == "upleft") {
 				setDirection("left");
 				setCollisionOn(false);
 				gp.cChecker.checkTile(this);
@@ -262,7 +264,7 @@ public class Player extends GameObject{
 						setWorldY(getWorldY() - getSpeed());
 					}
 				}
-			} else if(isCollisionOn() == true && getDirection() == "uprt") {
+			} else if(isCollisionOn() == true && getDirection() == "upright") {
 				setDirection("right");
 				setCollisionOn(false);
 				gp.cChecker.checkTile(this);
@@ -282,7 +284,7 @@ public class Player extends GameObject{
 						setWorldY(getWorldY() - getSpeed());
 					}
 				}
-			} else if(isCollisionOn() == true && getDirection() == "downlt") {
+			} else if(isCollisionOn() == true && getDirection() == "downleft") {
 				setDirection("left");
 				setCollisionOn(false);
 				gp.cChecker.checkTile(this);
@@ -302,7 +304,7 @@ public class Player extends GameObject{
 						setWorldY(getWorldY() + getSpeed());
 					}
 				}
-			} else if(isCollisionOn() == true && getDirection() == "downrt") {
+			} else if(isCollisionOn() == true && getDirection() == "downright") {
 				setDirection("right");
 				setCollisionOn(false);
 				gp.cChecker.checkTile(this);
@@ -326,7 +328,7 @@ public class Player extends GameObject{
 			
 			if(keyH.isEnterPressed() && !attackCanceled) {
 				gp.playSE(7);
-				attacking = true;
+				setAttacking(true);
 				spriteCounter = 0;
 			}
 			
@@ -384,7 +386,7 @@ public class Player extends GameObject{
 		
 		switch(getDirection()) {
 		case "up":
-			if(!attacking) {
+			if(!isAttacking()) {
 				if(spriteNum == 1) {image = up1;} 
 				else {image = up2;}
 			} else {
@@ -393,9 +395,9 @@ public class Player extends GameObject{
 				else {image = attackUp2;}
 			}
 			break;
-		case "downlt":
-		case "uplt":
-			if(!attacking) {
+		case "downleft":
+		case "upleft":
+			if(!isAttacking()) {
 				if(spriteNum == 1) {image = left1;} 
 				else {image = left2;}
 			} else {
@@ -404,9 +406,9 @@ public class Player extends GameObject{
 				else {image = attackLeft2;}
 			}
 			break;
-		case "downrt":
-		case "uprt":
-			if(!attacking) {
+		case "downright":
+		case "upright":
+			if(!isAttacking()) {
 				if(spriteNum == 1) {image = right1;} 
 				else {image = right2;}
 			} else {
@@ -415,7 +417,7 @@ public class Player extends GameObject{
 			}
 			break;
 		case "down":
-			if(!attacking) {
+			if(!isAttacking()) {
 				if(spriteNum == 1) {image = down1;} 
 				else {image = down2;}
 			} else {
@@ -424,7 +426,7 @@ public class Player extends GameObject{
 			}
 			break;
 		case "left":
-			if(!attacking) {
+			if(!isAttacking()) {
 				if(spriteNum == 1) {image = left1;} 
 				else {image = left2;}
 			} else {
@@ -434,7 +436,7 @@ public class Player extends GameObject{
 			}
 			break;
 		case "right":
-			if(!attacking) {
+			if(!isAttacking()) {
 				if(spriteNum == 1) {image = right1;} 
 				else {image = right2;}
 			} else {
@@ -506,7 +508,7 @@ public class Player extends GameObject{
 		} else {
 			spriteNum = 1;
 			spriteCounter = 0;
-			attacking = false;
+			setAttacking(false);
 		}
 	}
 	
