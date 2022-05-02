@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import enums.ObjectType;
+import projectiles.SuperProjectile;
 
 public interface GameObjectInt {
 
@@ -171,4 +172,20 @@ public interface GameObjectInt {
 	boolean isAttacking();
 
 	void setAttacking(boolean attacking);
+
+	SuperProjectile getProjectile();
+
+	void setProjectile(SuperProjectile projectile);
+
+	int getUseCost();
+
+	void setUseCost(int useCost);
+
+	int getMana();
+
+	void setMana(int mana);
+
+	int getAttackSpeed();
+
+	void setAttackSpeed(int attackSpeed);
 }

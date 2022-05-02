@@ -24,6 +24,7 @@ public class Sound {
 		soundURL[8] = getClass().getResource("/sound/sword_strike1.wav");
 		soundURL[9] = getClass().getResource("/sound/levelup.wav");
 		soundURL[10] = getClass().getResource("/sound/cursor.wav");
+		soundURL[11] = getClass().getResource("/sound/burning.wav");
 	}
 	
 	public void setFile(int index) {

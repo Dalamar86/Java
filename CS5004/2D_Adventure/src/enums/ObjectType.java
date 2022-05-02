@@ -7,5 +7,6 @@ public enum ObjectType {
 	NPC,
 	PLAYER,
 	SHIELD,
-	WEAPON	
+	WEAPON,
+	PROJECTILE;
 }

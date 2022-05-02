@@ -12,8 +12,11 @@ import enums.ObjectType;
 import gameobject.GameObject;
 import main.*;
 import object.*;
+import projectiles.PROJ_FlameStrike;
 
 /**
+ * Player Class represents the user in the game.  This class extends the GameObject class and inherits
+ * all its methods and attributes.  
  * 
  * @author Robert Wilson
  *
@@ -30,9 +33,14 @@ public class Player extends GameObject{
 	private ArrayList<GameObject> inventory = new ArrayList<>();
 	private final int inventorySize = 20;
 	
+	/**
+	 * Creates a new instance of the player, with hitbox and default values
+	 * 
+	 * @param gp GamePanel which encases the whole application
+	 * @param keyH action listener
+	 */
 	public Player(GamePanel gp, KeyHandler keyH) {
 		super(gp);
-
 		this.keyH = keyH;
 		
 		screenX = gp.screenWidth/2 - (gp.tileSize/2);
@@ -56,6 +64,14 @@ public class Player extends GameObject{
 	// 									Setup
 	//#####################################################################
 	
+	/**
+	 * Sets the default values for a player.  
+	 * This includes:
+	 * 		starting location
+	 * 		ObjectType
+	 * 		player attributes
+	 * 		current weapon, shield, and magic spell
+	 */
 	public void setDefaultValues() {
 		
 		setWorldX(gp.tileSize * 23);
@@ -77,11 +93,15 @@ public class Player extends GameObject{
 		setCoin(0);
 		setCurrentWeapon(new OBJ_Sword_Normal(gp));
 		setCurrentShield(new OBJ_Shield_Wooden(gp));
+		setProjectile(new PROJ_FlameStrike(gp));
 		setAttack(getAttack());
 		setDefense(getDefense());
 	}
 	
-	private void setItems() {
+	/**
+	 * Builds the inventory of the player.
+	 */
+	protected void setItems() {
 		getInventory().add(getCurrentWeapon());
 		getInventory().add(getCurrentShield());
 		getInventory().add(new OBJ_Key(gp));
@@ -93,15 +113,24 @@ public class Player extends GameObject{
 		getInventory().add(new OBJ_Axe(gp));
 	}
 	
+	/**
+	 * Set the attack and attack area based on the current weapon.
+	 */
 	public int getAttack() {
 		setAttackArea(getCurrentWeapon().getAttackArea());
 		return attack = getStrength() * getCurrentWeapon().getAttackValue();
 	}
 	
+	/**
+	 * Set the defense based on the current defense  
+	 */
 	public int getDefense() { 
 		return defense = getDexterity() * getCurrentShield().getDefenseValue();
 	}
 	
+	/**
+	 * Sets the images for the main character.
+	 */
 	public void getImage() {		
 		up1 = setup("/player/boy_up_1");
 		up2 = setup("/player/boy_up_2");
@@ -113,6 +142,9 @@ public class Player extends GameObject{
 		right2 = setup("/player/boy_right_2");
 	}
 	
+	/**
+	 * Sets the attacking animation based on current weapon 
+	 */
 	public void getPlayerAttackImage() {
 		if(getCurrentWeapon().getName() == "sword_normal") {
 			attackUp1 = setup("/player/boy_attack_up_1", 		gp.tileSize,   gp.tileSize*2);
@@ -132,14 +164,23 @@ public class Player extends GameObject{
 			attackLeft2 = setup("/player/boy_axe_left_2", 	gp.tileSize*2, gp.tileSize);
 			attackRight1 = setup("/player/boy_axe_right_1",	gp.tileSize*2, gp.tileSize);
 			attackRight2 = setup("/player/boy_axe_right_2", 	gp.tileSize*2, gp.tileSize);
+		} else {
+			attackUp1 = setup("/player/boy_up_1");
+			attackUp2 = setup("/player/boy_up_2");
+			attackDown1 = setup("/player/boy_down_1");
+			attackDown2 = setup("/player/boy_down_2");
+			attackLeft1 = setup("/player/boy_left_1");
+			attackLeft2 = setup("/player/boy_left_2");
+			attackRight1 = setup("/player/boy_right_1");
+			attackRight2 = setup("/player/boy_right_2");
 		}
-		
 	}
 	
 	//#####################################################################
 	// 							Update and Draw
 	//#####################################################################
 	
+	@Override
 	public void update() {
 		if(isDying()) {
 			setAlive(false);
@@ -147,8 +188,10 @@ public class Player extends GameObject{
 		}
 		if(isAttacking()) {
 			attacking();
-		} else if(keyH.isUpPressed() == true || keyH.isDownPressed() == true || keyH.isLtPressed() == true || keyH.isRtPressed() == true || keyH.isEnterPressed()) {
+		} else if(keyH.isUpPressed() == true || keyH.isDownPressed() == true || keyH.isLtPressed() == true || 
+				keyH.isRtPressed() == true || keyH.isEnterPressed()) {
 			
+			// Check the direction of travel depending on which key is pressed
 			if(keyH.isUpPressed() == true) {
 				if(keyH.isLtPressed()) {
 					setDirection("upleft");
@@ -210,7 +253,8 @@ public class Player extends GameObject{
 			gp.eHandler.checkEvent();
 			
 			
-			// if collision is False, Player can move
+			// if collision is False, Player can move, else if collision is true can we move 
+			// in a direction that is independent of the diagonal
 			if(isCollisionOn() == false) {
 	
 				switch(getDirection()) {
@@ -326,15 +370,17 @@ public class Player extends GameObject{
 				}
 			}
 			
+			// Attack using enter key
 			if(keyH.isEnterPressed() && !attackCanceled) {
 				gp.playSE(7);
 				setAttacking(true);
 				spriteCounter = 0;
 			}
 			
+			// Reset attack canceled to false
 			attackCanceled = false;
-			//gp.keyH.enterPressed = false;
 			
+			// Choose sprite to use depending on counter
 			spriteCounter++;
 			if(spriteCounter > 12) {
 				if(spriteNum == 1) {
@@ -347,22 +393,44 @@ public class Player extends GameObject{
 			
 		} else {
 			
+			// Smooth out the animations
 			standCounter++;
 			if(standCounter == 20) {
 				spriteNum = 1;
 				standCounter = 0;
 			}
+		}
+		
+		// Magic spell on space key pressed
+		if(keyH.isSpacePressed() && !getProjectile().isAlive() && attackingSpeedCounter == getProjectile().getAttackSpeed()) {
 			
-			if(invincible) {
-				invincibleCounter++;
-				if(invincibleCounter > 60) {
-					invincible = false;
-					invincibleCounter = 0;
-				}
-			}		
+			// Set default coordinates, direction and user
+			getProjectile().set(getWorldX(), getWorldY(), getDirection(), true, this);
+			
+			// add it to the list
+			gp.projectileList.add(getProjectile());
+			attackingSpeedCounter = 0;
+			
+			// Play flameStrike sound
+			gp.playSE(11);
+		}
+		
+		// Invincible counter after being hit
+		if(invincible) {
+			invincibleCounter++;
+			if(invincibleCounter > 60) {
+				invincible = false;
+				invincibleCounter = 0;
+			}
+		}
+		
+		// Limit magic attacks to the given attack speed
+		if(attackingSpeedCounter < getProjectile().getAttackSpeed()) {
+			attackingSpeedCounter++;
 		}
 	}
 	
+	@Override
 	public void draw(Graphics2D g2) {
 		
 		BufferedImage image = null;
@@ -384,6 +452,7 @@ public class Player extends GameObject{
 			y = gp.screenHeight - (gp.worldHeight - getWorldY());
 		}
 		
+		// Choose appropriate sprite to draw
 		switch(getDirection()) {
 		case "up":
 			if(!isAttacking()) {
@@ -446,6 +515,7 @@ public class Player extends GameObject{
 			break;
 		}
 		
+		// Make the player flash when invincible
 		if(invincible) {
 			if(invincibleCounter <= 10) {
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3F));
@@ -454,8 +524,8 @@ public class Player extends GameObject{
 			} 
 		}
 		
+		// Draw the player
 		g2.drawImage(image,  x,  y, null);
-		
 		
 		// Reset alpha
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));
@@ -465,6 +535,11 @@ public class Player extends GameObject{
 	// 								Components
 	//#####################################################################
 	
+	/**
+	 * Starts the attacking animation and when the player is attacking, determine 
+	 * whether an attackable gameObject has been hit and call the appropriate 
+	 * method depending on which object that is.
+	 */
 	public void attacking() {
 		spriteCounter++;
 		
@@ -496,9 +571,10 @@ public class Player extends GameObject{
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
 			if(monsterIndex != 999) {
 				GameObject monster = gp.monster[monsterIndex];
-				damageMonster(monster);
+				damageMonster(monster, getAttack());
 			}
 			
+			// Reset the players location 
 			setWorldX(currentWorldX);
 			setWorldY(currentWorldY);
 			getSolidArea().width = solidAreaWidth;
@@ -512,17 +588,27 @@ public class Player extends GameObject{
 		}
 	}
 	
+	/**
+	 * Determines what action occurs depending on the object picked up.
+	 *   
+	 * @param index the index of the item picked up
+	 */
 	public void pickUpObject(int index) {
+		// Check that the item is not null
 		if(index != 999) {
+			// Make sure the inventory is not full
 			if(inventory.size() != inventorySize) {
 				
+				// Get the actual object at that index and reset some utility attributes
 				String objectName = gp.obj[index].getName();
 				String text = "";
+				boolean doorUnlocked = false;
+				
+				// Make sure it is not as door or chest, which should not be added to the 
+				// player inventory
 				if(objectName != "Door" && objectName != "Chest") {
 					inventory.add(gp.obj[index]);
 				}
-				
-				boolean doorUnlocked = false;
 				
 				switch(objectName) {
 				case "Key":
@@ -612,7 +698,7 @@ public class Player extends GameObject{
 		// TODO move character back
 	}
 	
-	public void damageMonster(GameObject monster) {
+	public void damageMonster(GameObject monster, int attack) {
 		int exp = monster.takeDamage(attack);
 		if(exp != 0 ) {
 			this.exp += exp;

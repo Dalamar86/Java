@@ -69,6 +69,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public GameObject obj[] = new SuperObject[20];
 	public GameObject npc[] = new GameObject[10];
 	public GameObject monster[]= new GameObject[20];
+	public ArrayList<GameObject> projectileList = new ArrayList<>();
 	public ArrayList<GameObject> entityList = new ArrayList<>();
 	public Comparator<GameObject> ee;
 	
@@ -194,22 +195,17 @@ public class GamePanel extends JPanel implements Runnable {
 				}
 			}
 			
-			/*
-			for(Entity m: monster) {
-				if(m != null) {
-					System.out.println(m);
-					if(m.isAlive() && !m.isDying()) {
-						m.update();
+			for(int i = 0; i < projectileList.size(); i++) {
+				if(projectileList.get(i) != null) {
+					if(projectileList.get(i).isAlive()) {
+						projectileList.get(i).update();
 					}
-					if(!m.isAlive()) {
-						System.out.println("monster has died: " + m);
-						m.remove();
-						System.out.println(m);
+					if(projectileList.get(i).isAlive() == false) {
+						projectileList.remove(i);
 					}
-					
 				}
 			}
-			*/
+			
 			break;
 		case PAUSESTATE:
 			break;
@@ -320,6 +316,13 @@ public class GamePanel extends JPanel implements Runnable {
 			for(GameObject m: monster) {
 				if(m != null) {
 					entityList.add(m);
+				}
+			}
+			
+			// Projectiles
+			for(GameObject p: projectileList) {
+				if(p != null) {
+					entityList.add(p);
 				}
 			}
 			

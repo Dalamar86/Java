@@ -13,7 +13,7 @@ import enums.GameState;
 public class KeyHandler implements KeyListener {
 
 	GamePanel gp;
-	private boolean upPressed, downPressed, ltPressed, rtPressed, enterPressed;
+	private boolean upPressed, downPressed, ltPressed, rtPressed, enterPressed, spacePressed;
 	
 	// Debug
 	private boolean showDebugText = false;
@@ -118,6 +118,8 @@ public class KeyHandler implements KeyListener {
 				
 			} else if(code == KeyEvent.VK_ENTER) {
 				setEnterPressed(true);
+			} else if(code == KeyEvent.VK_SPACE) {
+				setSpacePressed(true);
 			}
 			break;
 			
@@ -189,7 +191,9 @@ public class KeyHandler implements KeyListener {
 			setRtPressed(false);
 		}  if(code == KeyEvent.VK_ENTER) {
 			setEnterPressed(false);
-		}
+		} if(code == KeyEvent.VK_SPACE) {
+			setSpacePressed(false);
+		} 
 	}
 
 	public boolean isEnterPressed() {
@@ -198,6 +202,14 @@ public class KeyHandler implements KeyListener {
 
 	public void setEnterPressed(boolean enterPressed) {
 		this.enterPressed = enterPressed;
+	}
+	
+	public boolean isSpacePressed() {
+		return spacePressed;
+	}
+
+	public void setSpacePressed(boolean spacePressed) {
+		this.spacePressed = spacePressed;
 	}
 
 	public boolean isUpPressed() {

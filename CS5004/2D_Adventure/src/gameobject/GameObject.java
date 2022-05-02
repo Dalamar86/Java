@@ -13,6 +13,7 @@ import java.lang.Math;
 
 import enums.ObjectType;
 import main.*;
+import projectiles.SuperProjectile;
 
 /**
  * This stores variables that will be used in player, monster, and NPC classes
@@ -54,17 +55,20 @@ public abstract class GameObject implements GameObjectInt {
 	private int coin;
 	private GameObject currentWeapon;
 	private GameObject currentShield;
+	private SuperProjectile projectile;
 	
 	// Shared stats
 	protected int maxLife;
 	protected int life;
 	private int strength;
 	private int dexterity;
-	protected int mana;
+	protected int maxMana;
+	private int mana;
 	protected int attack;
 	protected int attackBonus;
 	protected int defense;
 	private int speed;
+	private int attackSpeed;
 	
 	// Object stats
 	private BufferedImage image1;
@@ -75,15 +79,17 @@ public abstract class GameObject implements GameObjectInt {
 	private int attackValue;
 	private int defenseValue;
 	private String description = "";
+	protected int useCost;
 	
 	// Counters
 	protected int spriteCounter = 0;
 	protected int actionTimeCounter = 0;
 	protected int invincibleCounter = 0;
 	protected int dyingCounter = 0;
+	protected int attackingSpeedCounter = 0;
 	
 	// Describes an image with an accessible buffer of image data.
-	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+	public BufferedImage up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
 	public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
 	protected double scale = 1;
 	
@@ -258,7 +264,7 @@ public abstract class GameObject implements GameObjectInt {
 				changeAlpha(g2, 0.4f);
 				//g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4F));
 			}
-			if(isDying()) {
+			if(isDying() && getType() != ObjectType.PROJECTILE) {
 				attack = 0;
 				dyingAnimation(g2);
 			}
@@ -370,6 +376,7 @@ public abstract class GameObject implements GameObjectInt {
 		} 
 		return direction;
 	}
+	
 	//#####################################################################
 	// 							Getters and Setters
 	//#####################################################################
@@ -717,5 +724,45 @@ public abstract class GameObject implements GameObjectInt {
 	@Override
 	public void setAttacking(boolean attacking) {
 		this.attacking = attacking;
+	}
+
+	@Override
+	public SuperProjectile getProjectile() {
+		return projectile;
+	}
+
+	@Override
+	public void setProjectile(SuperProjectile projectile) {
+		this.projectile = projectile;
+	}
+
+	@Override
+	public int getUseCost() {
+		return useCost;
+	}
+
+	@Override
+	public void setUseCost(int useCost) {
+		this.useCost = useCost;
+	}
+
+	@Override
+	public int getMana() {
+		return mana;
+	}
+
+	@Override
+	public void setMana(int mana) {
+		this.mana = mana;
+	}
+
+	@Override
+	public int getAttackSpeed() {
+		return attackSpeed;
+	}
+
+	@Override
+	public void setAttackSpeed(int attackSpeed) {
+		this.attackSpeed = attackSpeed;
 	}
 }
