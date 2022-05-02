@@ -34,6 +34,7 @@ public enum Area {
 			gp.aSetter.addItem(new MON_GreenSlime(gp), 21, 40);
 			gp.aSetter.addItem(new MON_GreenSlime(gp), 23, 36);
 			gp.aSetter.addItem(new MON_GreenSlime(gp), 37, 10);
+			gp.aSetter.addItem(new MON_RockSpitter(gp), 37, 40);
 			gp.aSetter.addItem(new MON_GreenSlime_Boss(gp), 11, 32);
 		}
 		
