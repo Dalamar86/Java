@@ -1,12 +1,22 @@
 package monster;
 
-import java.util.Random;
-
 import enums.ObjectType;
 import main.GamePanel;
 
+/**
+ * Rock spitter moves in random directions and then spits out a rock projectile.  
+ * Will not react to player interaction.
+ * 
+ * @author Robert Wilson
+ *
+ */
 public final class MON_RockSpitter extends SuperMonster {
 
+	/**
+	 * Creates an instance of the rock spitter monster.
+	 * 
+	 * @param gp (GamePanel) Current game panel
+	 */
 	public MON_RockSpitter(GamePanel gp) {
 		super(gp);
 
@@ -19,6 +29,7 @@ public final class MON_RockSpitter extends SuperMonster {
 		defense = 0;
 		exp = 2;
 		
+		// Hit box
 		getSolidArea().x = 3;
 		getSolidArea().y = 18;
 		getSolidArea().width = 42;
@@ -26,15 +37,18 @@ public final class MON_RockSpitter extends SuperMonster {
 		setSolidAreaDefaultX(getSolidArea().x);
 		setSolidAreaDefaultY(getSolidArea().y);
 
+		// buffer monster images
 		getImage();
 	}
 	
 	//#####################################################################
 	// 								Setup
 	//#####################################################################
-		
+	
+	/**
+	 * Load image paths and send to get scaled and add the buffered images.
+	 */
 	public void getImage() {
-		
 		up1 = setup("/monster/rock_spitter_up_1");
 		up2 = setup("/monster/rock_spitter_up_2");
 		up3 = setup("/monster/rock_spitter_up_3");
@@ -57,24 +71,4 @@ public final class MON_RockSpitter extends SuperMonster {
 	//#####################################################################
 	// 								Components
 	//#####################################################################
-	
-	public void setAction() {
-		actionTimeCounter ++;
-		
-		if(actionTimeCounter == 120) {
-			Random rand = new Random();
-			int i = rand.nextInt(100) + 1;
-			
-			if(i <= 25) {
-				setDirection("up");
-			} else if(i <= 50) {
-				setDirection("down");
-			} else if(i <= 75) {
-				setDirection("left");
-			} else if(i > 75) {
-				setDirection("right");
-			}
-			actionTimeCounter = 0;
-		}	
-	}
 }

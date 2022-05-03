@@ -2,6 +2,14 @@ package enums;
 
 import gameobject.GameObject;
 
+/**
+ * Enum which houses the Finite-State Machine which the monsters 
+ * use to determine their actions.
+ * 
+ * 
+ * @author Robert Wilson
+ *
+ */
 public enum FSM {
 	IDLE {
 		@Override
@@ -28,5 +36,10 @@ public enum FSM {
 		}
 	};
 	
+	/**
+	 * the update method of the FSM
+	 * 
+	 * @param gameObject The gameObject who owns this particular FSM 
+	 */
 	public abstract void update(GameObject gameObject);
 }

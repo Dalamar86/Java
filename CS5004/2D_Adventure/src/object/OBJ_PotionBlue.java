@@ -5,8 +5,19 @@ import enums.ObjectType;
 import gameobject.GameObject;
 import main.GamePanel;
 
+/**
+ * Blue potion replenishes player mana. Single use item
+ * 
+ * @author Robert Wilson
+ *
+ */
 public class OBJ_PotionBlue extends SuperObject {
 	
+	/**
+	 * Creates an instance of the blue potion object.
+	 * 
+	 * @param gp (GamePanel) Current game panel
+	 */
 	public OBJ_PotionBlue(GamePanel gp) {
 		super(gp, "Potion_blue");
 		this.setDescription("[" + getName() + "]\nWhat does this mysterious blue liquid do?\n I guess we won't know till you try it.");

@@ -1,13 +1,23 @@
 package monster;
 
-import java.util.Random;
-
 import enums.FSM;
 import enums.ObjectType;
 import main.GamePanel;
 
+/**
+ * Green Slime monster attacks by hitting character during random movements.  Actively moves
+ * away from player when het.
+ * 
+ * @author Robert Wilson
+ *
+ */
 public final class MON_GreenSlime extends SuperMonster {
 
+	/**
+	 * Creates an instance of the green slime monster.
+	 * 
+	 * @param gp (GamePanel) Current game panel
+	 */
 	public MON_GreenSlime(GamePanel gp) {
 		super(gp);
 		
@@ -20,6 +30,7 @@ public final class MON_GreenSlime extends SuperMonster {
 		defense = 0;
 		exp = 2;
 		
+		// Hit box
 		getSolidArea().x = 3;
 		getSolidArea().y = 18;
 		getSolidArea().width = 42;
@@ -27,6 +38,7 @@ public final class MON_GreenSlime extends SuperMonster {
 		setSolidAreaDefaultX(getSolidArea().x);
 		setSolidAreaDefaultY(getSolidArea().y);
 		
+		// buffer monster images
 		getImage();
 	}
 
@@ -34,8 +46,10 @@ public final class MON_GreenSlime extends SuperMonster {
 	// 								Setup
 	//#####################################################################
 	
+	/**
+	 * Load image paths and send to get scaled and add the buffered images.
+	 */
 	public void getImage() {
-		
 		up1 = setup("/monster/greenslime_down_1");
 		up2 = setup("/monster/greenslime_down_2");
 		down1 = setup("/monster/greenslime_down_1");
@@ -49,26 +63,6 @@ public final class MON_GreenSlime extends SuperMonster {
 	//#####################################################################
 	// 								Components
 	//#####################################################################
-	
-	public void setAction() {
-		actionTimeCounter ++;
-		
-		if(actionTimeCounter == 120) {
-			Random rand = new Random();
-			int i = rand.nextInt(100) + 1;
-			
-			if(i <= 25) {
-				setDirection("up");
-			} else if(i <= 50) {
-				setDirection("down");
-			} else if(i <= 75) {
-				setDirection("left");
-			} else if(i > 75) {
-				setDirection("right");
-			}
-			actionTimeCounter = 0;
-		}	
-	}
 	
 	@Override
 	public void damageReaction() {

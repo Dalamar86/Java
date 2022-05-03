@@ -245,7 +245,7 @@ public class Player extends GameObject{
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
 			if(monsterIndex != 999) {
 				GameObject monster = gp.monster[monsterIndex];
-				takeDamage(monster.attack());
+				takeDamage(monster.getAttack());
 			}
 			
 			
@@ -610,6 +610,7 @@ public class Player extends GameObject{
 					inventory.add(gp.obj[index]);
 				}
 				
+				// Determine which action to take by the item name
 				switch(objectName) {
 				case "Key":
 					gp.playSE(1);
@@ -657,6 +658,9 @@ public class Player extends GameObject{
 					text = "mysterious liquid";
 					break;
 				}
+				
+				// delete the door if it was opened otherwise delete 
+				// every other object picked up
 				if(objectName == "Door") {
 					if(doorUnlocked) {
 						gp.obj[index] = null;
@@ -670,7 +674,13 @@ public class Player extends GameObject{
 		}
 	}
 	
+	/**
+	 * action to take if player runs into an NPC.
+	 * 
+	 * @param index The index of the NPC which has been run into.
+	 */
 	public void interactNPC(int index) {
+		// Check that the NPC exists
 		if(index != 999) {
 			attackCanceled = true;
 			gp.setGameState(GameState.DIALOGUESTATE);
@@ -698,6 +708,15 @@ public class Player extends GameObject{
 		// TODO move character back
 	}
 	
+	/**
+	 * If the player hits a monster then the monster takes the 
+	 * correct amount of damage and returns experience if it is killed.
+	 * If the monster dies and experience is given, then check if the 
+	 * player has leveled up.
+	 * 
+	 * @param monster The monster which takes the damage.
+	 * @param attack The attack of either the melee weapon of the spell cast.
+	 */
 	public void damageMonster(GameObject monster, int attack) {
 		int exp = monster.takeDamage(attack);
 		if(exp != 0 ) {
@@ -706,6 +725,10 @@ public class Player extends GameObject{
 		}
 	}
 	
+	/**
+	 * Chech if the player has earned enough experience to level up and if
+	 * it has then raise the appropriate skills.
+	 */
 	public void checkLevelUp() {
 		if(exp >= nextLevelExp ) {
 			level++;
@@ -722,6 +745,9 @@ public class Player extends GameObject{
 		}
 	}
 	
+	/**
+	 * Change the item currently equipped by the player.
+	 */
 	public void equipItem() {
 		int itemIndex = gp.ui.getItemIndex();
 		
@@ -743,6 +769,9 @@ public class Player extends GameObject{
 		}
 	}
 	
+	/**
+	 * If a door is unlocked we need to remove a key from the player inventory
+	 */
 	private void useKey() {
 		int i;
 		for(i = 0; i < inventory.size(); i++) {
@@ -757,26 +786,56 @@ public class Player extends GameObject{
 	// 							Getters and Setters
 	//#####################################################################
 	
+	/**
+	 * Getter for the boolean determining if the attack should be canceled
+	 * 
+	 * @return attackCanceled (boolean) boolean of whether the attack should be canceled.
+	 */
 	public boolean isAttackCanceled() {
 		return attackCanceled;
 	}
 
+	/**
+	 * Setter for the boolean determining if the attack should be canceled
+	 * 
+	 * @param attackCanceled (boolean) boolean of whether the attack should be canceled.
+	 */
 	public void setAttackCanceled(boolean attackCanceled) {
 		this.attackCanceled = attackCanceled;
 	}
 
+	/**
+	 * Getter for the player's inventory List
+	 * 
+	 * @return inventory (ArrayList) the List containing the players inventory 
+	 */
 	public ArrayList<GameObject> getInventory() {
 		return inventory;
 	}
 
+	/**
+	 * Setter of the player's inventory.  
+	 * 
+	 * @param inventory (ArrayList) an arrayList of items the player can carry
+	 */
 	public void setInventory(ArrayList<GameObject> inventory) {
 		this.inventory = inventory;
 	}
 	
+	/**
+	 * Getter for the number of keys the player currently has.
+	 * 
+	 * @return hasKey (int) number of keys a player currently has in it's possession. 
+	 */
 	public int getHasKey() {
 		return hasKey;
 	}
 
+	/**
+	 * Setter for the number of keys a player has.
+	 * 
+	 * @param hasKey (int) the number of keys a player will have.
+	 */
 	public void setHasKey(int hasKey) {
 		this.hasKey = hasKey;
 	}

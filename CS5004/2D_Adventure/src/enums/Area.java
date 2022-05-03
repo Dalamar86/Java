@@ -1,13 +1,19 @@
 package enums;
 
-import object.*;
-
 import java.util.ArrayList;
 
+import object.*;
 import main.GamePanel;
 import monster.*;
 import npc.*;
 
+/**
+ * Enum which represents the various levels available in the game.  Contains two 
+ * abstract methods setup and resetMonsters.
+ * 
+ * @author Robert Wilson
+ *
+ */
 public enum Area {
 	DEBUG {
 		@Override
@@ -127,8 +133,19 @@ public enum Area {
 		}
 	};
 	
-	
+	/**
+	 * Creates all the objects on the current level and adds them to the 
+	 * Asset Setter.
+	 * 
+	 * @param gp Current Game Panel
+	 */
 	public abstract void setup(GamePanel gp);
+	
+	/**
+	 * Adds the monsters for that level back into the Asset Setter
+	 * 
+	 * @param gp Current Game Panel
+	 */
 	public abstract void resetMonster(GamePanel gp);
 	
 }

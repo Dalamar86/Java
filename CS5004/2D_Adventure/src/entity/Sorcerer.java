@@ -8,11 +8,23 @@ import object.OBJ_PotionBlue;
 import object.OBJ_PotionRed;
 import projectiles.PROJ_FlameStrike;
 
+/**
+ * The sorcerer class is an extension of the player class.  This character can use magic to 
+ * do its bidding but cannot use melee weapons.
+ * 
+ * @author Robert Wilson
+ *
+ */
 public final class Sorcerer extends Player{
 
+	/**
+	 * Creates an instance of the sorcerer
+	 * 
+	 * @param gp current GamePanel
+	 * @param keyH action listener for this player
+	 */
 	public Sorcerer(GamePanel gp, KeyHandler keyH) {
 		super(gp, keyH);
-		
 	}
 
 	@Override
@@ -43,8 +55,6 @@ public final class Sorcerer extends Player{
 	
 	@Override
 	protected void setItems() {
-		//getInventory().add(getCurrentWeapon());
-		//getInventory().add(getCurrentShield());
 		getInventory().add(new OBJ_Key(gp));
 		setHasKey(getHasKey() + 1);
 		getInventory().add(new OBJ_PotionRed(gp));

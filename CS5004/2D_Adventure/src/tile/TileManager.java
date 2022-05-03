@@ -1,33 +1,56 @@
 package tile;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import javax.imageio.ImageIO;
 
 import enums.Area;
 import main.*;
 
+/**
+ * Creates, manages, and draws tiles from the given map.  
+ * 
+ * @author Robert Wilson
+ *
+ */
 public class TileManager {
-
+	// Current Game Panel
 	GamePanel gp;
-	public Tile[] tile;
-	public int mapTileNum[] [];
 	
+	// list of current tile images
+	public Tile[] tile;
+	
+	//  map in numeric form
+	public int mapTileNum[][];
+	
+	/**
+	 * Creates an instance of the tile manager, creating a map with the world col and row size.
+	 * Loads tiles from the map into mapTileNum.
+	 * 
+	 * @param gp (GamePanel) Current game panel
+	 */
 	public TileManager(GamePanel gp) {
-		
 		this.gp = gp;
 		
+		// Setup tilles
 		tile = new Tile[50];
 		mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
 		
-		getTileImage(Area.MAIN);
-		loadMap("/maps/worldV2.txt");
+		// Load map
+		String mapPath = getTileImage(Area.MAIN);
+		loadMap(mapPath);
 	}
 	
+	/**
+	 * Load the proper tiles for the given area on the map
+	 * 
+	 * @param area (Area) area to be loaded
+	 * @return (String) path of map to be loaded
+	 */
 	public String getTileImage(Area area) {
 		switch(area) {
 		case MAIN:
@@ -87,14 +110,18 @@ public class TileManager {
 		return "";
 	}
 	
+	/**
+	 * Buffer the current object's image and scale it to the games tile size. 
+	 * 
+	 * @param index (int) index of the tile to load
+	 * @param imagePath (String) the path of the image to be buffered
+	 * @param collision (boolean) whether or not it is traversablel.  True means it is, false otherwise
+	 */
 	public void setup(int index, String imageName, boolean collision) {
-		
-		UtilityTool uTool = new UtilityTool();
-		
 		try {
 			tile[index] = new Tile();
 			tile[index].image = ImageIO.read(getClass().getResourceAsStream("/tiles/" + imageName + ".png"));
-			tile[index].image = uTool.scaleImage(tile[index].image, gp.tileSize, gp.tileSize);
+			tile[index].image = scaleImage(tile[index].image, gp.tileSize, gp.tileSize);
 			tile[index].collision = collision;
 			
 		} catch(IOException e) {
@@ -102,6 +129,30 @@ public class TileManager {
 		}
 	}
 	
+	/**
+	 * Scales the given image to the specified width and height.
+	 * 
+	 * @param original (BufferedImage) Original image to scale
+	 * @param width (int) width to scale the image at
+	 * @param height (int) height to scale the image at
+	 * 
+	 * @return image (BufferedImage) scaled image
+	 */
+	public BufferedImage scaleImage(BufferedImage original, int width, int height) {
+		
+		BufferedImage scaledImage = new BufferedImage(width, height, original.getType());
+		Graphics2D g2 = scaledImage.createGraphics();
+		g2.drawImage(original, 0, 0, width, height, null);
+		g2.dispose();
+
+		return scaledImage;
+	}
+	
+	/**
+	 * Loads the map and marries the numeric on the map with a particular tile image.
+	 * 
+	 * @param filePath (String) file path of map to load
+	 */
 	public void loadMap(String filePath) {
 		try {
 			InputStream is = getClass().getResourceAsStream(filePath);
@@ -131,6 +182,12 @@ public class TileManager {
 		}
 	}
 	
+	/**
+	 * The draw method for the objects.  Takes the buffered images, chooses the correct one
+	 * and then draws it.
+	 * 
+	 * @param (Graphics2D) graphics renderer
+	 */
 	public void draw(Graphics2D g2) {
 		
 		int worldCol = 0;

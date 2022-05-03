@@ -2,16 +2,33 @@ package main;
 
 import gameobject.GameObject;
 
+/**
+ * Checks for collisions between gameObjects, tiles, and players.
+ * 
+ * @author Robert Wilson
+ *
+ */
 public class CollisionChecker {
-
+	// Current GamePanel
 	GamePanel gp;
 	
+	/**
+	 * Creates a new instance of a collision checker
+	 * 
+	 * @param gp (GamePanel) Current game Panel
+	 */
 	public CollisionChecker (GamePanel gp) {
 		this.gp = gp;
 	}
 	
+	/**
+	 * Checks for collision between a gameobject and a tile.  If a collision is detected it 
+	 * sets the gameObject's collisionOn to true. 
+	 * 
+	 * @param gameObject (GameObject) object to check for collision with
+	 */
 	public void checkTile(GameObject gameObject) {
-		
+		// Get every tile around the object
 		int entityLeftWorldX = gameObject.getWorldX() + gameObject.getSolidArea().x;
 		int entityRightWorldX = gameObject.getWorldX() + gameObject.getSolidArea().x + gameObject.getSolidArea().width;
 		int entityTopWorldY = gameObject.getWorldY() + gameObject.getSolidArea().y;
@@ -24,7 +41,7 @@ public class CollisionChecker {
 		
 		int tileNum1, tileNum2, tileNum3, tileNum4;
 		
-		
+		// Depending on which direction the object is moving, check the tiles in that direction
 		switch(gameObject.getDirection()) {
 		case "up":
 			entityTopRow = (entityTopWorldY - gameObject.getSpeed())/gp.tileSize;
@@ -105,6 +122,14 @@ public class CollisionChecker {
 		}
 	}
 	
+	/**
+	 * Checker for when a gameObject interacts with an object, If the boolean player is true then a player is
+	 * the one interacting.  Returns an index of 999 if nothing is interacted with. 
+	 * 
+	 * @param gameObject (GameObject) gameObject to check if it interacts with any objects in gp's object list
+	 * @param player (boolean) true if the object is a player, setting the index to the object interacted with if true
+	 * @return index (int) index of the object interacted with
+	 */
 	public int checkObject(GameObject gameObject, boolean player) {
 		int index = 999;
 		
@@ -148,18 +173,23 @@ public class CollisionChecker {
 						index = i;
 					}
 				}
-				
 				gameObject.getSolidArea().x = gameObject.getSolidAreaDefaultX();
 				gameObject.getSolidArea().y = gameObject.getSolidAreaDefaultY();
 				gp.obj[i].getSolidArea().x = gp.obj[i].getSolidAreaDefaultX();
 				gp.obj[i].getSolidArea().y = gp.obj[i].getSolidAreaDefaultY();
 			}
 		}
-		
 		return index;
 	}
 	
-	// NPC or Monster collision
+	// 
+	/**
+	 * Checks for NPC or Monster collision and returns the index if the target is collided with
+	 * 
+	 * @param gameObject (GameObject) object doing the checking
+	 * @param target (GameObject) object being checked against
+	 * @return index (int) index of the target interacted with, 999 if not interacted with
+	 */
 	public int checkEntity(GameObject gameObject, GameObject[] target) {
 		int index = 999;
 		
@@ -202,17 +232,21 @@ public class CollisionChecker {
 					}
 					
 				}
-				
 				gameObject.getSolidArea().x = gameObject.getSolidAreaDefaultX();
 				gameObject.getSolidArea().y = gameObject.getSolidAreaDefaultY();
 				target[i].getSolidArea().x = target[i].getSolidAreaDefaultX();
 				target[i].getSolidArea().y = target[i].getSolidAreaDefaultY();
 			}
 		}
-		
 		return index;
 	}
 	
+	/**
+	 * Checker if the object interacts with the player, returns true if it does and false if it doesn't.
+	 * 
+	 * @param gameObject (GameObject)  object doing the checking
+	 * @return contacctPlayer (boolean) 
+	 */
 	public boolean checkPlayer(GameObject gameObject) {
 		
 		boolean contactPlayer = false;

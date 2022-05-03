@@ -3,8 +3,19 @@ package projectiles;
 import enums.ObjectType;
 import main.GamePanel;
 
-public class PROJ_FlameStrike extends SuperProjectile {
+/**
+ * FlameStrike projectile is a make spell which can be used by both player and monster.  
+ * 
+ * @author Robert Wilson
+ *
+ */
+public final class PROJ_FlameStrike extends SuperProjectile {
 
+	/**
+	 * Creates an instance of the flame strike projectile.
+	 * 
+	 * @param gp (GamePanel) Current game panel
+	 */
 	public PROJ_FlameStrike(GamePanel gp) {
 		super(gp);
 		
@@ -22,6 +33,9 @@ public class PROJ_FlameStrike extends SuperProjectile {
 		getImage();
 	}
 
+	/**
+	 * Load image paths and send to get scaled and add the buffered images.
+	 */
 	public void getImage() {
 		up1 = setup("/projectiles/flame_strike_up_1");
 		up2 = setup("/projectiles/flame_strike_up_1");
@@ -31,10 +45,5 @@ public class PROJ_FlameStrike extends SuperProjectile {
 		left2 = setup("/projectiles/flame_strike_left_1");
 		right1 = setup("/projectiles/flame_strike_right_1");
 		right2 = setup("/projectiles/flame_strike_right_1");
-	}
-	
-	@Override
-	public int attack() {
-		return attack;
 	}
 }
