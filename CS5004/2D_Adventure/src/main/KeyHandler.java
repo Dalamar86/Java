@@ -3,19 +3,29 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import enums.GameState;
+
 /**
- * This class controls our keyboard input.
+ * Keyboard action listener.
+ * 
  * @author Robert Wilson
  *
  */
 public class KeyHandler implements KeyListener {
-
+	// Current game panel
 	GamePanel gp;
-	private boolean upPressed, downPressed, ltPressed, rtPressed, enterPressed;
+	
+	// Button pressed booleans, true if pressed
+	private boolean upPressed, downPressed, ltPressed, rtPressed, enterPressed, spacePressed;
 	
 	// Debug
 	private boolean showDebugText = false;
 	
+	/**
+	 * Creates an instance of the key Handler.
+	 * 
+	 * @param gp (GamePanel) Current game panel
+	 */
 	public KeyHandler(GamePanel gp) {
 		this.gp = gp;
 	}
@@ -116,6 +126,8 @@ public class KeyHandler implements KeyListener {
 				
 			} else if(code == KeyEvent.VK_ENTER) {
 				setEnterPressed(true);
+			} else if(code == KeyEvent.VK_SPACE) {
+				setSpacePressed(true);
 			}
 			break;
 			
@@ -187,53 +199,137 @@ public class KeyHandler implements KeyListener {
 			setRtPressed(false);
 		}  if(code == KeyEvent.VK_ENTER) {
 			setEnterPressed(false);
-		}
+		} if(code == KeyEvent.VK_SPACE) {
+			setSpacePressed(false);
+		} 
 	}
 
+	//#####################################################################
+	// 							Getters and Setters
+	//#####################################################################
+	
+	/**
+	 * Returns true if the enter button was pressed
+	 * 
+	 * @return enterPressed (boolean)
+	 */
 	public boolean isEnterPressed() {
 		return enterPressed;
 	}
 
+	/**
+	 * Sets the enterPressed boolean to parameter.
+	 * 
+	 * @param enterPressed (boolean)
+	 */
 	public void setEnterPressed(boolean enterPressed) {
 		this.enterPressed = enterPressed;
 	}
+	
+	/**
+	 * Returns true if the space button was pressed
+	 * 
+	 * @return spacePressed (boolean)
+	 */
+	public boolean isSpacePressed() {
+		return spacePressed;
+	}
 
+	/**
+	 * Sets the spacePressed boolean to parameter.
+	 * 
+	 * @param spacePressed (boolean)
+	 */
+	public void setSpacePressed(boolean spacePressed) {
+		this.spacePressed = spacePressed;
+	}
+
+	/**
+	 * Returns true if the up button was pressed
+	 * 
+	 * @return upPressed (boolean)
+	 */
 	public boolean isUpPressed() {
 		return upPressed;
 	}
 
+	/**
+	 * Sets the upPressed boolean to parameter.
+	 * 
+	 * @param upPressed (boolean)
+	 */
 	public void setUpPressed(boolean upPressed) {
 		this.upPressed = upPressed;
 	}
 
+	/**
+	 * Returns true if the down button was pressed
+	 * 
+	 * @return downPressed (boolean)
+	 */
 	public boolean isDownPressed() {
 		return downPressed;
 	}
 
+	/**
+	 * Sets the downPressed boolean to parameter.
+	 * 
+	 * @param downPressed (boolean)
+	 */
 	public void setDownPressed(boolean downPressed) {
 		this.downPressed = downPressed;
 	}
 
+	/**
+	 * Returns true if the a button was pressed
+	 * 
+	 * @return ltPressed (boolean)
+	 */
 	public boolean isLtPressed() {
 		return ltPressed;
 	}
 
+	/**
+	 * Sets the ltPressed boolean to parameter.
+	 * 
+	 * @param ltPressed (boolean)
+	 */
 	public void setLtPressed(boolean ltPressed) {
 		this.ltPressed = ltPressed;
 	}
 
+	/**
+	 * Returns true if the d button was pressed
+	 * 
+	 * @return rtPressed (boolean)
+	 */
 	public boolean isRtPressed() {
 		return rtPressed;
 	}
 
+	/**
+	 * Sets the rtPressed boolean to parameter.
+	 * 
+	 * @param rtPressed (boolean)
+	 */
 	public void setRtPressed(boolean rtPressed) {
 		this.rtPressed = rtPressed;
 	}
 
+	/**
+	 * Returns true if the t button was pressed
+	 * 
+	 * @return showDebugText (boolean)
+	 */
 	public boolean isShowDebugText() {
 		return showDebugText;
 	}
 
+	/**
+	 * Sets the showDebugText boolean to parameter.
+	 * 
+	 * @param showDebugText (boolean)
+	 */
 	public void setShowDebugText(boolean showDebugText) {
 		this.showDebugText = showDebugText;
 	}

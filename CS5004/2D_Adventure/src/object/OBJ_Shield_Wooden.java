@@ -1,10 +1,21 @@
 package object;
 
+import enums.ObjectType;
 import main.GamePanel;
-import main.ObjectType;
 
-public class OBJ_Shield_Wooden extends SuperObject {
+/**
+ * Wooden shield is the base defensive shield of the game, offering minimal protection.
+ * 
+ * @author Robert Wilson
+ *
+ */
+public final class OBJ_Shield_Wooden extends SuperObject {
 
+	/**
+	 * Creates an instance of the wooden shield object.
+	 * 
+	 * @param gp (GamePanel) Current game panel
+	 */
 	public OBJ_Shield_Wooden(GamePanel gp) {
 		super(gp, "shield_wood");
 		setType(ObjectType.SHIELD);

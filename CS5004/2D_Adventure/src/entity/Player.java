@@ -7,11 +7,16 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import enums.GameState;
+import enums.ObjectType;
 import gameobject.GameObject;
 import main.*;
 import object.*;
+import projectiles.PROJ_FlameStrike;
 
 /**
+ * Player Class represents the user in the game.  This class extends the GameObject class and inherits
+ * all its methods and attributes.  
  * 
  * @author Robert Wilson
  *
@@ -28,9 +33,14 @@ public class Player extends GameObject{
 	private ArrayList<GameObject> inventory = new ArrayList<>();
 	private final int inventorySize = 20;
 	
+	/**
+	 * Creates a new instance of the player, with hitbox and default values
+	 * 
+	 * @param gp GamePanel which encases the whole application
+	 * @param keyH action listener
+	 */
 	public Player(GamePanel gp, KeyHandler keyH) {
 		super(gp);
-
 		this.keyH = keyH;
 		
 		screenX = gp.screenWidth/2 - (gp.tileSize/2);
@@ -54,6 +64,14 @@ public class Player extends GameObject{
 	// 									Setup
 	//#####################################################################
 	
+	/**
+	 * Sets the default values for a player.  
+	 * This includes:
+	 * 		starting location
+	 * 		ObjectType
+	 * 		player attributes
+	 * 		current weapon, shield, and magic spell
+	 */
 	public void setDefaultValues() {
 		
 		setWorldX(gp.tileSize * 23);
@@ -75,11 +93,15 @@ public class Player extends GameObject{
 		setCoin(0);
 		setCurrentWeapon(new OBJ_Sword_Normal(gp));
 		setCurrentShield(new OBJ_Shield_Wooden(gp));
+		setProjectile(new PROJ_FlameStrike(gp));
 		setAttack(getAttack());
 		setDefense(getDefense());
 	}
 	
-	private void setItems() {
+	/**
+	 * Builds the inventory of the player.
+	 */
+	protected void setItems() {
 		getInventory().add(getCurrentWeapon());
 		getInventory().add(getCurrentShield());
 		getInventory().add(new OBJ_Key(gp));
@@ -91,15 +113,24 @@ public class Player extends GameObject{
 		getInventory().add(new OBJ_Axe(gp));
 	}
 	
+	/**
+	 * Set the attack and attack area based on the current weapon.
+	 */
 	public int getAttack() {
 		setAttackArea(getCurrentWeapon().getAttackArea());
 		return attack = getStrength() * getCurrentWeapon().getAttackValue();
 	}
 	
+	/**
+	 * Set the defense based on the current defense  
+	 */
 	public int getDefense() { 
 		return defense = getDexterity() * getCurrentShield().getDefenseValue();
 	}
 	
+	/**
+	 * Sets the images for the main character.
+	 */
 	public void getImage() {		
 		up1 = setup("/player/boy_up_1");
 		up2 = setup("/player/boy_up_2");
@@ -111,6 +142,9 @@ public class Player extends GameObject{
 		right2 = setup("/player/boy_right_2");
 	}
 	
+	/**
+	 * Sets the attacking animation based on current weapon 
+	 */
 	public void getPlayerAttackImage() {
 		if(getCurrentWeapon().getName() == "sword_normal") {
 			attackUp1 = setup("/player/boy_attack_up_1", 		gp.tileSize,   gp.tileSize*2);
@@ -130,58 +164,69 @@ public class Player extends GameObject{
 			attackLeft2 = setup("/player/boy_axe_left_2", 	gp.tileSize*2, gp.tileSize);
 			attackRight1 = setup("/player/boy_axe_right_1",	gp.tileSize*2, gp.tileSize);
 			attackRight2 = setup("/player/boy_axe_right_2", 	gp.tileSize*2, gp.tileSize);
+		} else {
+			attackUp1 = setup("/player/boy_up_1");
+			attackUp2 = setup("/player/boy_up_2");
+			attackDown1 = setup("/player/boy_down_1");
+			attackDown2 = setup("/player/boy_down_2");
+			attackLeft1 = setup("/player/boy_left_1");
+			attackLeft2 = setup("/player/boy_left_2");
+			attackRight1 = setup("/player/boy_right_1");
+			attackRight2 = setup("/player/boy_right_2");
 		}
-		
 	}
 	
 	//#####################################################################
 	// 							Update and Draw
 	//#####################################################################
 	
+	@Override
 	public void update() {
 		if(isDying()) {
 			setAlive(false);
 			gp.setGameState(GameState.DEADSTATE);
 		}
-		if(attacking) {
+		if(isAttacking()) {
 			attacking();
-		} else if(keyH.isUpPressed() == true || keyH.isDownPressed() == true || keyH.isLtPressed() == true || keyH.isRtPressed() == true || keyH.isEnterPressed()) {
+		} else if(keyH.isUpPressed() == true || keyH.isDownPressed() == true || keyH.isLtPressed() == true || 
+				keyH.isRtPressed() == true || keyH.isEnterPressed()) {
 			
+			// Check the direction of travel depending on which key is pressed
 			if(keyH.isUpPressed() == true) {
 				if(keyH.isLtPressed()) {
-					setDirection("uplt");
+					setDirection("upleft");
 				} else if (keyH.isRtPressed()) {
-					setDirection("uprt");
+					setDirection("upright");
 				} else {
 					setDirection("up");
 				}
 			} else if(keyH.isDownPressed() == true) {
 				if(keyH.isLtPressed()) {
-					setDirection("downlt");
+					setDirection("downleft");
 				} else if (keyH.isRtPressed()) {
-					setDirection("downrt");
+					setDirection("downright");
 				} else {
 					setDirection("down");
 				}
 			} else if(keyH.isLtPressed() == true) {
 				if(keyH.isUpPressed()) {
-					setDirection("uplt");
+					setDirection("upleft");
 				} else if (keyH.isDownPressed()) {
-					setDirection("downlt");
+					setDirection("downleft");
 				} else {
 					setDirection("left");
 				}
 			} else if(keyH.isRtPressed() == true) {
 				if(keyH.isUpPressed()) {
-					setDirection("uprt");
+					setDirection("upright");
 				} else if (keyH.isDownPressed()) {
-					setDirection("downrt");
+					setDirection("downright");
 				} else {
 					setDirection("right");
 				}
 			}  
 			if(keyH.isEnterPressed()) {
-				attacking = true;
+				setAttacking(true);
 			}
 			
 			// Check tile collision
@@ -200,7 +245,7 @@ public class Player extends GameObject{
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
 			if(monsterIndex != 999) {
 				GameObject monster = gp.monster[monsterIndex];
-				takeDamage(monster.attack());
+				takeDamage(monster.getAttack());
 			}
 			
 			
@@ -208,29 +253,30 @@ public class Player extends GameObject{
 			gp.eHandler.checkEvent();
 			
 			
-			// if collision is False, Player can move
+			// if collision is False, Player can move, else if collision is true can we move 
+			// in a direction that is independent of the diagonal
 			if(isCollisionOn() == false) {
 	
 				switch(getDirection()) {
 				case "up":
 					setWorldY(getWorldY() - getSpeed());
 					break;
-				case "uplt":
+				case "upleft":
 					setWorldY(getWorldY() - getSpeeddiag());
 					setWorldX(getWorldX() - getSpeeddiag());
 					break;
-				case "uprt":
+				case "upright":
 					setWorldY(getWorldY() - getSpeeddiag());
 					setWorldX(getWorldX() + getSpeeddiag());
 					break;
 				case "down":
 					setWorldY(getWorldY() + getSpeed());
 					break;
-				case "downlt":
+				case "downleft":
 					setWorldY(getWorldY() + getSpeeddiag());
 					setWorldX(getWorldX() - getSpeeddiag());
 					break;
-				case "downrt":
+				case "downright":
 					setWorldY(getWorldY() + getSpeeddiag());
 					setWorldX(getWorldX() + getSpeeddiag());
 					break;
@@ -242,7 +288,7 @@ public class Player extends GameObject{
 					break;
 				}
 				
-			} else if(isCollisionOn() == true && getDirection() == "uplt") {
+			} else if(isCollisionOn() == true && getDirection() == "upleft") {
 				setDirection("left");
 				setCollisionOn(false);
 				gp.cChecker.checkTile(this);
@@ -262,7 +308,7 @@ public class Player extends GameObject{
 						setWorldY(getWorldY() - getSpeed());
 					}
 				}
-			} else if(isCollisionOn() == true && getDirection() == "uprt") {
+			} else if(isCollisionOn() == true && getDirection() == "upright") {
 				setDirection("right");
 				setCollisionOn(false);
 				gp.cChecker.checkTile(this);
@@ -282,7 +328,7 @@ public class Player extends GameObject{
 						setWorldY(getWorldY() - getSpeed());
 					}
 				}
-			} else if(isCollisionOn() == true && getDirection() == "downlt") {
+			} else if(isCollisionOn() == true && getDirection() == "downleft") {
 				setDirection("left");
 				setCollisionOn(false);
 				gp.cChecker.checkTile(this);
@@ -302,7 +348,7 @@ public class Player extends GameObject{
 						setWorldY(getWorldY() + getSpeed());
 					}
 				}
-			} else if(isCollisionOn() == true && getDirection() == "downrt") {
+			} else if(isCollisionOn() == true && getDirection() == "downright") {
 				setDirection("right");
 				setCollisionOn(false);
 				gp.cChecker.checkTile(this);
@@ -324,15 +370,17 @@ public class Player extends GameObject{
 				}
 			}
 			
+			// Attack using enter key
 			if(keyH.isEnterPressed() && !attackCanceled) {
 				gp.playSE(7);
-				attacking = true;
+				setAttacking(true);
 				spriteCounter = 0;
 			}
 			
+			// Reset attack canceled to false
 			attackCanceled = false;
-			//gp.keyH.enterPressed = false;
 			
+			// Choose sprite to use depending on counter
 			spriteCounter++;
 			if(spriteCounter > 12) {
 				if(spriteNum == 1) {
@@ -345,22 +393,44 @@ public class Player extends GameObject{
 			
 		} else {
 			
+			// Smooth out the animations
 			standCounter++;
 			if(standCounter == 20) {
 				spriteNum = 1;
 				standCounter = 0;
 			}
+		}
+		
+		// Magic spell on space key pressed
+		if(keyH.isSpacePressed() && !getProjectile().isAlive() && attackingSpeedCounter == getProjectile().getAttackSpeed()) {
 			
-			if(invincible) {
-				invincibleCounter++;
-				if(invincibleCounter > 60) {
-					invincible = false;
-					invincibleCounter = 0;
-				}
-			}		
+			// Set default coordinates, direction and user
+			getProjectile().set(getWorldX(), getWorldY(), getDirection(), true, this);
+			
+			// add it to the list
+			gp.projectileList.add(getProjectile());
+			attackingSpeedCounter = 0;
+			
+			// Play flameStrike sound
+			gp.playSE(11);
+		}
+		
+		// Invincible counter after being hit
+		if(invincible) {
+			invincibleCounter++;
+			if(invincibleCounter > 60) {
+				invincible = false;
+				invincibleCounter = 0;
+			}
+		}
+		
+		// Limit magic attacks to the given attack speed
+		if(attackingSpeedCounter < getProjectile().getAttackSpeed()) {
+			attackingSpeedCounter++;
 		}
 	}
 	
+	@Override
 	public void draw(Graphics2D g2) {
 		
 		BufferedImage image = null;
@@ -382,9 +452,10 @@ public class Player extends GameObject{
 			y = gp.screenHeight - (gp.worldHeight - getWorldY());
 		}
 		
+		// Choose appropriate sprite to draw
 		switch(getDirection()) {
 		case "up":
-			if(!attacking) {
+			if(!isAttacking()) {
 				if(spriteNum == 1) {image = up1;} 
 				else {image = up2;}
 			} else {
@@ -393,9 +464,9 @@ public class Player extends GameObject{
 				else {image = attackUp2;}
 			}
 			break;
-		case "downlt":
-		case "uplt":
-			if(!attacking) {
+		case "downleft":
+		case "upleft":
+			if(!isAttacking()) {
 				if(spriteNum == 1) {image = left1;} 
 				else {image = left2;}
 			} else {
@@ -404,9 +475,9 @@ public class Player extends GameObject{
 				else {image = attackLeft2;}
 			}
 			break;
-		case "downrt":
-		case "uprt":
-			if(!attacking) {
+		case "downright":
+		case "upright":
+			if(!isAttacking()) {
 				if(spriteNum == 1) {image = right1;} 
 				else {image = right2;}
 			} else {
@@ -415,7 +486,7 @@ public class Player extends GameObject{
 			}
 			break;
 		case "down":
-			if(!attacking) {
+			if(!isAttacking()) {
 				if(spriteNum == 1) {image = down1;} 
 				else {image = down2;}
 			} else {
@@ -424,7 +495,7 @@ public class Player extends GameObject{
 			}
 			break;
 		case "left":
-			if(!attacking) {
+			if(!isAttacking()) {
 				if(spriteNum == 1) {image = left1;} 
 				else {image = left2;}
 			} else {
@@ -434,7 +505,7 @@ public class Player extends GameObject{
 			}
 			break;
 		case "right":
-			if(!attacking) {
+			if(!isAttacking()) {
 				if(spriteNum == 1) {image = right1;} 
 				else {image = right2;}
 			} else {
@@ -444,6 +515,7 @@ public class Player extends GameObject{
 			break;
 		}
 		
+		// Make the player flash when invincible
 		if(invincible) {
 			if(invincibleCounter <= 10) {
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3F));
@@ -452,8 +524,8 @@ public class Player extends GameObject{
 			} 
 		}
 		
+		// Draw the player
 		g2.drawImage(image,  x,  y, null);
-		
 		
 		// Reset alpha
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));
@@ -463,6 +535,11 @@ public class Player extends GameObject{
 	// 								Components
 	//#####################################################################
 	
+	/**
+	 * Starts the attacking animation and when the player is attacking, determine 
+	 * whether an attackable gameObject has been hit and call the appropriate 
+	 * method depending on which object that is.
+	 */
 	public void attacking() {
 		spriteCounter++;
 		
@@ -494,9 +571,10 @@ public class Player extends GameObject{
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
 			if(monsterIndex != 999) {
 				GameObject monster = gp.monster[monsterIndex];
-				damageMonster(monster);
+				damageMonster(monster, getAttack());
 			}
 			
+			// Reset the players location 
 			setWorldX(currentWorldX);
 			setWorldY(currentWorldY);
 			getSolidArea().width = solidAreaWidth;
@@ -506,22 +584,33 @@ public class Player extends GameObject{
 		} else {
 			spriteNum = 1;
 			spriteCounter = 0;
-			attacking = false;
+			setAttacking(false);
 		}
 	}
 	
+	/**
+	 * Determines what action occurs depending on the object picked up.
+	 *   
+	 * @param index the index of the item picked up
+	 */
 	public void pickUpObject(int index) {
+		// Check that the item is not null
 		if(index != 999) {
+			// Make sure the inventory is not full
 			if(inventory.size() != inventorySize) {
 				
+				// Get the actual object at that index and reset some utility attributes
 				String objectName = gp.obj[index].getName();
 				String text = "";
+				boolean doorUnlocked = false;
+				
+				// Make sure it is not as door or chest, which should not be added to the 
+				// player inventory
 				if(objectName != "Door" && objectName != "Chest") {
 					inventory.add(gp.obj[index]);
 				}
 				
-				boolean doorUnlocked = false;
-				
+				// Determine which action to take by the item name
 				switch(objectName) {
 				case "Key":
 					gp.playSE(1);
@@ -569,6 +658,9 @@ public class Player extends GameObject{
 					text = "mysterious liquid";
 					break;
 				}
+				
+				// delete the door if it was opened otherwise delete 
+				// every other object picked up
 				if(objectName == "Door") {
 					if(doorUnlocked) {
 						gp.obj[index] = null;
@@ -582,7 +674,13 @@ public class Player extends GameObject{
 		}
 	}
 	
+	/**
+	 * action to take if player runs into an NPC.
+	 * 
+	 * @param index The index of the NPC which has been run into.
+	 */
 	public void interactNPC(int index) {
+		// Check that the NPC exists
 		if(index != 999) {
 			attackCanceled = true;
 			gp.setGameState(GameState.DIALOGUESTATE);
@@ -610,7 +708,16 @@ public class Player extends GameObject{
 		// TODO move character back
 	}
 	
-	public void damageMonster(GameObject monster) {
+	/**
+	 * If the player hits a monster then the monster takes the 
+	 * correct amount of damage and returns experience if it is killed.
+	 * If the monster dies and experience is given, then check if the 
+	 * player has leveled up.
+	 * 
+	 * @param monster The monster which takes the damage.
+	 * @param attack The attack of either the melee weapon of the spell cast.
+	 */
+	public void damageMonster(GameObject monster, int attack) {
 		int exp = monster.takeDamage(attack);
 		if(exp != 0 ) {
 			this.exp += exp;
@@ -618,6 +725,10 @@ public class Player extends GameObject{
 		}
 	}
 	
+	/**
+	 * Chech if the player has earned enough experience to level up and if
+	 * it has then raise the appropriate skills.
+	 */
 	public void checkLevelUp() {
 		if(exp >= nextLevelExp ) {
 			level++;
@@ -634,6 +745,9 @@ public class Player extends GameObject{
 		}
 	}
 	
+	/**
+	 * Change the item currently equipped by the player.
+	 */
 	public void equipItem() {
 		int itemIndex = gp.ui.getItemIndex();
 		
@@ -655,6 +769,9 @@ public class Player extends GameObject{
 		}
 	}
 	
+	/**
+	 * If a door is unlocked we need to remove a key from the player inventory
+	 */
 	private void useKey() {
 		int i;
 		for(i = 0; i < inventory.size(); i++) {
@@ -669,26 +786,56 @@ public class Player extends GameObject{
 	// 							Getters and Setters
 	//#####################################################################
 	
+	/**
+	 * Getter for the boolean determining if the attack should be canceled
+	 * 
+	 * @return attackCanceled (boolean) boolean of whether the attack should be canceled.
+	 */
 	public boolean isAttackCanceled() {
 		return attackCanceled;
 	}
 
+	/**
+	 * Setter for the boolean determining if the attack should be canceled
+	 * 
+	 * @param attackCanceled (boolean) boolean of whether the attack should be canceled.
+	 */
 	public void setAttackCanceled(boolean attackCanceled) {
 		this.attackCanceled = attackCanceled;
 	}
 
+	/**
+	 * Getter for the player's inventory List
+	 * 
+	 * @return inventory (ArrayList) the List containing the players inventory 
+	 */
 	public ArrayList<GameObject> getInventory() {
 		return inventory;
 	}
 
+	/**
+	 * Setter of the player's inventory.  
+	 * 
+	 * @param inventory (ArrayList) an arrayList of items the player can carry
+	 */
 	public void setInventory(ArrayList<GameObject> inventory) {
 		this.inventory = inventory;
 	}
 	
+	/**
+	 * Getter for the number of keys the player currently has.
+	 * 
+	 * @return hasKey (int) number of keys a player currently has in it's possession. 
+	 */
 	public int getHasKey() {
 		return hasKey;
 	}
 
+	/**
+	 * Setter for the number of keys a player has.
+	 * 
+	 * @param hasKey (int) the number of keys a player will have.
+	 */
 	public void setHasKey(int hasKey) {
 		this.hasKey = hasKey;
 	}

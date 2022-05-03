@@ -13,6 +13,12 @@ import java.util.ArrayList;
 import object.*;
 import gameobject.GameObject;
 
+/**
+ * Creates and manages all views and hud for the game.
+ * 
+ * @author Robert  Wilson
+ *
+ */
 public class UI {
 
 	// Setup
@@ -47,7 +53,12 @@ public class UI {
 	private int slotCol = 0;
 	private int slotRow = 0;
 	
-	
+	/**
+	 * Creates an instance of the UI and sets the first view to the title state.  
+	 * This also initializes some fonts needed for the game.
+	 * 
+	 * @param gp (GamePanel) Current Game Panel
+	 */
 	public UI(GamePanel gp) {
 		this.gp = gp;
 		this.text = "";
@@ -71,27 +82,30 @@ public class UI {
 		heart_full = heart.getImage1();
 		heart_half = heart.getImage2();
 		heart_blank = heart.getImage3();
-		
-		/*
-		// Create character screen items
-		Entity char_sword = gp.player.currentWeapon;
-		sword = char_sword.image1;
-		Entity char_shield = gp.player.currentShield;
-		shield= char_shield.image1;
-		*/
 	}
 	
+	/**
+	 * Adds a message to the queue to be printed out.
+	 * 
+	 * @param text (String) message to be printed
+	 */
 	public void addMessage(String text) {
 		message.add(text);
 		messageCounter.add(0);
 	}
 	
+	/**
+	 * Draw method of the UI which determines which view to draw based on the games state.
+	 * 
+	 * @param g2 (Graphics2D) 
+	 */
 	public void draw(Graphics2D g2) {
 		this.g2 = g2;
 		
 		g2.setFont(arial_40);
 		g2.setColor(Color.white);
 		
+		// Switch views depending on game state
 		switch(gp.getGameState()) {
 		case PLAYSTATE:
 			drawHUD();
@@ -122,6 +136,9 @@ public class UI {
 		}
 	}
 
+	/**
+	 * Creates and draws the overlay during the play and character states.
+	 */
 	private void drawHUD() {
 		
 		// Empty hearts
@@ -135,6 +152,7 @@ public class UI {
 			x += gp.tileSize;
 		}
 		int xKey = x;
+		
 		// Full hearts
 		x = gp.tileSize/2;
 		y = gp.tileSize/2;
@@ -164,14 +182,18 @@ public class UI {
 		g2.drawString(text, x, y);
 	}
 	
+	/**
+	 * Draws the notification messages on the side of the screen.  
+	 * After a certain amount of time, governed by as messageCounter, the message disappears.
+	 */
 	private void drawMessage() {
 		int messageX = gp.tileSize;
 		int messageY = gp.tileSize*4;
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20F));
 		
+		// Draw all messages
 		for(int i = 0; i < message.size(); i++) {
 			if(message.get(i) != null ) {
-				
 				g2.setColor(Color.black);
 				g2.drawString(message.get(i), messageX+2, messageY+2);
 				g2.setColor(Color.white);
@@ -181,6 +203,7 @@ public class UI {
 				messageCounter.set(i, counter);
 				messageY += 50;
 				
+				// Remove old messages
 				if(messageCounter.get(i) > 120) {
 					message.remove(i);
 					messageCounter.remove(i);
@@ -189,6 +212,9 @@ public class UI {
 		}
 	}
 	
+	/**
+	 * Creates manages and draws the title screen.
+	 */
 	private void drawTitleScreen() {
 		if(getTitleScreenState() == 0) {
 			g2.setColor(new Color(25, 25, 185));
@@ -275,20 +301,26 @@ public class UI {
 				g2.drawString(">", x-gp.tileSize, y);
 			}
 		}
-		
 	}
 	
+	/**
+	 * Create and draw the pause screen.
+	 */
 	private void drawPauseScreen() {
-		
+		// Setup
 		g2.setFont(arial_80B);
 		text = "Paused";
 		int x, y;
 		x = getXforCenteredText(text);
 		y = gp.screenHeight/2;
 		
+		// draw
 		g2.drawString(text, x, y);
 	}
 	
+	/**
+	 * Create and draw the dialogue screen.
+	 */
 	private void drawDialogueScreen() {
 		// Make a dialogue window
 		int x = gp.tileSize*2, y = gp.tileSize/2;
@@ -300,14 +332,18 @@ public class UI {
 		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
 		x += gp.tileSize; y += gp.tileSize;
 		
+		// split up and draw the message
 		for(String line : currentDialogue.split("\n")) {
 			g2.drawString(line, x, y);
 			y += 40;
 		}
-		
 	}
 	
+	/**
+	 * Create, manage, and draw the character screen.
+	 */
 	private void drawCharacterScreen() {
+		// character screen frame stats
 		final int frameX = gp.tileSize/2;
 		final int frameY = (int)(gp.tileSize*1.5);
 		final int frameWidth = gp.tileSize*5;
@@ -389,21 +425,22 @@ public class UI {
 		g2.drawString(value, textX, textY);
 		textY += lineHeight;
 		
+		// player weapon and shield
 		g2.drawImage(gp.player.getCurrentWeapon().getImage1(), rightJust-gp.tileSize, textY-15, null);
 		textY += gp.tileSize;
 		g2.drawImage(gp.player.getCurrentShield().getImage1(), rightJust-gp.tileSize, textY-4, null);
 	}
 	
+	/**
+	 * Creates, manages, and draws the player inventory when the character screen is up.
+	 */
 	private void drawInventory() {
-		
 		// Frame
 		int frameX = gp.tileSize*9;
 		int frameY = gp.tileSize;
 		int frameWidth = gp.tileSize*6;
 		int frameHeight = gp.tileSize*5;
 		drawSubWindow(frameX, frameY, frameWidth, frameHeight);
-		
-		
 		
 		// Slot
 		final int slotXstart = frameX + 20;
@@ -414,6 +451,7 @@ public class UI {
 		
 		// Draw player inventory
 		for(GameObject obj: gp.player.getInventory()) {
+			// fill the current weapon and shield object tiles
 			if(obj == gp.player.getCurrentWeapon() || obj == gp.player.getCurrentShield()) {
 				g2.setColor(new Color(240, 190, 90));
 				g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
@@ -451,7 +489,7 @@ public class UI {
 		g2.setFont(g2.getFont().deriveFont(16F));
 		int itemIndex = getItemIndex();
 		
-		
+		// Draw the description only if there is an item to display it for
 		if(itemIndex < gp.player.getInventory().size()){
 			drawSubWindow(dFrameX, dFrameY, dFrameWidth, dFrameHeight);
 			for(String line: gp.player.getInventory().get(itemIndex).getDescription().split("\n")) {
@@ -461,27 +499,47 @@ public class UI {
 		}
 	}
 	
+	/**
+	 * returns the item index from the inventory
+	 * 
+	 * @return itemIndex (int)
+	 */
 	public int getItemIndex() {
 		int itemIndex = getSlotCol() + (getSlotRow()*5);
 		return itemIndex;
 	}
 	
+	/**
+	 * Create and draw the death screen.
+	 */
 	private void drawDeathScreen() {
+		// Frame
 		int frameWidth = gp.tileSize*7;
 		int frameHeight = gp.tileSize*3;
 		int frameX = gp.screenWidth/2 - gp.tileSize*3;
 		int frameY = gp.screenHeight/2;
 		drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 		
+		// stats
 		g2.setBackground(Color.black);
 		g2.setFont(baskerville);
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 42F));
 		text = "You have died";
 		int textX = getXforCenteredText(text) + 20;
 		int textY = (int) (frameY + gp.tileSize*1.7);
+		
+		// draw
 		g2.drawString(text, textX , textY);
 	}
 	
+	/**
+	 * Draws a sub-window at the given x and y coordinates with the given width and height.
+	 * 
+	 * @param x (int) left x coordinate
+	 * @param y (int) top y coordinate
+	 * @param width (int) adds to x to indicate the right most x coordinate
+	 * @param height (int) adds to y to indicate the bottom most y coordinate
+	 */
 	public void drawSubWindow(int x, int y, int width, int height) {
 		Color c = new Color(0, 0, 0, 200);
 		g2.setColor(c);
@@ -493,62 +551,148 @@ public class UI {
 		g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);
 	}
 	
+	//#####################################################################
+	// 								Components
+	//#####################################################################
+	
+	/**
+	 * Returns the x value for centered text
+	 * 
+	 * @param text (String) string of which the center is to be found
+	 * @return (int) the x position the text needs to be at forit to show up center justified
+	 */
 	public int getXforCenteredText(String text) {
 		return gp.screenWidth/2 - (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
 	}
 	
+	/**
+	 * Returns the x value for right justfied text
+	 * 
+	 * @param text (String) string of which the right most position is to be found
+	 * @param rightJust (int) the rightmost position the text should be
+	 * @return (int) the x position the text needs to be at for it to show up right justified
+	 */
 	public int getXforRightJustifiedText(String text, int rightJust) {
 		return rightJust - (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
 	}
 	
+	//#####################################################################
+	// 							Getters and Setters
+	//#####################################################################
+	
+	/**
+	 * Sets the current dialogue to be displayed.
+	 * 
+	 * @param dialogue (String)
+	 */
 	public void setCurrentDialogue(String dialogue) {
 		this.currentDialogue = dialogue;
 	}
 
+	/**
+	 * Returns the row of the item in the inventory during character state.
+	 * 
+	 * @return slotRow (int)
+	 */
 	public int getSlotRow() {
 		return slotRow;
 	}
 
+	/**
+	 * Sets the row of the item in the inventory during character state.
+	 * 
+	 * @param slotRow (int)
+	 */
 	public void setSlotRow(int slotRow) {
 		this.slotRow = slotRow;
 	}
 
+	/**
+	 * The farthest the cursor can go in the inventory.
+	 * 
+	 * @return slotRowMax (int)
+	 */
 	public int getSlotRowMax() {
 		return slotRowMax;
 	}
 
+	/**
+	 * Sets the max number of rows for the inventor during character screen.
+	 * 
+	 * @param slotRowMax (int)
+	 */
 	public void setSlotRowMax(int slotRowMax) {
 		this.slotRowMax = slotRowMax;
 	}
 
+	/**
+	 * Returns the column of the item in the inventory during character state.
+	 * 
+	 * @return slotCol (int)
+	 */
 	public int getSlotCol() {
 		return slotCol;
 	}
 
+	/**
+	 * Sets the column of the item in the inventory during character state.
+	 * 
+	 * @param slotCol (int)
+	 */
 	public void setSlotCol(int slotCol) {
 		this.slotCol = slotCol;
 	}
 
+	/**
+	 * The farthest the cursor can go in the inventory.
+	 * 
+	 * @return slotColMax (int)
+	 */
 	public int getSlotColMax() {
 		return slotColMax;
 	}
 
+	/**
+	 * Sets the max number of columns for the inventor during character screen.
+	 * 
+	 * @param slotColMax (int)
+	 */
 	public void setSlotColMax(int slotColMax) {
 		this.slotColMax = slotColMax;
 	}
 
+	/**
+	 * Returns the command number for the title screen.
+	 * 
+	 * @return commandNum (int)
+	 */
 	public int getCommandNum() {
 		return commandNum;
 	}
 
+	/**
+	 * Sets the command Number for the title screen.
+	 * 
+	 * @param commandNum (int)
+	 */
 	public void setCommandNum(int commandNum) {
 		this.commandNum = commandNum;
 	}
 
+	/**
+	 * Returns which title screen the user is on.
+	 * 
+	 * @return titleScreenState (int) One for main, two for character selection
+	 */
 	public int getTitleScreenState() {
 		return titleScreenState;
 	}
 
+	/**
+	 * Sets which title screen is displayed.
+	 * 
+	 * @param titleScreenState (int) One for main, two for character selection
+	 */
 	public void setTitleScreenState(int titleScreenState) {
 		this.titleScreenState = titleScreenState;
 	}

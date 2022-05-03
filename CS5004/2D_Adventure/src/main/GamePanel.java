@@ -12,20 +12,22 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import entity.*;
+import enums.Area;
+import enums.GameState;
 import gameobject.GameObject;
 import tile.*;
 import object.*;
 
 /**
- * This is our game panel and is the window for our game.
+ * This game panel holds all aspects of the game.  It implements Runnable which provides us with the 
+ * thread interface while letting us extend JPanel, which provides us with paint.    
+ * 
  * @author Robert Wilson
  *
  */
 public class GamePanel extends JPanel implements Runnable {
 	
-	/**
-	 * 
-	 */
+	// Serial version
 	private static final long serialVersionUID = 1L;
 
 	
@@ -66,11 +68,17 @@ public class GamePanel extends JPanel implements Runnable {
 	public Player player = new Player(this, keyH);
 	public GameObject obj[] = new SuperObject[20];
 	public GameObject npc[] = new GameObject[10];
-	public GameObject monster[]= new GameObject[20];
+	public GameObject monster[]= new GameObject[30];
+	public ArrayList<GameObject> projectileList = new ArrayList<>();
 	public ArrayList<GameObject> entityList = new ArrayList<>();
 	public Comparator<GameObject> ee;
 	
-			
+	/**
+	 * Creates an instance of the GamePanel.  This panel will encompass the entire game
+	 * and all classes will be able to be reached through tihs one.  
+	 * 
+	 * @param window
+	 */
 	public GamePanel (JFrame window) {
 		this.setWindow(window);
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -80,10 +88,14 @@ public class GamePanel extends JPanel implements Runnable {
 		this.setFocusable(true);
 	}
 
+	/**
+	 * Setup the game by starting with the debug area and title state.  Also 
+	 * start the music and set the comparator for entities.
+	 */
 	public void setupGame() {
-		area = Area.DEBUG;
+		setArea(Area.DEBUG);
 		gameState = GameState.TITLESTATE;
-		Area.debugSetup(this);
+		area.setup(this);
 		addAssets();
 		playMusic(0);
 		
@@ -98,11 +110,14 @@ public class GamePanel extends JPanel implements Runnable {
 		};
 	}
 
+	/**
+	 * Load the current area and all its assets and tiles
+	 */
 	public void loadArea() {
 		aSetter.reset();
-		switch(area) {
+		switch(getArea()) {
 		case DEBUG:
-			Area.debugSetup(this);
+			area.setup(this);
 			break;
 		case MAIN:
 			//Area.mainSetup(this);
@@ -122,18 +137,24 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 	}
 	
+	/**
+	 * Create and start the game thread
+	 */
 	public void startGameThread() {
 		gameThread = new Thread(this);
 		gameThread.start();
 	}
 	
+	/**
+	 * Ends the game. Depreciated but works fine for this implementation.
+	 */
 	public void endGameThread() {
 		gameThread.stop();
 	}
 	
 	@Override
 	public void run() {
-		
+		// Use well known FPS based timing system
 		double drawInterval = 1000000000/FPS;
 		double delta = 0;
 		long lastTime = System.nanoTime();
@@ -167,6 +188,9 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 	}
 	
+	/**
+	 * Update all object by calling the update method of all objects.
+	 */
 	public void update( ) {
 		switch(gameState) {
 		case TITLESTATE:
@@ -192,22 +216,17 @@ public class GamePanel extends JPanel implements Runnable {
 				}
 			}
 			
-			/*
-			for(Entity m: monster) {
-				if(m != null) {
-					System.out.println(m);
-					if(m.isAlive() && !m.isDying()) {
-						m.update();
+			for(int i = 0; i < projectileList.size(); i++) {
+				if(projectileList.get(i) != null) {
+					if(projectileList.get(i).isAlive()) {
+						projectileList.get(i).update();
 					}
-					if(!m.isAlive()) {
-						System.out.println("monster has died: " + m);
-						m.remove();
-						System.out.println(m);
+					if(projectileList.get(i).isAlive() == false) {
+						projectileList.remove(i);
 					}
-					
 				}
 			}
-			*/
+			
 			break;
 		case PAUSESTATE:
 			break;
@@ -223,8 +242,11 @@ public class GamePanel extends JPanel implements Runnable {
 		
 	}
 	
+	/**
+	 * Call all objects draw methods as well as tileManager and UI.  Sort entities 
+	 * by their worldY position.
+	 */
 	public void paintComponent(Graphics g) {
-		
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
 		
@@ -240,57 +262,7 @@ public class GamePanel extends JPanel implements Runnable {
 			ui.draw(g2);
 			break;
 		case DIALOGUESTATE:
-			/*
-			// Tile
-			tileM.draw(g2);
-			
-			// Object
-			for(int i = 0; i < obj.length; i++) {
-				if(obj[i] != null) {
-					obj[i].draw(g2, this);
-				}
-			}
-			
-			// NPC
-			for(int i = 0;i < npc.length; i++) {
-				if(npc[i] != null) {
-					npc[i].draw(g2);
-				}
-			}
-			
-			// Player
-			player.draw(g2);
-			
-			// UI
-			ui.draw(g2);
-			break;
-			*/
 		case PAUSESTATE:
-			/*
-			// Tile
-			tileM.draw(g2);
-			
-			// Object
-			for(int i = 0; i < obj.length; i++) {
-				if(obj[i] != null) {
-					obj[i].draw(g2, this);
-				}
-			}
-			
-			// NPC
-			for(int i = 0;i < npc.length; i++) {
-				if(npc[i] != null) {
-					npc[i].draw(g2);
-				}
-			}
-			
-			// Player
-			player.draw(g2);
-			
-			// UI
-			ui.draw(g2);
-			break;
-			*/
 		case CHARACTERSTATE:
 		case DEADSTATE:
 		case PLAYSTATE:
@@ -310,7 +282,7 @@ public class GamePanel extends JPanel implements Runnable {
 			// Object
 			for(int i = 0; i < obj.length; i++) {
 				if(obj[i] != null) {
-					entityList.add(obj[i]); // draw(g2, this);
+					entityList.add(obj[i]);
 				}
 			}
 			
@@ -318,6 +290,13 @@ public class GamePanel extends JPanel implements Runnable {
 			for(GameObject m: monster) {
 				if(m != null) {
 					entityList.add(m);
+				}
+			}
+			
+			// Projectiles
+			for(GameObject p: projectileList) {
+				if(p != null) {
+					entityList.add(p);
 				}
 			}
 			
@@ -371,6 +350,9 @@ public class GamePanel extends JPanel implements Runnable {
 	// 								Helper Methods
 	//#####################################################################
 	
+	/**
+	 * Add all assest to the board from the asset setter.
+	 */
 	private void addAssets() {
 		for(int index = 0; index < aSetter.getObj().size(); index++) {
 			obj[index] = aSetter.getObj().get(index);
@@ -385,22 +367,52 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 	}
 	
-	public void addAssetMonster() {		
+	/**
+	 * Reset the monsters on the board.
+	 */
+	public void resetAssetMonster() {
 		for(int index = 0; index < aSetter.getMonster().size(); index++) {
 			monster[index] = aSetter.getMonster().get(index);
 		}
 	}
 	
+	/**
+	 * Add new monsters to the board from the asset setter.
+	 */
+	public void addAssetMonster() {
+		int index2 = 0;
+		for(int index = 0; index2 < aSetter.getMonster().size(); index++) {
+			if(monster[index] == null) {
+				monster[index] = aSetter.getMonster().get(index2);
+				index2++;
+				System.out.println("monster added to  gp at index: " + index);
+			}
+		}
+	}
+	
+	/**
+	 * Play the background music of the game.
+	 * 
+	 * @param index
+	 */
 	public void playMusic(int index) {
 		music.setFile(index);
 		music.play();
 		music.loop();
 	}
 	
+	/**
+	 * Stop the current music playing.
+	 */
 	public void stopMusic() {
 		music.stop();
 	}
 	
+	/**
+	 * Plays sound effects.
+	 * 
+	 * @param index (int) number of sound effect to play
+	 */
 	public void playSE(int index) {
 		se.setFile(index);
 		se.play();
@@ -411,29 +423,76 @@ public class GamePanel extends JPanel implements Runnable {
 	// 							Getters and Setters
 	//#####################################################################
 	
-	
+	/**
+	 * Sets the current game state.
+	 * 
+	 * @param gameState (GameState)
+	 */
 	public void setGameState(GameState gameState) {
 		this.gameState = gameState;
 	}
 
+	/**
+	 * Returns the current game state.
+	 * 
+	 * @return gameState (GameState)
+	 */
 	public GameState getGameState() {
 		return gameState;
 	}
 
+	/**
+	 * Sets the previous game state to the current.
+	 * game state.
+	 * 
+	 */
 	public void setPrevState() {
 		this.gameStatePrev = gameState;
 		
 	}
 
+	/**
+	 * Returns the previous game state.
+	 * 
+	 * @return gameStatePrev (GameState)
+	 */
 	public GameState getPrevSate() {
 		return gameStatePrev;
 	}
 
+	/**
+	 * Returns the current window of the game.
+	 * 
+	 * @return window (JFrame)
+	 */
 	public JFrame getWindow() {
 		return window;
 	}
 
+	/**
+	 * Sets the window of the current game.
+	 * 
+	 * @param window (JFrame)
+	 */
 	public void setWindow(JFrame window) {
 		this.window = window;
+	}
+
+	/**
+	 * Returns the current game area.
+	 * 
+	 * @return area (Area)
+	 */
+	public Area getArea() {
+		return area;
+	}
+
+	/**
+	 * Sets the current game area.
+	 * 
+	 * @param area (Area)
+	 */
+	public void setArea(Area area) {
+		this.area = area;
 	}
 }

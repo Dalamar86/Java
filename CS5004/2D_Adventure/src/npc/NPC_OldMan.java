@@ -2,11 +2,23 @@ package npc;
 
 import java.util.Random;
 
+import enums.ObjectType;
 import main.GamePanel;
-import main.ObjectType;
 
-public class NPC_OldMan extends SuperNPC {
+/**
+ * This NPC is a proof of concept.  Moves around randomly and 
+ * speaks when player interacts with it.
+ * 
+ * @author Robert Wilson
+ *
+ */
+public final class NPC_OldMan extends SuperNPC {
 
+	/**
+	 * Creates an instance of the old man npc.
+	 * 
+	 * @param gp (GamePanel) Current game panel
+	 */
 	public NPC_OldMan(GamePanel gp) {
 		super(gp);
 		
@@ -22,6 +34,9 @@ public class NPC_OldMan extends SuperNPC {
 	// 								Setup
 	//#####################################################################
 	
+	/**
+	 * Load image paths and send to get scaled and add the buffered images.
+	 */
 	public void getImage() {		
 		up1 = setup("/npc/oldman_up_1");
 		up2 = setup("/npc/oldman_up_2");
@@ -37,6 +52,9 @@ public class NPC_OldMan extends SuperNPC {
 	// 								Components
 	//#####################################################################
 	
+	/**
+	 * Dialogue specific to this NPC
+	 */
 	public void setDialogue() {
 		dialogues[0] = "Hello, Link";
 		dialogues[1] = "So, you've found me!";
@@ -44,6 +62,7 @@ public class NPC_OldMan extends SuperNPC {
 		dialogues[3] = "Good luck storming the castle";
 	}
 	
+	@Override
 	public void setAction() {
 		actionTimeCounter ++;
 		
@@ -64,11 +83,13 @@ public class NPC_OldMan extends SuperNPC {
 		}	
 	}
 	
+	@Override
 	public void speak() {
 		super.speak();
 		// leaves room for customization
 	}
 	
+	@Override
 	public int takeDamage(int damage) {
 		return 0;
 	}
